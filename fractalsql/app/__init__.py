@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from flask import Flask, send_from_directory, request
+from sqlalchemy.engine.url import make_url
 
 from config import Config
 from extensions import bcrypt, db, login_manager, migrate
@@ -11,6 +12,14 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
+
+    # Ensure SQLite DB path is writable (Render: /var/data/app.db)
+    try:
+        db_url = make_url(app.config["SQLALCHEMY_DATABASE_URI"])
+        if db_url.drivername == "sqlite" and db_url.database:
+            Path(db_url.database).parent.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
 
     db.init_app(app)
     migrate.init_app(app, db)

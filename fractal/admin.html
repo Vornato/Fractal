@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fractal Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    body{margin:0;font-family:'Space Grotesk',sans-serif;background:#030d0d;color:#eafff9;min-height:100vh;}
+    header{padding:1.5rem 2rem;background:#001919;border-bottom:1px solid rgba(122,255,198,.3);display:flex;justify-content:space-between;align-items:center;}
+    main{padding:2rem;}
+    form{display:flex;gap:1rem;flex-wrap:wrap;}
+    input{padding:.8rem 1rem;border-radius:.6rem;border:1px solid rgba(122,255,198,.4);background:#000c0c;color:#fff;}
+    button{padding:.85rem 1.6rem;border-radius:.7rem;border:0;cursor:pointer;background:linear-gradient(120deg,#7affc6,#3bc5ff);color:#001d19;font-weight:600;}
+    table{width:100%;border-collapse:collapse;margin-top:2rem;background:#001313;border-radius:1rem;overflow:hidden;}
+    th,td{padding:0.9rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}
+    tr:last-child td{border-bottom:0;}
+    .status{padding:.25rem .7rem;border-radius:999px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;}
+    .approved{background:rgba(122,255,198,.15);color:#7affc6;}
+    .pending{background:rgba(255,195,113,.15);color:#ffc371;}
+    .actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .hidden{display:none;}
+    .note{margin-top:1rem;font-size:.9rem;color:#84bcb0;}
+    .settings{margin-top:1.5rem;background:#001212;padding:1rem;border-radius:1rem;border:1px solid rgba(122,255,198,.25);}
+    .settings h3{margin-top:0;}
+    .stack{display:flex;flex-direction:column;gap:.6rem;}
+    .compact-input{width:180px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.6rem;}
+    #alertBox{margin:1rem 0;padding:1rem 1.2rem;border-radius:.9rem;border:1px solid rgba(255,125,125,.45);background:rgba(255,99,132,.12);color:#ffdfe6;line-height:1.45;}
+    #alertBox strong{color:#ff8fa5;}
+    #alertBox code{background:rgba(255,255,255,.08);padding:0.2rem 0.35rem;border-radius:0.4rem;font-size:0.9rem;}
+    #alertBox .small{display:block;color:#f9bebe;font-size:0.9rem;margin-top:0.35rem;}
+    #alertBox.hidden{display:none;}
+    .status-badge{display:inline-flex;align-items:center;gap:0.35rem;padding:0.35rem 0.65rem;border-radius:999px;font-size:0.85rem;letter-spacing:0.02em;font-weight:600;}
+    .status-permanent{background:rgba(122,255,198,.18);color:#0fd18a;border:1px solid rgba(122,255,198,.6);}
+    .status-temporary{background:rgba(122,255,198,.08);color:#1be6a1;border:1px dashed rgba(122,255,198,.6);}
+    .status-door{background:rgba(255,214,102,.16);color:#ffc861;border:1px solid rgba(255,214,102,.6);}
+    .status-declined{background:rgba(255,122,122,.18);color:#ff7a7a;border:1px solid rgba(255,122,122,.55);}
+    .status-icon{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;font-size:0.7rem;background:rgba(255,255,255,.08);}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Fractal Admin Panel</strong>
+    <nav>
+      <a href="index.html" style="color:#7affc6;text-decoration:none;margin-right:1rem;">Site</a>
+      <a href="register.html" style="color:#7affc6;text-decoration:none;">Register</a>
+    </nav>
+  </header>
+  <main>
+    <div id="alertBox" class="hidden"></div>
+    <section id="adminPanel" class="">
+      <p id="adminLoginMessage" class="note"></p>
+      <h2>Registered Users</h2>
+      <div class="settings">
+        <h3>Payment details (shows on booking)</h3>
+        <div class="stack">
+          <input id="tbcAccountInput" type="text" class="compact-input" placeholder="TBC account / IBAN" />
+          <input id="bogAccountInput" type="text" class="compact-input" placeholder="Georgian Bank account / IBAN" />
+          <input id="qrUrlInput" type="text" placeholder="QR code URL (optional)" />
+          <input id="transferNoteInput" type="text" placeholder="Note to display (optional)" />
+          <button id="savePaymentCfg" type="button">Save payment details</button>
+          <p class="note">These values are stored locally in the browser and shown to buyers selecting bank transfer.</p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Unique ID</th>
+            <th>Phone</th>
+            <th>ID</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Social</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>Ticket</th>
+          </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+      </table>
+      <p class="note">Changes automatically update the downloadable Excel (CSV) snapshot.</p>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = (() => {
+      if (window.FRAC_API_BASE) return window.FRAC_API_BASE;
+      const host = window.location.hostname || "localhost";
+      const port = "5000";
+      return `http://${host}:${port}`;
+    })();
+
+    const adminPanel = document.getElementById('adminPanel');
+    // Legacy compatibility: if there isn't a separate login section, fall back to the main panel element.
+    const adminLoginSection = document.getElementById('adminLoginSection') || adminPanel;
+    const adminLoginMessage = document.getElementById('adminLoginMessage');
+    const alertBox = document.getElementById('alertBox');
+    const userTable = document.getElementById('userTable');
+    const logoutBtn = document.createElement('button');
+    logoutBtn.textContent = 'Logout';
+    logoutBtn.style.marginLeft = '1rem';
+    logoutBtn.style.background = '#ff4f81';
+    logoutBtn.style.color = '#fff';
+    document.querySelector('header nav').appendChild(logoutBtn);
+    const tbcAccountInput = document.getElementById('tbcAccountInput');
+    const bogAccountInput = document.getElementById('bogAccountInput');
+    const transferNoteInput = document.getElementById('transferNoteInput');
+    const qrUrlInput = document.getElementById('qrUrlInput');
+    const savePaymentCfg = document.getElementById('savePaymentCfg');
+    const statusOptions = ['permanent', 'temporary', 'door', 'declined'];
+    let adminLoggedIn = false;
+    let users = [];
+    const AUTO_ADMIN_EMAIL = "FractalAdmin@123";
+    const AUTO_ADMIN_PASSWORD = "Fractalisadmin123";
+    const NON_ADMIN_REDIRECT = "index.html";
+
+    function renderStatusBadge(status) {
+      const normalized = (status || '').toLowerCase();
+      const labels = {
+        permanent: { text: 'Permanent', icon: '&#10003;', cls: 'status-permanent' },
+        temporary: { text: 'Temporary', icon: '&#10003;', cls: 'status-temporary' },
+        door: { text: 'Door', icon: '&#9633;', cls: 'status-door' },
+        declined: { text: 'Declined', icon: '&#10007;', cls: 'status-declined' }
+      };
+      const meta = labels[normalized] || { text: status || 'unknown', icon: '?', cls: '' };
+      return `<span class="status-badge ${meta.cls}"><span class="status-icon">${meta.icon}</span>${meta.text}</span>`;
+    }
+
+    function clearAlert() {
+      alertBox.classList.add('hidden');
+      alertBox.innerHTML = '';
+    }
+
+    function showAlert(_message, _meta = {}) {
+      // Temporarily suppress inline error warnings on the admin panel
+      alertBox.classList.add('hidden');
+      alertBox.innerHTML = '';
+    }
+
+    function showMessage(el, text, isError = false) {
+      el.textContent = text;
+      el.style.color = isError ? '#ff8080' : '#7affc6';
+    }
+
+    function loadPaymentConfig() {
+      try {
+        const stored = localStorage.getItem('fractalPaymentConfig');
+        return stored ? JSON.parse(stored) : {};
+      } catch (e) { return {}; }
+    }
+
+    function savePaymentConfig(cfg) {
+      localStorage.setItem('fractalPaymentConfig', JSON.stringify(cfg));
+    }
+
+    function loadTicketData() {
+      try {
+        const stored = localStorage.getItem('fractalTickets');
+        return stored ? JSON.parse(stored) : {};
+      } catch (e) { return {}; }
+    }
+
+    function saveTicketData(data) {
+      localStorage.setItem('fractalTickets', JSON.stringify(data));
+    }
+
+    async function api(path, { method = 'GET', body, headers } = {}) {
+      const opts = {
+        method,
+        credentials: 'include',
+        headers: headers || {}
+      };
+      // Always send admin Basic auth for admin endpoints to survive cookie issues
+      if (path.startsWith('/api/admin')) {
+        const basic = btoa(`${AUTO_ADMIN_EMAIL}:${AUTO_ADMIN_PASSWORD}`);
+        opts.headers['Authorization'] = `Basic ${basic}`;
+      }
+      if (body instanceof FormData) {
+        opts.body = body;
+      } else if (body) {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(body);
+      }
+      const res = await fetch(`${API_BASE}${path}`, opts);
+      const rawText = await res.text();
+      let data = null;
+      try { data = rawText ? JSON.parse(rawText) : null; } catch (e) { /* ignore */ }
+      if (!res.ok) {
+        const detail = (data && data.error) || rawText || `Request failed (${res.status})`;
+        const err = new Error(detail);
+        err.status = res.status;
+        err.path = path;
+        err.body = data || rawText;
+        throw err;
+      }
+      return data || {};
+    }
+
+    function renderUsers() {
+      userTable.innerHTML = '';
+      const tickets = loadTicketData();
+      users.forEach((user) => {
+        const row = document.createElement('tr');
+        const statusSelect = `<select data-id="${user.id}" class="status-select">${statusOptions
+          .map((opt) => `<option value="${opt}" ${user.status === opt ? 'selected' : ''}>${opt}</option>`)
+          .join('')}</select>`;
+        const ticketEntry = tickets[user.id] || {};
+        const ticketInputs = `
+          <div class="stack">
+            <input type="text" class="ticket-url" data-id="${user.id}" placeholder="Ticket link" value="${ticketEntry.ticket || ''}">
+            <input type="text" class="ticket-qr" data-id="${user.id}" placeholder="QR link" value="${ticketEntry.qr || ''}">
+            <button type="button" class="save-ticket" data-id="${user.id}">Save</button>
+          </div>
+        `;
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>FR-${user.id}</td>
+          <td>${user.phone || ''}</td>
+          <td>${user.id_number || ''}</td>
+          <td>${user.dob || ''}</td>
+          <td>${user.gender || ''}</td>
+          <td>${user.social_link ? `<a href="${user.social_link}" target="_blank" style="color:#7affc6;">Link</a>` : ''}</td>
+          <td>${renderStatusBadge(user.status)}</td>
+          <td>${statusSelect}</td>
+          <td>${ticketInputs}</td>
+        `;
+        userTable.appendChild(row);
+      });
+    }
+
+    function loadPaymentForm() {
+      const cfg = loadPaymentConfig();
+      tbcAccountInput.value = cfg.tbcAccount || '';
+      bogAccountInput.value = cfg.bogAccount || '';
+      transferNoteInput.value = cfg.transferNote || '';
+      qrUrlInput.value = cfg.qrUrl || '';
+    }
+
+    async function loadUsers() {
+      try {
+        const res = await api('/api/admin/users');
+        users = res.users;
+        renderUsers();
+        adminPanel.classList.remove('hidden');
+        if (adminPanel !== adminLoginSection) {
+          adminLoginSection.classList.add('hidden');
+        }
+        adminLoggedIn = true;
+        loadPaymentForm();
+        clearAlert();
+      } catch (error) {
+        showAlert('Failed to load users', {
+          status: error.status,
+          path: '/api/admin/users',
+          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
+        });
+        throw error;
+      }
+    }
+
+    async function updateStatus(userId, status) {
+      try {
+        await api(`/api/admin/users/${userId}/status`, { method: 'PATCH', body: { status } });
+        await loadUsers();
+      } catch (error) {
+        showAlert('Failed to update status', {
+          status: error.status,
+          path: `/api/admin/users/${userId}/status`,
+          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
+        });
+        showMessage(adminLoginMessage, error.message, true);
+      }
+    }
+
+    async function autoAdminLogin() {
+      adminLoginMessage.textContent = '';
+      clearAlert();
+      const payload = { email: AUTO_ADMIN_EMAIL, password: AUTO_ADMIN_PASSWORD };
+      try {
+        // Ensure auth login sets user and session cookie
+        await api('/api/auth/login', { method: 'POST', body: payload });
+        // Explicitly set admin session
+        await api('/api/admin/login', { method: 'POST', body: payload });
+        await loadUsers();
+      } catch (error) {
+        showAlert('Admin auto-login failed', {
+          status: error.status,
+          path: error.path || 'login flow',
+          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
+        });
+        showMessage(adminLoginMessage, error.message || 'Admin login failed', true);
+        throw error;
+      }
+    }
+
+    savePaymentCfg.addEventListener('click', () => {
+      const cfg = {
+        tbcAccount: tbcAccountInput.value.trim(),
+        bogAccount: bogAccountInput.value.trim(),
+        transferNote: transferNoteInput.value.trim(),
+        qrUrl: qrUrlInput.value.trim()
+      };
+      savePaymentConfig(cfg);
+      showMessage(adminLoginMessage, 'Payment details saved locally.');
+    });
+
+    userTable.addEventListener('change', (event) => {
+      const select = event.target.closest('.status-select');
+      if (!select) return;
+      const userId = select.dataset.id;
+      const status = select.value;
+      updateStatus(userId, status);
+    });
+
+    userTable.addEventListener('click', (event) => {
+      const btn = event.target.closest('.save-ticket');
+      if (!btn) return;
+      const userId = btn.dataset.id;
+      const ticketInput = userTable.querySelector(`.ticket-url[data-id="${userId}"]`);
+      const qrInput = userTable.querySelector(`.ticket-qr[data-id="${userId}"]`);
+      const data = loadTicketData();
+      data[userId] = {
+        ticket: ticketInput.value.trim(),
+        qr: qrInput.value.trim(),
+        note: `Ticket for FR-${userId}`,
+        paymentId: `FR-${userId}`
+      };
+      saveTicketData(data);
+      showMessage(adminLoginMessage, `Ticket info saved for user ${userId}.`);
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await api('/api/admin/logout', { method: 'POST' });
+      } catch (error) {
+        /* ignore */
+      }
+      adminLoggedIn = false;
+      adminPanel.classList.add('hidden');
+      if (adminPanel !== adminLoginSection) {
+        adminLoginSection.classList.remove('hidden');
+      }
+      showMessage(adminLoginMessage, '');
+      clearAlert();
+    });
+
+    (async function bootstrap() {
+      try {
+        // If a logged-in user is not the admin, block access and redirect.
+        try {
+          const me = await api('/api/user/me');
+          if (me && me.user && me.user.email && me.user.email !== AUTO_ADMIN_EMAIL) {
+            showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
+            setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
+            return;
+          }
+        } catch (err) {
+          /* ignore 401; proceed to admin login */
+        }
+        await autoAdminLogin();
+      } catch (error) {
+        adminLoggedIn = false;
+        showMessage(adminLoginMessage, 'Admin auto-login failed. Check backend credentials.', true);
+      }
+    })();
+  </script>
+</body>
+</html>

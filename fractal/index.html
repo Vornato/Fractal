@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fractal Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#021311; --deep:#001f1f; --electric:#76ffd5; --lime:#c1ff6b; --aqua:#2deeee; --violet:#2c1361; --glass:rgba(4,16,18,.65); --card:rgba(0,31,31,.75); }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:'Noto Sans Georgian','Space Grotesk',system-ui,-apple-system,sans-serif;min-height:100vh;background:radial-gradient(circle at 15% 20%,rgba(118,255,213,.2),transparent 55%),radial-gradient(circle at 75% 0,rgba(44,19,97,.45),transparent 50%),#010a0a;color:#e9fff6;line-height:1.6;overflow-x:hidden;}
+    /* Psychedelic flowing backdrop */
+    .plasma {
+      position:fixed;inset:0;pointer-events:none;z-index:-2;
+      background:
+        radial-gradient(60% 40% at 20% 20%, rgba(118,255,213,.14), transparent 60%),
+        radial-gradient(50% 45% at 80% 10%, rgba(179,116,255,.20), transparent 60%),
+        radial-gradient(40% 50% at 70% 70%, rgba(44,255,200,.16), transparent 60%),
+        radial-gradient(45% 35% at 30% 80%, rgba(255,160,88,.14), transparent 60%);
+      filter:blur(18px) saturate(1.2);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    @keyframes drift { from{transform:translate3d(-10px,0,0) scale(1);} to{transform:translate3d(10px,10px,0) scale(1.05);} }
+    header.top-bar{position:sticky;top:0;z-index:10;padding:1.2rem clamp(1.5rem,4vw,4rem);display:flex;justify-content:space-between;align-items:center;gap:1rem;background:rgba(0,20,20,.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(118,255,213,.2);}    
+    .brand{display:inline-flex;align-items:center;gap:.6rem;font-family:'Orbitron','Space Grotesk',sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:1.05rem;color:var(--lime);}    
+    .brand img{height:38px;width:38px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(118,255,213,.5));}
+    .top-actions{display:flex;align-items:center;gap:.75rem;}    
+    .language-switch{display:flex;gap:.4rem;}    
+    .language-switch button{border:1px solid rgba(118,255,213,.4);background:transparent;color:#e8fff6;padding:.4rem .9rem;border-radius:999px;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}    
+    .language-switch button.active{background:linear-gradient(120deg,var(--electric),var(--lime));color:#001615;box-shadow:0 0 18px rgba(118,255,213,.6);}    
+    .profile-link{border:1px solid rgba(118,255,213,.35);color:#e8fff6;text-decoration:none;padding:.45rem 1rem;border-radius:999px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;display:none;align-items:center;gap:.45rem;background:rgba(0,31,31,.45);}    
+    .profile-link::before{content:'⚡';font-size:.8rem;opacity:.8;}    
+    header.hero{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:clamp(2.5rem,4vw,4rem);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:3rem;align-items:center;background:linear-gradient(135deg,rgba(0,10,10,.85),rgba(0,0,0,.55)),url('Poster28.webp') center/cover no-repeat;}    
+    header.hero::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(180deg,rgba(1,10,10,.35),rgba(1,10,10,.65));pointer-events:none;z-index:-1;}    
+    h1{font-family:'Orbitron','Space Grotesk',sans-serif;font-size:clamp(2.8rem,6vw,4.8rem);margin:0 0 1rem;letter-spacing:.08em;text-transform:uppercase;color:#d2ffe9;}    
+    .eyebrow{text-transform:uppercase;letter-spacing:.4em;font-size:.75rem;color:var(--electric);margin-bottom:1rem;display:inline-flex;align-items:center;gap:.5rem;}    
+    .eyebrow::before{content:'';width:40px;height:1px;background:currentColor;opacity:.5;}    
+    .hero-cta{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;}    
+    .cta{text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:.9rem 1.8rem;border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem;transition:transform .3s, box-shadow .3s, background .3s;color:#e9fff6;}    
+    .cta.primary{background:linear-gradient(120deg,var(--electric),var(--lime));color:#001615;box-shadow:0 0 40px rgba(118,255,213,.4);}    
+    .cta.ghost{color:var(--electric);}    
+    .cta:hover{transform:translateY(-4px) scale(1.02);}    
+    .stats{margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;}    
+    .stat{backdrop-filter:blur(18px);background:rgba(0,31,31,.45);border:1px solid rgba(118,255,213,.2);border-radius:1rem;padding:1rem;}    
+    .stat strong{font-family:'Orbitron',sans-serif;font-size:1.35rem;display:block;color:var(--electric);}    
+    .slider{position:relative;overflow:hidden;border-radius:1.5rem;min-height:360px;border:1px solid rgba(118,255,213,.2);backdrop-filter:blur(24px);background:rgba(0,14,14,.8);box-shadow:0 40px 120px rgba(0,16,16,.7);}    
+    .slider-track{display:flex;width:100%;height:100%;transition:transform 1s cubic-bezier(.22,.68,0,1);}    
+    .slide{position:relative;min-width:100%;padding:2.5rem;display:flex;flex-direction:column;justify-content:space-between;color:#fff;overflow:hidden;}    
+    .slide-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.82;filter:saturate(1.25) brightness(1.05) contrast(1.1);transform:scale(1.05);z-index:0;}    
+    .slide::before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(0,10,12,.78),rgba(0,10,12,.55),rgba(0,10,12,.65));z-index:1;}    
+    .slide::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.18),transparent 55%);mix-blend-mode:screen;z-index:1;}    
+    .slide-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:1.5rem;text-shadow:0 3px 14px rgba(0,0,0,.55);}    
+    .slide .tag{text-transform:uppercase;letter-spacing:.3em;font-size:.7rem;color:rgba(255,255,255,.85);}    
+    .slide-footer{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:2;text-shadow:0 3px 12px rgba(0,0,0,.55);}    
+    .slider-dots{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:3;}    
+    .slider-dots button{width:12px;height:12px;border-radius:50%;border:0;background:rgba(255,255,255,.35);cursor:pointer;transition:transform .3s, background .3s;}    
+    .slider-dots button.active{background:var(--electric);transform:scale(1.4);box-shadow:0 0 12px rgba(118,255,213,.8);}    
+    section{padding:clamp(2.5rem,4vw,5rem);}    
+    .event-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}    
+    .event-card{padding:1.8rem;border-radius:1.4rem;background:var(--card);border:1px solid rgba(118,255,213,.18);box-shadow:0 20px 60px rgba(0,10,10,.55);position:relative;overflow:hidden;cursor:pointer;transition:transform .4s ease,border-color .3s;}    
+    .event-card:hover{transform:translateY(-8px) scale(1.01);border-color:var(--electric);}    
+    .card-body{position:relative;z-index:2;display:flex;flex-direction:column;gap:1rem;}    
+    .event-card .tag{font-size:.75rem;letter-spacing:.4em;text-transform:uppercase;color:var(--electric);}    
+    .event-card h3{margin:.4rem 0;font-size:1.35rem;}    
+    .event-description{color:#f1fffb;font-size:.95rem;}    
+    .event-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(233,255,246,.75);}    
+    .micro-label{margin-top:.6rem;margin-bottom:.2rem;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--electric);}    
+    .lineup,.rituals{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem .8rem;}    
+    .lineup li,.rituals li{font-size:.85rem;color:#eafff8;background:rgba(255,255,255,.05);border-radius:.9rem;padding:.35rem .9rem;}    
+    .event-footer{display:flex;justify-content:space-between;align-items:center;}    
+    .price{font-family:'Orbitron',sans-serif;font-size:1.05rem;color:var(--electric);}    
+    .timeline{margin-top:3rem;border-radius:1rem;padding:1.2rem;border:1px solid rgba(118,255,213,.2);display:flex;gap:1rem;overflow-x:auto;scrollbar-width:none;background:rgba(0,20,20,.8);}    
+    .timeline::-webkit-scrollbar{display:none;}    
+    .node{flex:1;min-width:200px;padding:1rem;border-radius:1rem;background:rgba(0,31,31,.45);border:1px solid rgba(118,255,213,.2);text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;}    
+    .node strong{display:block;font-size:1rem;margin-top:.5rem;color:var(--electric);}    
+    .booking-panel{background:radial-gradient(circle at 30% 20%,rgba(118,255,213,.35),transparent 60%),rgba(0,24,24,.9);}    
+    .booking-gate{display:flex;flex-direction:column;gap:.8rem;padding:1.8rem;border-radius:1.2rem;border:1px solid rgba(118,255,213,.25);background:rgba(0,20,20,.85);text-align:center;box-shadow:0 24px 60px rgba(0,10,10,.55);}    
+    .booking-gate .cta{margin-top:.8rem;display:inline-flex;}    
+    .panel-content{display:none;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem;align-items:start;}    
+    .panel-text h3{font-size:clamp(1.6rem,3vw,2.3rem);margin:.4rem 0;letter-spacing:.06em;text-transform:uppercase;}    
+    form{background:rgba(0,16,16,.85);border-radius:1.5rem;padding:2rem;border:1px solid rgba(118,255,213,.2);box-shadow:0 30px 80px rgba(0,8,8,.7);}    
+    .field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.2rem;letter-spacing:.18em;font-size:.7rem;text-transform:uppercase;color:#c0ffe0;}    
+    .field input,.field select{padding:1rem;border-radius:.9rem;border:1px solid rgba(118,255,213,.25);background:rgba(0,31,31,.8);color:#e9fff6;font-size:1rem;font-family:inherit;transition:border .3s,box-shadow .3s;}    
+    .field input:focus,.field select:focus{border-color:var(--electric);outline:none;box-shadow:0 0 20px rgba(118,255,213,.35);}    
+    .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;}    
+    button.stretch{width:100%;}
+    #confirmation{margin-top:1rem;min-height:1.5rem;color:var(--electric);font-size:.95rem;letter-spacing:.08em;opacity:1;}
+    .payment-info{background:rgba(0,31,31,.6);border:1px dashed rgba(118,255,213,.3);border-radius:1rem;padding:1rem;color:#d6fff0;font-size:.95rem;line-height:1.5;}
+    .payment-info h4{margin:0 0 .4rem;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--electric);}
+    .payment-steps{margin:.4rem 0;padding-left:1.2rem;color:#c9fbea;}
+    footer{padding:2rem;text-align:center;font-size:.9rem;color:#9fe6d0;}
+    .footer-link{color:var(--electric);text-decoration:none;border-bottom:1px dashed rgba(118,255,213,.5);}
+    .footer-link:hover{color:var(--lime);}
+    @media (max-width:700px){.hero-cta{flex-direction:column;} .slide{padding:1.8rem;} form{padding:1.5rem;} .top-bar{flex-direction:column;gap:.5rem;}}
+    .user-pill{display:none;align-items:center;gap:.35rem;border:1px solid rgba(118,255,213,.3);padding:.4rem .85rem;border-radius:999px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--electric);background:rgba(0,31,31,.4);}
+    .logout-btn{display:none;border:1px solid rgba(255,255,255,.25);background:transparent;color:#e9fff6;padding:.4rem .8rem;border-radius:999px;font-size:.75rem;letter-spacing:.08em;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div class="plasma" aria-hidden="true"></div>
+  <header class="top-bar">
+    <span class="brand"><img src="Fractal.png" alt="Fractal logo" />Fractal Events</span>
+    <div class="top-actions">
+      <div class="language-switch" role="tablist" aria-label="Language switcher">
+        <button type="button" data-lang="geo">KA</button>
+        <button type="button" data-lang="eng" class="active">EN</button>
+      </div>
+      <span id="userBadge" class="user-pill"></span>
+      <a id="profileLink" class="profile-link" href="register.html">Profile</a>
+      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+    </div>
+  </header>
+
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow" id="heroEyebrow"></p>
+      <h1 id="heroTitle">Fractal Events</h1>
+      <p id="heroIntro"></p>
+      <div class="hero-cta">
+        <a href="#book" class="cta primary" id="ctaPrimary"></a>
+        <a href="#events" class="cta ghost" id="ctaSecondary"></a>
+        <a href="register.html" class="cta ghost" style="border-color:rgba(118,255,213,.4);color:var(--lime);">Register</a>
+      </div>
+      <div class="stats" id="statsPanel"></div>
+    </div>
+    <div class="slider" aria-live="polite">
+      <div class="slider-track"></div>
+      <div class="slider-dots" role="tablist"></div>
+    </div>
+  </header>
+
+  <section class="events" id="events">
+    <div class="section-head">
+      <p class="eyebrow" id="eventSectionEyebrow"></p>
+      <h2 id="eventSectionHeading"></h2>
+      <p id="eventSectionCopy"></p>
+    </div>
+    <div class="event-grid" aria-live="polite"></div>
+    <div class="timeline" aria-label="Event orbit timeline"></div>
+  </section>
+
+  <section class="booking-panel" id="book">
+    <div id="bookingGate" class="booking-gate" aria-live="polite">
+      <p id="bookingGateMessage">Please sign in or register to book tickets.</p>
+      <a class="cta primary" href="register.html">Register / Login</a>
+    </div>
+    <div class="panel-content">
+      <div class="panel-text">
+        <p class="eyebrow" id="bookingEyebrow"></p>
+        <h3 id="eventFocus"></h3>
+        <p id="eventCopy"></p>
+        <ul class="perks" id="perksList"></ul>
+      </div>
+      <form id="bookingForm">
+        <label class="field">
+          <span id="labelEvent"></span>
+          <input type="text" id="selectedEvent" name="event" required readonly />
+        </label>
+        <div class="two-col">
+          <label class="field">
+            <span id="labelName"></span>
+            <input type="text" id="nameInput" name="name" required />
+          </label>
+          <label class="field">
+            <span id="labelEmail"></span>
+            <input type="email" id="emailInput" name="email" required />
+          </label>
+        </div>
+        <div class="two-col">
+          <label class="field">
+            <span id="labelPhone"></span>
+            <input type="tel" id="phoneInput" name="phone" required />
+          </label>
+          <label class="field">
+            <span id="labelGuests"></span>
+            <input type="number" id="ticketsInput" name="tickets" min="1" max="8" value="1" required />
+          </label>
+        </div>
+        <label class="field">
+          <span id="labelTier"></span>
+          <select name="tier" id="tierSelect" required></select>
+        </label>
+        <div class="two-col">
+          <label class="field">
+            <span id="labelPayment"></span>
+            <select name="payment" id="paymentSelect" required></select>
+          </label>
+          <label class="field">
+            <span id="labelPaymentId"></span>
+            <input type="text" id="paymentIdInput" name="paymentId" placeholder="XXXX-XXXX-XXXX" required />
+          </label>
+        </div>
+        <div id="paymentInfo" class="payment-info" aria-live="polite"></div>
+        <button type="submit" class="cta primary stretch" id="submitLabel"></button>
+        <p id="confirmation" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Fractal Events - All rights reserved. Site designed by <a href="https://levanisportfolio.com/" target="_blank" rel="noopener" class="footer-link">Vornato (Levani Esitashvili)</a>.
+  </footer>
+
+  <script>
+    const translations = {
+  "geo": {
+    "hero": {
+      "eyebrow": "NEXT CHAPTER | ცამეტი",
+      "title": "Fractal Events",
+      "copy": "Animato ბრუნდება Tsameti-ში UV დეკორაციებით, SHALA ირანიდან და განახლებული ქართული სცენის ენერგიით.",
+      "primary": "ბილეთების დაჯავშნა",
+      "secondary": "დეტალები"
+    },
+    "stats": [
+      {
+        "value": "23+",
+        "label": "Face Control"
+      },
+      {
+        "value": "6",
+        "label": "არტისტი სცენაზე"
+      },
+      {
+        "value": "22:00",
+        "label": "დაწყება"
+      }
+    ],
+    "slider": [
+      {
+        "title": "ANIMATO - NEXT CHAPTER",
+        "tag": "ჰედლაინერი",
+        "copy": "მზად ხარ ახალი ფსიქოდელიური თავგადასავლისთვის? 28 ნოემბერს Fractal ცამეტის სცენას აანთებს Animato-ს, SHALA-ს და განახლებულ ადგილობრივ გუნდთან ერთად.",
+        "meta": "28 ნოემბერი | Tsameti Restaurant | თბილისი",
+        "image": "Poster28.webp",
+        "accent": "#7affc6"
+      }
+    ],
+    "eventSection": {
+      "eyebrow": "სცენის პულსი",
+      "heading": "ANIMATO - NEXT CHAPTER",
+      "blurb": "ლოკალური ბილეთები, ქართული არტისტები, გლობალური ხარისხის პროდაქშენი."
+    },
+    "events": [
+      {
+        "title": "ANIMATO - NEXT CHAPTER TBILISI",
+        "date": "28 ნოემბერი 2024 | პარასკევი",
+        "city": "Tsameti Restaurant, თამარაშვილის 13e, თბილისი",
+        "price": "I კალათა: 60 ₾ | II კალათა: 80 ₾ | კარზე: 120 ₾",
+        "vibe": "თბილისის ჰედლაინერი",
+        "capacity": "Face Control 23+",
+        "description": "NEXT CHAPTER — 28 ნოემბერს Fractal უფრო მეტი მუხტით და განახლებული ენერგიით ბრუნდება და ცამეტის სცენაზე იწვევს ფსაიტრანსის წამყვან ვარსკვლავ Animato-ს. მასთან ერთად ჰიპნოზურ სეტს უკრავს SHALA ირანიდან და ქართველი არტისტების ძლიერი შემადგენლობა. ბასი, ლაზერები და UV ინსტალაციები ქმნის უწყვეტ ღამეს.",
+        "accent": "#7affc6",
+        "poster": "Poster28.webp",
+        "lineup": [
+          "ANIMATO",
+          "SHALA",
+          "MARCUSS",
+          "INFEST",
+          "HOLO",
+          "NAKAMURA"
+        ],
+        "rituals": [
+          "ახალი UV დეკორაციები და ინტერაქტიული ინსტალაციები",
+          "ლაზერები და პროექციის მეფინგი, ძლიერი ბასი",
+          "ჩილ და საგამოფენო ზონა",
+          "სახის/სხეულის UV მოხატვა"
+        ],
+        "timeline": [
+          {
+            "label": "თარიღი",
+            "value": "28 ნოემბერი",
+            "copy": "პარასკევი | 22:00+"
+          },
+          {
+            "label": "Face Control",
+            "value": "23+",
+            "copy": "Dress code: ფსაი/ტრაიბალ"
+          },
+          {
+            "label": "ბილეთები",
+            "value": "60/80/120 ₾",
+            "copy": "I | II | კარზე"
+          },
+          {
+            "label": "ლოკაცია",
+            "value": "Tsameti",
+            "copy": "თამარაშვილის 13e"
+          }
+        ],
+        "blurb": "პარასკევი, 28 ნოემბერი | 22:00+ | Tsameti Restaurant, თბილისი"
+      }
+    ],
+    "perks": [
+      "ახალი UV დეკორაციები და ინტერაქტიული ინსტალაციები",
+      "ლაზერები, მეფინგი და ძლიერი ბასი",
+      "ჩილ + საგამოფენო ზონა და UV face/body art"
+    ],
+    "booking": {
+      "eyebrow": "დაჯავშნა",
+      "focus": "ANIMATO - NEXT CHAPTER TBILISI",
+      "copy": "პარასკევი, 28 ნოემბერი | 22:00+ | Tsameti Restaurant, თამარაშვილის 13e, თბილისი",
+      "placeholderEvent": "აირჩიე ღონისძიება",
+      "namePlaceholder": "მაგ. ნიკა მოსულიშვილი",
+      "phonePlaceholder": "+995 5XX XX XX XX",
+      "paymentPlaceholder": "აირჩიე გადახდის მეთოდი"
+    },
+    "form": {
+      "labels": {
+        "event": "ღონისძიება",
+        "name": "სრული სახელი",
+        "email": "ელ.ფოსტა",
+        "phone": "ტელეფონი",
+        "guests": "სტუმრები",
+        "tier": "ბილეთის კატეგორია",
+        "payment": "გადახდა",
+        "paymentId": "ბარათი / საფულის ID"
+      },
+      "tiers": [
+        { "value": "tier1", "label": "I კალათა" },
+        { "value": "tier2", "label": "II კალათა" },
+        { "value": "door", "label": "კარზე" }
+      ],
+      "payments": [
+        {
+          "value": "",
+          "label": "აირჩიე გადახდა",
+          "disabled": true
+        },
+        { "value": "card", "label": "ბარათი" },
+        { "value": "transfer-tbc", "label": "ბანკი (TBC)" },
+        { "value": "transfer-bog", "label": "ბანკი (Georgian Bank)" },
+        { "value": "crypto", "label": "კრიპტო" },
+        { "value": "apple", "label": "Apple Pay" }
+      ],
+      "submit": "დადასტურება",
+      "download": "Excel ჩამოტვირთვა"
+    },
+    "confirm": {
+      "missingEvent": "გთხოვ, აირჩიე ღონისძიება.",
+      "success": (name, tier, eventTitle) => `${name}, შენი ${tier} ბილეთი ${eventTitle}-ზე დადასტურებულია.`,
+      "excel": "Excel ფაილი განახლდა."
+    }
+  },
+  "eng": {
+    "hero": {
+      "eyebrow": "Next Chapter | Tbilisi",
+      "title": "Fractal Events",
+      "copy": "Animato returns to Tsameti with UV decor, SHALA from Iran, and a reborn Georgian squad.",
+      "primary": "Book Tickets",
+      "secondary": "See Details"
+    },
+    "stats": [
+      {
+        "value": "23+",
+        "label": "Face Control"
+      },
+      {
+        "value": "6",
+        "label": "Artists On Deck"
+      },
+      {
+        "value": "22:00",
+        "label": "Launch Time"
+      }
+    ],
+    "slider": [
+      {
+        "title": "ANIMATO - NEXT CHAPTER",
+        "tag": "Headliner portal",
+        "copy": "Ready for a new psychedelic quest? On 28 Nov, Fractal reignites Tsameti with Animato, SHALA, and a recharged local crew.",
+        "meta": "28 Nov | Tsameti Restaurant | Tbilisi",
+        "image": "Poster28.webp",
+        "accent": "#7affc6"
+      }
+    ],
+    "eventSection": {
+      "eyebrow": "Scene Pulse",
+      "heading": "ANIMATO - NEXT CHAPTER",
+      "blurb": "Local tickets, local artists, global-grade production."
+    },
+    "events": [
+      {
+        "title": "ANIMATO - NEXT CHAPTER TBILISI",
+        "date": "28 November 2024 | Friday",
+        "city": "Tsameti Restaurant, 13e Mikheil Tamarashvili St, Tbilisi",
+        "price": "Wave I: 60 ₾ | Wave II: 80 ₾ | Door: 120 ₾",
+        "vibe": "Tbilisi headliner",
+        "capacity": "Face Control 23+",
+        "description": "Animato, SHALA, and elite Georgian selectors deliver lasers, UV art, and heavy bass for a nonstop night.",
+        "accent": "#7affc6",
+        "poster": "Poster28.webp",
+        "lineup": [
+          "ANIMATO",
+          "SHALA",
+          "MARCUSS",
+          "INFEST",
+          "HOLO",
+          "NAKAMURA"
+        ],
+        "rituals": [
+          "Next-gen UV decor and interactive installations",
+          "Lasers and projection mapping with heavy bass",
+          "Chill and exhibit lounge",
+          "UV face/body art corners"
+        ],
+        "timeline": [
+          {
+            "label": "Date",
+            "value": "28 Nov",
+            "copy": "Friday | 22:00+"
+          },
+          {
+            "label": "Face Control",
+            "value": "23+",
+            "copy": "Dress code: Psy/Tribal"
+          },
+          {
+            "label": "Tickets",
+            "value": "60/80/120 ₾",
+            "copy": "Wave I | Wave II | Door"
+          },
+          {
+            "label": "Venue",
+            "value": "Tsameti",
+            "copy": "13e Mikheil Tamarashvili St"
+          }
+        ],
+        "blurb": "Friday, 28 Nov | 22:00+ | Tsameti Restaurant, Tbilisi"
+      }
+    ],
+    "perks": [
+      "Next-gen UV decor & interactive installations",
+      "Lasers, mapping, and earth-shaking bass",
+      "Chill + exhibit zones with UV face/body art"
+    ],
+    "booking": {
+      "eyebrow": "Reserve your passage",
+      "focus": "ANIMATO - NEXT CHAPTER TBILISI",
+      "copy": "Friday, 28 Nov | 22:00+ | Tsameti Restaurant, 13e Mikheil Tamarashvili St, Tbilisi",
+      "placeholderEvent": "Tap an event card",
+      "namePlaceholder": "e.g. Nova Traveler",
+      "phonePlaceholder": "+995 5XX XX XX XX",
+      "paymentPlaceholder": "Choose a method"
+    },
+    "form": {
+      "labels": {
+        "event": "Event",
+        "name": "Full name",
+        "email": "Email address",
+        "phone": "Phone",
+        "guests": "Guests",
+        "tier": "Ticket tier",
+        "payment": "Payment method",
+        "paymentId": "Card / Wallet ID"
+      },
+      "tiers": [
+        {
+          "value": "tier1",
+          "label": "Wave I"
+        },
+        {
+          "value": "tier2",
+          "label": "Wave II"
+        },
+        {
+          "value": "door",
+          "label": "Door"
+        }
+      ],
+      "payments": [
+        {
+          "value": "",
+          "label": "Choose a method",
+          "disabled": true
+        },
+        {
+          "value": "card",
+          "label": "Card"
+        },
+        {
+          "value": "transfer-tbc",
+          "label": "Bank transfer (TBC)"
+        },
+        {
+          "value": "transfer-bog",
+          "label": "Bank transfer (Georgian Bank)"
+        },
+        {
+          "value": "crypto",
+          "label": "Crypto wallet"
+        },
+        {
+          "value": "apple",
+          "label": "Apple Pay"
+        }
+      ],
+      "submit": "Confirm & Pay",
+      "download": "Download Excel file"
+    },
+    "confirm": {
+      "missingEvent": "Please select an event to continue.",
+      "success": (name, tier, eventTitle) => `${name}, your ${tier} access to ${eventTitle} is locked in.`,
+      "excel": "Excel file updated with your booking."
+    }
+  }
+}
+const API_BASE = (() => {
+  const host = window.location.hostname || "localhost";
+  const port = "5000";
+  return `http://${host}:${port}`;
+})(); // dynamically match the current host so cookies stay same-site
+
+    const heroEyebrow = document.getElementById('heroEyebrow');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroIntro = document.getElementById('heroIntro');
+    const ctaPrimary = document.getElementById('ctaPrimary');
+    const ctaSecondary = document.getElementById('ctaSecondary');
+    const statsPanel = document.getElementById('statsPanel');
+    const sliderTrack = document.querySelector('.slider-track');
+    const sliderDots = document.querySelector('.slider-dots');
+    const eventGrid = document.querySelector('.event-grid');
+    const timeline = document.querySelector('.timeline');
+    const eventSectionEyebrow = document.getElementById('eventSectionEyebrow');
+    const eventSectionHeading = document.getElementById('eventSectionHeading');
+    const eventSectionCopy = document.getElementById('eventSectionCopy');
+    const bookingEyebrow = document.getElementById('bookingEyebrow');
+    const eventFocus = document.getElementById('eventFocus');
+    const eventCopy = document.getElementById('eventCopy');
+    const perksList = document.getElementById('perksList');
+    const selectedEventInput = document.getElementById('selectedEvent');
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const phoneInput = document.getElementById('phoneInput');
+    const ticketsInput = document.getElementById('ticketsInput');
+    const tierSelect = document.getElementById('tierSelect');
+    const paymentSelect = document.getElementById('paymentSelect');
+    const paymentIdInput = document.getElementById('paymentIdInput');
+    const submitLabel = document.getElementById('submitLabel');
+    const confirmation = document.getElementById('confirmation');
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingGate = document.getElementById('bookingGate');
+    const bookingGateMessage = document.getElementById('bookingGateMessage');
+    const bookingContent = document.querySelector('#book .panel-content');
+    const profileLink = document.getElementById('profileLink');
+    const paymentInfo = document.getElementById('paymentInfo');
+    const userBadge = document.getElementById('userBadge');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const labelMap = {
+      event: document.getElementById('labelEvent'),
+      name: document.getElementById('labelName'),
+      email: document.getElementById('labelEmail'),
+      phone: document.getElementById('labelPhone'),
+      guests: document.getElementById('labelGuests'),
+      tier: document.getElementById('labelTier'),
+      payment: document.getElementById('labelPayment'),
+      paymentId: document.getElementById('labelPaymentId')
+    };
+
+    let currentLang = 'eng';
+    let currentSlides = [];
+    let currentEvents = [];
+    let sliderIndex = 0;
+    let sliderInterval = null;
+    let confirmCopy = translations.geo.confirm;
+    let cachedUser = null;
+    let paymentConfig = null;
+
+    function renderContent(lang) {
+      const data = translations[lang];
+      currentLang = lang;
+      document.documentElement.lang = lang === 'geo' ? 'ka' : 'en';
+      confirmCopy = data.confirm;
+      heroEyebrow.textContent = data.hero.eyebrow;
+      heroTitle.textContent = data.hero.title;
+      heroIntro.textContent = data.hero.copy;
+      ctaPrimary.textContent = data.hero.primary;
+      ctaSecondary.textContent = data.hero.secondary;
+
+      statsPanel.innerHTML = '';
+      data.stats.forEach((stat) => {
+        const card = document.createElement('div');
+        card.className = 'stat';
+        card.innerHTML = `<strong>${stat.value}</strong><span>${stat.label}</span>`;
+        statsPanel.appendChild(card);
+      });
+
+      eventSectionEyebrow.textContent = data.eventSection.eyebrow;
+      eventSectionHeading.textContent = data.eventSection.heading;
+      eventSectionCopy.textContent = data.eventSection.blurb;
+
+      bookingEyebrow.textContent = data.booking.eyebrow;
+      eventFocus.textContent = data.booking.focus;
+      eventCopy.textContent = data.booking.copy;
+      selectedEventInput.placeholder = data.booking.placeholderEvent;
+      nameInput.placeholder = data.booking.namePlaceholder;
+      phoneInput.placeholder = data.booking.phonePlaceholder;
+
+      Object.entries(data.form.labels).forEach(([key, value]) => {
+        labelMap[key].textContent = value;
+      });
+      submitLabel.textContent = data.form.submit;
+
+      tierSelect.innerHTML = '';
+      data.form.tiers.forEach((tier) => {
+        const option = document.createElement('option');
+        option.value = tier.value;
+        option.textContent = tier.label;
+        tierSelect.appendChild(option);
+      });
+
+      paymentSelect.innerHTML = '';
+      data.form.payments.forEach((method) => {
+        const option = document.createElement('option');
+        option.value = method.value;
+        option.textContent = method.label;
+        if (method.disabled) { option.disabled = true; option.selected = true; }
+        paymentSelect.appendChild(option);
+      });
+
+      perksList.innerHTML = '';
+      data.perks.forEach((perk) => {
+        const item = document.createElement('li');
+        item.textContent = perk;
+        perksList.appendChild(item);
+      });
+
+      currentSlides = data.slider;
+      buildSlider();
+      currentEvents = data.events;
+      buildEvents();
+      if (currentEvents.length) { selectEvent(currentEvents[0], false); }
+      updatePaymentInfo();
+      syncBookingVisibility();
+    }
+
+    function buildSlider() {
+      sliderTrack.innerHTML = '';
+      sliderDots.innerHTML = '';
+      sliderIndex = 0;
+      currentSlides.forEach((slide, index) => {
+        const article = document.createElement('article');
+        article.className = 'slide';
+        article.style.background = `linear-gradient(135deg, rgba(0,0,0,.7), ${slide.accent || '#7affc6'})`;
+        article.innerHTML = `
+          ${slide.image ? `<img src="${slide.image}" alt="Poster for ${slide.title}" class="slide-poster" loading="lazy" />` : ''}
+          <div class="slide-content">
+            <span class="tag">${slide.tag}</span>
+            <h3>${slide.title}</h3>
+            <p>${slide.copy}</p>
+          </div>
+          <div class="slide-footer">
+            <span>${slide.meta}</span>
+            <span>${currentLang === 'geo' ? 'ჰედლაინერი' : 'Headliner'}</span>
+          </div>
+        `;
+        sliderTrack.appendChild(article);
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', 'Show ' + slide.title);
+        dot.addEventListener('click', () => goToSlide(index));
+        sliderDots.appendChild(dot);
+      });
+      goToSlide(0);
+      if (sliderInterval) clearInterval(sliderInterval);
+      if (currentSlides.length > 1) {
+        sliderInterval = setInterval(() => { sliderIndex = (sliderIndex + 1) % currentSlides.length; goToSlide(sliderIndex); }, 5200);
+      }
+    }
+
+    function goToSlide(index) {
+      sliderIndex = index;
+      sliderTrack.style.transform = `translateX(-${index * 100}%)`;
+      document.querySelectorAll('.slider-dots button').forEach((dot, idx) => dot.classList.toggle('active', idx === index));
+    }
+
+    function syncBookingVisibility() {
+      const isLoggedIn = !!cachedUser;
+      if (bookingContent) bookingContent.style.display = isLoggedIn ? 'grid' : 'none';
+      if (bookingGate) bookingGate.style.display = isLoggedIn ? 'none' : 'flex';
+      if (bookingGateMessage) bookingGateMessage.textContent = 'Please sign in or register to book tickets.';
+      if (ctaPrimary) ctaPrimary.href = isLoggedIn ? '#book' : 'register.html';
+      if (userBadge) {
+        userBadge.style.display = isLoggedIn ? 'inline-flex' : 'none';
+        userBadge.textContent = isLoggedIn ? (cachedUser.name || cachedUser.email || 'User') : '';
+      }
+      if (logoutBtn) logoutBtn.style.display = isLoggedIn ? 'inline-flex' : 'none';
+      if (profileLink) profileLink.style.display = isLoggedIn ? 'inline-flex' : 'none';
+    }
+
+    function buildEvents() {
+      eventGrid.innerHTML = '';
+      timeline.innerHTML = '';
+      currentEvents.forEach((event) => {
+        const card = document.createElement('article');
+        card.className = 'event-card';
+        if (event.poster) { card.style.backgroundImage = `url('${event.poster}')`; card.style.backgroundSize = 'cover'; card.style.backgroundBlendMode = 'overlay'; }
+        const lineupList = (event.lineup || []).map((artist) => `<li>${artist}</li>`).join('');
+        const ritualList = (event.rituals || []).map((item) => `<li>${item}</li>`).join('');
+        card.innerHTML = `
+          <div class="card-body">
+            <span class="tag">${event.vibe}</span>
+            <h3>${event.title}</h3>
+            <p class="event-description">${event.description}</p>
+            <div class="event-meta">
+              <span>${event.date}</span>
+              <span>${event.city}</span>
+            </div>
+            ${lineupList ? `<p class="micro-label">${currentLang === 'geo' ? 'Line-up' : 'Line-up'}</p><ul class="lineup">${lineupList}</ul>` : ''}
+            ${ritualList ? `<p class="micro-label">${currentLang === 'geo' ? 'რას უნდა ელოდოთ' : 'What to expect'}</p><ul class="rituals">${ritualList}</ul>` : ''}
+            <div class="event-footer">
+              <span class="price">${event.price}</span>
+              <button class="mini-cta" type="button">${currentLang === 'geo' ? 'დაჯავშნა' : 'Book'}</button>
+            </div>
+          </div>
+        `;
+        card.addEventListener('click', () => selectEvent(event));
+        card.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); selectEvent(event); });
+        eventGrid.appendChild(card);
+        (event.timeline || []).forEach((nodeData) => {
+          const node = document.createElement('article');
+          node.className = 'node';
+          node.style.borderColor = event.accent;
+          node.innerHTML = `<span>${nodeData.label}</span><strong>${nodeData.value}</strong><small>${nodeData.copy || ''}</small>`;
+          timeline.appendChild(node);
+        });
+      });
+    }
+
+    function selectEvent(event, scrollToForm = true) {
+      selectedEventInput.value = event.title;
+      eventFocus.textContent = event.title;
+      eventCopy.textContent = event.blurb || `${event.city} | ${event.date}`;
+      if (event.accent) document.documentElement.style.setProperty('--electric', event.accent);
+      if (scrollToForm) {
+        const bookingSection = document.getElementById('book');
+        if (cachedUser && bookingSection) {
+          bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (!cachedUser && bookingGate) {
+          bookingGate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }
+
+    const languageButtons = document.querySelectorAll('[data-lang]');
+    languageButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        languageButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
+        renderContent(button.dataset.lang);
+      });
+    });
+
+    paymentSelect.addEventListener('change', () => {
+      const option = paymentSelect.selectedOptions[0];
+      if (option && option.disabled) { paymentSelect.value = ''; return; }
+      updatePaymentInfo();
+    });
+
+    async function fetchCurrentUser() {
+      try {
+        const res = await fetch(`${API_BASE}/api/user/me`, { credentials: 'include' });
+        if (!res.ok) throw new Error('unauthenticated');
+        const body = await res.json();
+        cachedUser = body.user;
+        if (profileLink) {
+          profileLink.style.display = 'inline-flex';
+          profileLink.textContent = (cachedUser && cachedUser.name) ? cachedUser.name : 'Profile';
+        }
+        if (userBadge) {
+          userBadge.style.display = 'inline-flex';
+          userBadge.textContent = cachedUser.name || cachedUser.email || 'User';
+        }
+      } catch (error) {
+        cachedUser = null;
+        if (profileLink) profileLink.style.display = 'none';
+        if (userBadge) userBadge.style.display = 'none';
+      }
+      updatePaymentInfo();
+      syncBookingVisibility();
+    }
+
+    function loadPaymentConfig() {
+      if (paymentConfig) return paymentConfig;
+      try {
+        const stored = localStorage.getItem('fractalPaymentConfig');
+        paymentConfig = stored ? JSON.parse(stored) : {};
+      } catch (e) { paymentConfig = {}; }
+      return paymentConfig;
+    }
+
+    function getPaymentId() {
+      if (cachedUser && cachedUser.id) return `FR-${cachedUser.id}`;
+      if (cachedUser && cachedUser.email) return 'FR-' + btoa(cachedUser.email).replace(/[^A-Z0-9]/gi, '').slice(0, 8);
+      return null;
+    }
+
+        function updatePaymentInfo() {
+      if (!paymentInfo) return;
+      const method = paymentSelect.value;
+      const cfg = loadPaymentConfig();
+      const payId = getPaymentId();
+      const descriptionLabel = `Use payment description: "Ticket for ${payId || 'FR-XXXX'}"`;
+      const intro = 'Payment instructions';
+      const missing = 'Transfer details not set. Please contact admin.';
+      paymentInfo.innerHTML = '';
+      if (!cachedUser) {
+        paymentInfo.innerHTML = 'Please sign in to see payment details and complete booking.';
+        return;
+      }
+      if (method === 'transfer-tbc' || method === 'transfer-bog') {
+        const bankLabel = method === 'transfer-tbc' ? 'TBC Bank' : 'Georgian Bank';
+        const account = method === 'transfer-tbc' ? cfg.tbcAccount : cfg.bogAccount;
+        if (paymentIdInput) paymentIdInput.value = payId || '';
+        const details = account ? `
+          <h4>${intro} - ${bankLabel}</h4>
+          <p>Send transfer to this account and include in description:</p>
+          <div class="payment-steps">
+            <div>${descriptionLabel}</div>
+            <div>Amount: match your ticket category (I/II/Door)</div>
+          </div>
+          <p>Account: <strong>${account}</strong></p>
+          ${cfg.transferNote ? `<p>${cfg.transferNote}</p>` : ''}
+          ${cfg.qrUrl ? `<p>QR code: <a href="${cfg.qrUrl}" target="_blank" style="color:var(--electric);">Open</a></p>` : ''}
+        ` : `<p>${missing}</p>`;
+        paymentInfo.innerHTML = details;
+      } else if (method === 'card') {
+        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Pay directly with your card.</p>`;
+      } else if (method === 'crypto') {
+        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Crypto wallet accepted; include your transfer TX in the booking.</p>`;
+      } else if (method === 'apple') {
+        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Apple Pay supported.</p>`;
+      } else {
+        paymentInfo.innerHTML = '';
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+        } catch (e) { /* ignore */ }
+        cachedUser = null;
+        syncBookingVisibility();
+      });
+    }
+
+    bookingForm.addEventListener('submit', async (eventObj) => {
+      eventObj.preventDefault();
+      confirmation.textContent = '';
+      if (!cachedUser) {
+        confirmation.textContent = currentLang === 'geo' ? 'დაჯავშნისთვის გთხოვ, შეხვიდე ანგარიშში.' : 'Please sign in to book tickets.';
+        return;
+      }
+      if (!selectedEventInput.value) { confirmation.textContent = confirmCopy.missingEvent; return; }
+      const data = new FormData(bookingForm);
+      const name = data.get('name') || (currentLang === 'geo' ? 'მეგობარო' : 'Explorer');
+      const tier = data.get('tier');
+      const payload = {
+        language: currentLang,
+        event_title: selectedEventInput.value,
+        name,
+        email: data.get('email'),
+        phone: data.get('phone'),
+        guests: data.get('tickets'),
+        tier,
+        payment: data.get('payment'),
+        payment_id: data.get('paymentId')
+      };
+      try {
+        const res = await fetch(`${API_BASE}/api/bookings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || 'Booking failed');
+        confirmation.textContent = confirmCopy.success(name, tier, selectedEventInput.value);
+        bookingForm.reset();
+        if (currentEvents.length) selectEvent(currentEvents[0], false);
+      } catch (error) { confirmation.textContent = error.message; }
+    });
+
+    const yearEl = document.getElementById('year');
+    if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+
+    function init() {
+      currentLang = 'eng';
+      renderContent(currentLang);
+      languageButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.lang === currentLang));
+      fetchCurrentUser();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

@@ -506,11 +506,7 @@
     }
   }
 }
-const API_BASE = (() => {
-  const host = window.location.hostname || "localhost";
-  const port = "5000";
-  return `http://${host}:${port}`;
-})(); // dynamically match the current host so cookies stay same-site
+const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
 
     const heroEyebrow = document.getElementById('heroEyebrow');
     const heroTitle = document.getElementById('heroTitle');

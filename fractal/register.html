@@ -247,12 +247,7 @@
   </main>
 
   <script>
-    const API_BASE = (() => {
-      if (window.FRAC_API_BASE) return window.FRAC_API_BASE;
-      const host = window.location.hostname || "localhost";
-      const port = "5000";
-      return `http://${host}:${port}`;
-    })();
+    const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
 
     const registerForm = document.getElementById('registerForm');
     const loginForm = document.getElementById('loginForm');

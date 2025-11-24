@@ -23,7 +23,7 @@ class Config:
     # Excel export path
     EXCEL_OUTPUT_PATH = os.getenv(
         "EXCEL_OUTPUT_PATH",
-        r"G:\Fractal\fractalsql\Database\base.xlsx",
+        "/var/data/base.xlsx",
     )
     PASSWORD_RESET_URL_BASE = os.getenv("PASSWORD_RESET_URL_BASE", "http://127.0.0.1:5500/register.html")
     PASSWORD_RESET_TOKEN_MINUTES = int(os.getenv("PASSWORD_RESET_TOKEN_MINUTES", "60"))

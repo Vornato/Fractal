@@ -11,7 +11,8 @@ load_dotenv(base_dir / ".env", override=False)
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", f"sqlite:///{(base_dir / 'app.db').as_posix()}")
+    # Default to a writable, ephemeral SQLite path (/tmp) for cloud deploys; override with DATABASE_URL
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:////tmp/app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(base_dir / "uploads"))
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB

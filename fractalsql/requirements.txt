@@ -1,9 +1,12 @@
 Flask==3.0.3
-Flask-SQLAlchemy==3.1.1
-Flask-Migrate==4.0.7
 Flask-Login==0.6.3
+Flask-Migrate==4.0.7
 Flask-Bcrypt==1.0.1
+Flask-SQLAlchemy==3.1.1
 python-dotenv==1.0.1
-pandas==2.2.3
+SQLAlchemy==2.0.30
+alembic==1.13.2
+pandas==2.2.2
 openpyxl==3.1.5
-filelock==3.16.1
+filelock==3.15.4
+gunicorn==22.0.0

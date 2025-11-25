@@ -337,7 +337,7 @@
       updateStatus(userId, status);
     });
 
-    userTable.addEventListener('click', (event) => {
+    userTable.addEventListener('click', async (event) => {
       const btn = event.target.closest('.save-ticket');
       if (!btn) return;
       const userId = btn.dataset.id;

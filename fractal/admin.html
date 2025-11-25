@@ -363,19 +363,19 @@
         // If a logged-in user is not the admin, block access and redirect.
         try {
           const me = await api('/api/user/me');
-          if (me && me.user && me.user.email && me.user.email !== AUTO_ADMIN_EMAIL) {
-            showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
-            setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
-            return;
+          if (me && me.user && me.user.email) {
+            if (me.user.email !== AUTO_ADMIN_EMAIL) {
+              showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
+              setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
+              return;
+            }
+            // Recognize existing admin session and allow basic auth on admin endpoints
+            setAdminAuthed(true);
           }
         } catch (err) {
           /* ignore 401; proceed to admin login */
         }
-        if (isAdminAuthed()) {
-          await autoAdminLogin();
-        } else {
-          showMessage(adminLoginMessage, 'Not logged in. Please sign in as admin.', true);
-        }
+        await autoAdminLogin();
       } catch (error) {
         adminLoggedIn = false;
         showMessage(adminLoginMessage, 'Admin auto-login failed. Check backend credentials.', true);

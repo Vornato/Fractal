@@ -88,10 +88,8 @@
 
   <script>
     const API_BASE = (() => {
-      if (window.FRAC_API_BASE) return window.FRAC_API_BASE;
-      const host = window.location.hostname || "localhost";
-      const port = "5000";
-      return `http://${host}:${port}`;
+      // Default to deployed backend; allow override for local testing.
+      return window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
     })();
 
     const adminPanel = document.getElementById('adminPanel');

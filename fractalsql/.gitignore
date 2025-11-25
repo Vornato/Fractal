@@ -5,6 +5,5 @@ env/
 .env
 instance/
 app.db
-migrations/
 uploads/
 *.xlsx

@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from extensions import db
-from models import User
+from models import User, Ticket
 from services.excel_export import write_users_to_excel
 
 user_bp = Blueprint("user", __name__)
@@ -90,3 +90,10 @@ def upload_photo():
     write_users_to_excel()
 
     return jsonify({"photo": unique_name, "url": f"/uploads/{unique_name}"})
+
+
+@user_bp.route("/tickets", methods=["GET"])
+@login_required
+def my_tickets():
+    tickets = Ticket.query.filter_by(user_id=current_user.id).all()
+    return jsonify({"tickets": [t.to_dict() for t in tickets]})

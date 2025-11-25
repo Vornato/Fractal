@@ -55,15 +55,22 @@
       <h2>Registered Users</h2>
       <div class="settings">
         <h3>Payment details (shows on booking)</h3>
-        <div class="stack">
-          <input id="tbcAccountInput" type="text" class="compact-input" placeholder="TBC account / IBAN" />
-          <input id="bogAccountInput" type="text" class="compact-input" placeholder="Georgian Bank account / IBAN" />
-          <input id="qrUrlInput" type="text" placeholder="QR code URL (optional)" />
-          <input id="transferNoteInput" type="text" placeholder="Note to display (optional)" />
-          <button id="savePaymentCfg" type="button">Save payment details</button>
-          <p class="note">These values are stored locally in the browser and shown to buyers selecting bank transfer.</p>
+      <div class="stack">
+        <input id="tbcAccountInput" type="text" class="compact-input" placeholder="TBC account / IBAN" />
+        <input id="bogAccountInput" type="text" class="compact-input" placeholder="Georgian Bank account / IBAN" />
+        <input id="qrUrlInput" type="text" placeholder="QR code URL (optional)" />
+        <input id="transferNoteInput" type="text" placeholder="Note to display (optional)" />
+        <div class="stack" id="tierControls">
+          <label><input type="checkbox" value="wave1" /> Wave I</label>
+          <label><input type="checkbox" value="wave2" /> Wave II</label>
+          <label><input type="checkbox" value="wave3" /> Wave III</label>
+          <label><input type="checkbox" value="door" /> Door</label>
+          <small class="note">Select which tiers are available to users.</small>
         </div>
+        <button id="savePaymentCfg" type="button">Save payment details</button>
+        <p class="note">These values are stored and shown to buyers selecting bank transfer. <a href="#" id="exportLink" style="color:#7affc6;">Download Excel (CSV) snapshot</a></p>
       </div>
+    </div>
       <table>
         <thead>
           <tr>
@@ -108,6 +115,8 @@
     const bogAccountInput = document.getElementById('bogAccountInput');
     const transferNoteInput = document.getElementById('transferNoteInput');
     const qrUrlInput = document.getElementById('qrUrlInput');
+    const exportLink = document.getElementById('exportLink');
+    const tierControls = document.querySelectorAll('#tierControls input[type="checkbox"]');
     const savePaymentCfg = document.getElementById('savePaymentCfg');
     const statusOptions = ['permanent', 'temporary', 'door', 'declined'];
     let adminLoggedIn = false;
@@ -155,16 +164,7 @@
       localStorage.setItem('fractalPaymentConfig', JSON.stringify(cfg));
     }
 
-    function loadTicketData() {
-      try {
-        const stored = localStorage.getItem('fractalTickets');
-        return stored ? JSON.parse(stored) : {};
-      } catch (e) { return {}; }
-    }
-
-    function saveTicketData(data) {
-      localStorage.setItem('fractalTickets', JSON.stringify(data));
-    }
+    const ticketsByUser = {};
 
     const ADMIN_AUTH_FLAG = 'fractalAdminAuthed';
     const isAdminAuthed = () => sessionStorage.getItem(ADMIN_AUTH_FLAG) === '1';
@@ -207,13 +207,12 @@
 
     function renderUsers() {
       userTable.innerHTML = '';
-      const tickets = loadTicketData();
       users.forEach((user) => {
         const row = document.createElement('tr');
         const statusSelect = `<select data-id="${user.id}" class="status-select">${statusOptions
           .map((opt) => `<option value="${opt}" ${user.status === opt ? 'selected' : ''}>${opt}</option>`)
           .join('')}</select>`;
-        const ticketEntry = tickets[user.id] || {};
+        const ticketEntry = ticketsByUser[user.id] || {};
         const ticketInputs = `
           <div class="stack">
             <input type="text" class="ticket-url" data-id="${user.id}" placeholder="Ticket link" value="${ticketEntry.ticket || ''}">
@@ -238,18 +237,26 @@
       });
     }
 
-    function loadPaymentForm() {
-      const cfg = loadPaymentConfig();
-      tbcAccountInput.value = cfg.tbcAccount || '';
-      bogAccountInput.value = cfg.bogAccount || '';
-      transferNoteInput.value = cfg.transferNote || '';
-      qrUrlInput.value = cfg.qrUrl || '';
+    async function loadPaymentForm() {
+      try {
+        const res = await api('/api/admin/event-settings');
+        const s = (res && res.settings) || {};
+        tbcAccountInput.value = s.tbc_account || '';
+        bogAccountInput.value = s.bog_account || '';
+        transferNoteInput.value = s.transfer_note || '';
+        qrUrlInput.value = s.qr_url || '';
+        const allowed = new Set(s.allowed_tiers || ['wave1','wave2','wave3','door']);
+        tierControls.forEach((cb) => { cb.checked = allowed.has(cb.value); });
+      } catch (err) {
+        showMessage(adminLoginMessage, 'Could not load payment details', true);
+      }
     }
 
     async function loadUsers() {
       try {
         const res = await api('/api/admin/users');
         users = res.users;
+        Object.assign(ticketsByUser, res.tickets || {});
         renderUsers();
         adminPanel.classList.remove('hidden');
         if (adminPanel !== adminLoginSection) {
@@ -305,15 +312,20 @@
       }
     }
 
-    savePaymentCfg.addEventListener('click', () => {
-      const cfg = {
-        tbcAccount: tbcAccountInput.value.trim(),
-        bogAccount: bogAccountInput.value.trim(),
-        transferNote: transferNoteInput.value.trim(),
-        qrUrl: qrUrlInput.value.trim()
+    savePaymentCfg.addEventListener('click', async () => {
+      const payload = {
+        tbc_account: tbcAccountInput.value.trim(),
+        bog_account: bogAccountInput.value.trim(),
+        transfer_note: transferNoteInput.value.trim(),
+        qr_url: qrUrlInput.value.trim(),
+        allowed_tiers: Array.from(tierControls).filter((cb) => cb.checked).map((cb) => cb.value)
       };
-      savePaymentConfig(cfg);
-      showMessage(adminLoginMessage, 'Payment details saved locally.');
+      try {
+        await api('/api/admin/event-settings', { method: 'PUT', body: payload });
+        showMessage(adminLoginMessage, 'Payment details saved.');
+      } catch (err) {
+        showMessage(adminLoginMessage, err.message || 'Failed to save payment details', true);
+      }
     });
 
     userTable.addEventListener('change', (event) => {
@@ -330,16 +342,45 @@
       const userId = btn.dataset.id;
       const ticketInput = userTable.querySelector(`.ticket-url[data-id="${userId}"]`);
       const qrInput = userTable.querySelector(`.ticket-qr[data-id="${userId}"]`);
-      const data = loadTicketData();
-      data[userId] = {
+      const payload = {
         ticket: ticketInput.value.trim(),
         qr: qrInput.value.trim(),
         note: `Ticket for FR-${userId}`,
-        paymentId: `FR-${userId}`
+        payment_id: `FR-${userId}`
       };
-      saveTicketData(data);
-      showMessage(adminLoginMessage, `Ticket info saved for user ${userId}.`);
+      try {
+        const res = await api(`/api/admin/users/${userId}/ticket`, { method: 'PUT', body: payload });
+        ticketsByUser[userId] = res.ticket || payload;
+        showMessage(adminLoginMessage, `Ticket info saved for user ${userId}.`);
+      } catch (error) {
+        showMessage(adminLoginMessage, error.message || 'Failed to save ticket', true);
+      }
     });
+
+    if (exportLink) {
+      exportLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const url = `${API_BASE}/api/admin/users/export`;
+          const headers = {};
+          if (isAdminAuthed()) {
+            const basic = btoa(`${AUTO_ADMIN_EMAIL}:${AUTO_ADMIN_PASSWORD}`);
+            headers['Authorization'] = `Basic ${basic}`;
+          }
+          const res = await fetch(url, { credentials: 'include', headers });
+          if (!res.ok) throw new Error('Failed to download CSV');
+          const blob = await res.blob();
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'users.csv';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        } catch (err) {
+          showMessage(adminLoginMessage, err.message || 'Failed to download CSV', true);
+        }
+      });
+    }
 
     logoutBtn.addEventListener('click', async () => {
       try {

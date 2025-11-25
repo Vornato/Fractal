@@ -106,6 +106,11 @@ class EventSettings(db.Model):
     location = db.Column(db.String(255))
     booking_description = db.Column(db.Text)
     event_description = db.Column(db.Text)
+    tbc_account = db.Column(db.String(255))
+    bog_account = db.Column(db.String(255))
+    transfer_note = db.Column(db.Text)
+    qr_url = db.Column(db.String(500))
+    allowed_tiers = db.Column(db.JSON)
 
     def to_dict(self):
         return {
@@ -117,6 +122,11 @@ class EventSettings(db.Model):
           "location": self.location,
           "booking_description": self.booking_description,
           "event_description": self.event_description,
+          "tbc_account": self.tbc_account,
+          "bog_account": self.bog_account,
+          "transfer_note": self.transfer_note,
+          "qr_url": self.qr_url,
+          "allowed_tiers": self.allowed_tiers or [],
         }
 
 
@@ -145,3 +155,30 @@ class PasswordResetToken(db.Model):
         if self.expires_at and datetime.utcnow() > self.expires_at:
             return False
         return True
+
+
+class Ticket(db.Model):
+    __tablename__ = "tickets"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True, unique=True)
+    ticket_url = db.Column(db.String(500))
+    qr_url = db.Column(db.String(500))
+    note = db.Column(db.Text)
+    payment_id = db.Column(db.String(120))
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    user = db.relationship("User", backref="ticket", uselist=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "ticket": self.ticket_url,
+            "qr": self.qr_url,
+            "note": self.note,
+            "payment_id": self.payment_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }

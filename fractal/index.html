@@ -555,6 +555,12 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
       paymentId: document.getElementById('labelPaymentId')
     };
 
+    const DEFAULT_TIER_VALUES = ["wave1", "wave2", "wave3", "door"];
+    const TIER_LABELS = {
+      eng: { wave1: "Wave I", wave2: "Wave II", wave3: "Wave III", door: "Door" },
+      geo: { wave1: "Wave I", wave2: "Wave II", wave3: "Wave III", door: "Door" },
+    };
+    const ALLOWED_PAYMENTS = ["transfer-tbc", "transfer-bog"];
     let currentLang = 'eng';
     let currentSlides = [];
     let currentEvents = [];
@@ -563,6 +569,23 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
     let confirmCopy = translations.geo.confirm;
     let cachedUser = null;
     let paymentConfig = null;
+    let allowedTiers = DEFAULT_TIER_VALUES.slice();
+
+    function getTierLabel(value, lang) {
+      const labels = TIER_LABELS[lang] || TIER_LABELS.eng;
+      return labels[value] || value;
+    }
+
+    function rebuildTierSelect(lang) {
+      tierSelect.innerHTML = '';
+      const tierValues = (allowedTiers && allowedTiers.length) ? allowedTiers : DEFAULT_TIER_VALUES;
+      tierValues.forEach((value) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = getTierLabel(value, lang);
+        tierSelect.appendChild(option);
+      });
+    }
 
     function renderContent(lang) {
       const data = translations[lang];
@@ -599,22 +622,18 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
       });
       submitLabel.textContent = data.form.submit;
 
-      tierSelect.innerHTML = '';
-      data.form.tiers.forEach((tier) => {
-        const option = document.createElement('option');
-        option.value = tier.value;
-        option.textContent = tier.label;
-        tierSelect.appendChild(option);
-      });
+      rebuildTierSelect(lang);
 
       paymentSelect.innerHTML = '';
-      data.form.payments.forEach((method) => {
-        const option = document.createElement('option');
-        option.value = method.value;
-        option.textContent = method.label;
-        if (method.disabled) { option.disabled = true; option.selected = true; }
-        paymentSelect.appendChild(option);
-      });
+      data.form.payments
+        .filter((method) => ALLOWED_PAYMENTS.includes(method.value) || method.value === "")
+        .forEach((method) => {
+          const option = document.createElement('option');
+          option.value = method.value;
+          option.textContent = method.label;
+          if (method.disabled) { option.disabled = true; option.selected = true; }
+          paymentSelect.appendChild(option);
+        });
 
       perksList.innerHTML = '';
       data.perks.forEach((perk) => {
@@ -777,12 +796,19 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
       syncBookingVisibility();
     }
 
-    function loadPaymentConfig() {
+    async function loadPaymentConfig() {
       if (paymentConfig) return paymentConfig;
       try {
-        const stored = localStorage.getItem('fractalPaymentConfig');
-        paymentConfig = stored ? JSON.parse(stored) : {};
-      } catch (e) { paymentConfig = {}; }
+        const res = await fetch(`${API_BASE}/api/event-settings`);
+        const data = await res.json();
+        paymentConfig = (data && data.settings) || {};
+        allowedTiers = (paymentConfig.allowed_tiers && paymentConfig.allowed_tiers.length)
+          ? paymentConfig.allowed_tiers
+          : DEFAULT_TIER_VALUES.slice();
+        rebuildTierSelect(currentLang);
+      } catch (e) {
+        paymentConfig = {};
+      }
       return paymentConfig;
     }
 
@@ -795,41 +821,42 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
         function updatePaymentInfo() {
       if (!paymentInfo) return;
       const method = paymentSelect.value;
-      const cfg = loadPaymentConfig();
-      const payId = getPaymentId();
-      const descriptionLabel = `Use payment description: "Ticket for ${payId || 'FR-XXXX'}"`;
-      const intro = 'Payment instructions';
-      const missing = 'Transfer details not set. Please contact admin.';
-      paymentInfo.innerHTML = '';
-      if (!cachedUser) {
-        paymentInfo.innerHTML = 'Please sign in to see payment details and complete booking.';
-        return;
-      }
-      if (method === 'transfer-tbc' || method === 'transfer-bog') {
-        const bankLabel = method === 'transfer-tbc' ? 'TBC Bank' : 'Georgian Bank';
-        const account = method === 'transfer-tbc' ? cfg.tbcAccount : cfg.bogAccount;
-        if (paymentIdInput) paymentIdInput.value = payId || '';
-        const details = account ? `
-          <h4>${intro} - ${bankLabel}</h4>
-          <p>Send transfer to this account and include in description:</p>
-          <div class="payment-steps">
-            <div>${descriptionLabel}</div>
-            <div>Amount: match your ticket category (I/II/Door)</div>
-          </div>
-          <p>Account: <strong>${account}</strong></p>
-          ${cfg.transferNote ? `<p>${cfg.transferNote}</p>` : ''}
-          ${cfg.qrUrl ? `<p>QR code: <a href="${cfg.qrUrl}" target="_blank" style="color:var(--electric);">Open</a></p>` : ''}
-        ` : `<p>${missing}</p>`;
-        paymentInfo.innerHTML = details;
-      } else if (method === 'card') {
-        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Pay directly with your card.</p>`;
-      } else if (method === 'crypto') {
-        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Crypto wallet accepted; include your transfer TX in the booking.</p>`;
-      } else if (method === 'apple') {
-        paymentInfo.innerHTML = `<h4>${intro}</h4><p>Apple Pay supported.</p>`;
-      } else {
+      loadPaymentConfig().then((cfg) => {
+        const payId = getPaymentId();
+        const descriptionLabel = `Use payment description: "Ticket for ${payId || 'FR-XXXX'}"`;
+        const intro = 'Payment instructions';
+        const missing = 'Transfer details not set. Please contact admin.';
         paymentInfo.innerHTML = '';
-      }
+        if (!cachedUser) {
+          paymentInfo.innerHTML = 'Please sign in to see payment details and complete booking.';
+          return;
+        }
+        if (method === 'transfer-tbc' || method === 'transfer-bog') {
+          const bankLabel = method === 'transfer-tbc' ? 'TBC Bank' : 'Georgian Bank';
+          const account = method === 'transfer-tbc' ? cfg.tbc_account : cfg.bog_account;
+          if (paymentIdInput) paymentIdInput.value = payId || '';
+          const details = account ? `
+            <h4>${intro} - ${bankLabel}</h4>
+            <p>Send transfer to this account and include in description:</p>
+            <div class="payment-steps">
+              <div>${descriptionLabel}</div>
+              <div>Amount: match your ticket category (I/II/Door)</div>
+            </div>
+            <p>Account: <strong>${account}</strong></p>
+            ${cfg.transfer_note ? `<p>${cfg.transfer_note}</p>` : ''}
+            ${cfg.qr_url ? `<p>QR code: <a href="${cfg.qr_url}" target="_blank" style="color:var(--electric);">Open</a></p>` : ''}
+          ` : `<p>${missing}</p>`;
+          paymentInfo.innerHTML = details;
+        } else if (method === 'card') {
+          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Pay directly with your card.</p>`;
+        } else if (method === 'crypto') {
+          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Crypto wallet accepted; include your transfer TX in the booking.</p>`;
+        } else if (method === 'apple') {
+          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Apple Pay supported.</p>`;
+        } else {
+          paymentInfo.innerHTML = '';
+        }
+      });
     }
 
     if (logoutBtn) {

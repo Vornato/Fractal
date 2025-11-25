@@ -293,17 +293,6 @@
       } catch (e) { return {}; }
     }
 
-    function loadTicketData() {
-      try {
-        const stored = localStorage.getItem('fractalTickets');
-        return stored ? JSON.parse(stored) : {};
-      } catch (e) { return {}; }
-    }
-
-    function saveTicketData(data) {
-      localStorage.setItem('fractalTickets', JSON.stringify(data));
-    }
-
     const defaultPhoto = 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&w=240&q=60';
     function renderStatusPill(status) {
       const normalized = (status || '').toLowerCase();
@@ -434,24 +423,28 @@
       });
     }
 
-    function renderTicketsForUser(user) {
-      userTickets.innerHTML = '';
-      const data = loadTicketData();
-      const key = user && (user.id || user.email);
-      const ticket = key ? data[key] : null;
-      if (!ticket) {
-        userTickets.innerHTML = '<p class="muted">No tickets assigned yet.</p>';
-        return;
+    async function renderTicketsForUser(user) {
+      userTickets.innerHTML = '<p class="muted">No tickets assigned yet.</p>';
+      if (!user) return;
+      try {
+        const res = await api('/api/user/tickets');
+        const tickets = res.tickets || [];
+        if (!tickets.length) return;
+        userTickets.innerHTML = '';
+        tickets.forEach((ticket) => {
+          const card = document.createElement('div');
+          card.className = 'ticket-card';
+          card.innerHTML = `
+            <div><strong>Ticket for ${ticket.payment_id || user.id}</strong></div>
+            ${ticket.qr ? `<div class="ticket-links">QR: <a href="${ticket.qr}" target="_blank" rel="noopener">Open</a></div>` : ''}
+            ${ticket.ticket ? `<div class="ticket-links">Ticket: <a href="${ticket.ticket}" target="_blank" rel="noopener">Download</a></div>` : ''}
+            ${ticket.note ? `<p class="muted">${ticket.note}</p>` : ''}
+          `;
+          userTickets.appendChild(card);
+        });
+      } catch (error) {
+        userTickets.innerHTML = '<p class="muted">Could not load tickets.</p>';
       }
-      const card = document.createElement('div');
-      card.className = 'ticket-card';
-      card.innerHTML = `
-        <div><strong>Ticket for ${ticket.paymentId || key}</strong></div>
-        ${ticket.qr ? `<div class="ticket-links">QR: <a href="${ticket.qr}" target="_blank">Open</a></div>` : ''}
-        ${ticket.ticket ? `<div class="ticket-links">Ticket: <a href="${ticket.ticket}" target="_blank">Download</a></div>` : ''}
-        ${ticket.note ? `<p class="muted">${ticket.note}</p>` : ''}
-      `;
-      userTickets.appendChild(card);
     }
 
     async function fetchCurrentUser() {

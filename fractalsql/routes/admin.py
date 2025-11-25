@@ -4,7 +4,7 @@ from flask import Blueprint, current_app, jsonify, request, session
 from flask_login import current_user
 
 from extensions import db
-from models import User, UserStatus, EventSettings
+from models import User, UserStatus, EventSettings, Ticket
 from services.excel_export import write_users_to_excel
 
 admin_bp = Blueprint("admin", __name__)
@@ -62,7 +62,10 @@ def admin_logout():
 @admin_required
 def list_users():
     users = User.query.order_by(User.created_at.desc()).all()
-    return jsonify({"users": [user.to_dict() for user in users]})
+    user_ids = [u.id for u in users]
+    tickets = Ticket.query.filter(Ticket.user_id.in_(user_ids)).all() if user_ids else []
+    ticket_map = {t.user_id: t.to_dict() for t in tickets}
+    return jsonify({"users": [user.to_dict() for user in users], "tickets": ticket_map})
 
 
 @admin_bp.route("/users/<int:user_id>/status", methods=["PATCH"])
@@ -87,6 +90,34 @@ def update_status(user_id):
         current_app.logger.exception("Failed to export users to Excel after status update")
 
     return jsonify({"user": user.to_dict()})
+
+
+@admin_bp.route("/users/<int:user_id>/ticket", methods=["PUT"])
+@admin_required
+def upsert_ticket(user_id):
+    data = request.get_json() or {}
+    user = User.query.get_or_404(user_id)
+
+    ticket = Ticket.query.filter_by(user_id=user.id).first()
+    if not ticket:
+        ticket = Ticket(user_id=user.id)
+        db.session.add(ticket)
+
+    ticket.ticket_url = (data.get("ticket") or "").strip() or None
+    ticket.qr_url = (data.get("qr") or "").strip() or None
+    ticket.note = (data.get("note") or "").strip() or None
+    ticket.payment_id = (data.get("payment_id") or "").strip() or None
+
+    db.session.commit()
+    return jsonify({"ticket": ticket.to_dict()})
+
+
+@admin_bp.route("/users/<int:user_id>/ticket", methods=["DELETE"])
+@admin_required
+def delete_ticket(user_id):
+    Ticket.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return jsonify({"message": "Ticket removed"})
 
 
 def get_or_create_settings():
@@ -119,6 +150,71 @@ def update_event_settings():
     settings.location = data.get("location") or settings.location
     settings.booking_description = data.get("booking_description") or settings.booking_description
     settings.event_description = data.get("event_description") or settings.event_description
+    settings.tbc_account = data.get("tbc_account") or settings.tbc_account
+    settings.bog_account = data.get("bog_account") or settings.bog_account
+    settings.transfer_note = data.get("transfer_note") or settings.transfer_note
+    settings.qr_url = data.get("qr_url") or settings.qr_url
+    if "allowed_tiers" in data:
+        settings.allowed_tiers = data.get("allowed_tiers") or []
 
     db.session.commit()
     return jsonify({"settings": settings.to_dict()})
+
+
+@admin_bp.route("/users/export", methods=["GET"])
+@admin_required
+def export_users_csv():
+    import csv
+    from io import StringIO
+
+    users = User.query.order_by(User.id.asc()).all()
+    tickets = {t.user_id: t for t in Ticket.query.all()}
+
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(
+        [
+            "id",
+            "name",
+            "email",
+            "phone",
+            "id_number",
+            "gender",
+            "dob",
+            "social_link",
+            "city",
+            "status",
+            "created_at",
+            "updated_at",
+            "ticket_url",
+            "qr_url",
+            "ticket_note",
+            "ticket_payment_id",
+        ]
+    )
+    for u in users:
+        t = tickets.get(u.id)
+        writer.writerow(
+            [
+                u.id,
+                u.name,
+                u.email,
+                u.phone,
+                u.id_number,
+                u.gender,
+                u.dob.isoformat() if u.dob else "",
+                u.social_link,
+                u.city,
+                u.status.value if u.status else "",
+                u.created_at.isoformat() if u.created_at else "",
+                u.updated_at.isoformat() if u.updated_at else "",
+                t.ticket_url if t else "",
+                t.qr_url if t else "",
+                t.note if t else "",
+                t.payment_id if t else "",
+            ]
+        )
+
+    resp = current_app.response_class(output.getvalue(), mimetype="text/csv")
+    resp.headers["Content-Disposition"] = "attachment; filename=users.csv"
+    return resp

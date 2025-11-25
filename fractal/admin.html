@@ -166,6 +166,13 @@
       localStorage.setItem('fractalTickets', JSON.stringify(data));
     }
 
+    const ADMIN_AUTH_FLAG = 'fractalAdminAuthed';
+    const isAdminAuthed = () => sessionStorage.getItem(ADMIN_AUTH_FLAG) === '1';
+    const setAdminAuthed = (val) => {
+      if (val) sessionStorage.setItem(ADMIN_AUTH_FLAG, '1');
+      else sessionStorage.removeItem(ADMIN_AUTH_FLAG);
+    };
+
     async function api(path, { method = 'GET', body, headers } = {}) {
       const opts = {
         method,
@@ -173,7 +180,7 @@
         headers: headers || {}
       };
       // Always send admin Basic auth for admin endpoints to survive cookie issues
-      if (path.startsWith('/api/admin')) {
+      if (path.startsWith('/api/admin') && isAdminAuthed()) {
         const basic = btoa(`${AUTO_ADMIN_EMAIL}:${AUTO_ADMIN_PASSWORD}`);
         opts.headers['Authorization'] = `Basic ${basic}`;
       }
@@ -284,8 +291,10 @@
         await api('/api/auth/login', { method: 'POST', body: payload });
         // Explicitly set admin session
         await api('/api/admin/login', { method: 'POST', body: payload });
+        setAdminAuthed(true);
         await loadUsers();
       } catch (error) {
+        setAdminAuthed(false);
         showAlert('Admin auto-login failed', {
           status: error.status,
           path: error.path || 'login flow',
@@ -338,6 +347,7 @@
       } catch (error) {
         /* ignore */
       }
+      setAdminAuthed(false);
       adminLoggedIn = false;
       adminPanel.classList.add('hidden');
       if (adminPanel !== adminLoginSection) {
@@ -360,7 +370,11 @@
         } catch (err) {
           /* ignore 401; proceed to admin login */
         }
-        await autoAdminLogin();
+        if (isAdminAuthed()) {
+          await autoAdminLogin();
+        } else {
+          showMessage(adminLoginMessage, 'Not logged in. Please sign in as admin.', true);
+        }
       } catch (error) {
         adminLoggedIn = false;
         showMessage(adminLoginMessage, 'Admin auto-login failed. Check backend credentials.', true);

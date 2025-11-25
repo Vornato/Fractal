@@ -27,6 +27,14 @@ def upgrade():
         length=20,
     )
 
+    # Drop legacy tables if they exist (handles local preexisting DB when rerunning initial migration)
+    with op.batch_alter_table("users", schema=None) as batch_op:
+        pass
+    op.execute("DROP TABLE IF EXISTS password_reset_tokens")
+    op.execute("DROP TABLE IF EXISTS event_settings")
+    op.execute("DROP TABLE IF EXISTS bookings")
+    op.execute("DROP TABLE IF EXISTS users")
+
     op.create_table(
         "users",
         sa.Column("id", sa.Integer(), primary_key=True),

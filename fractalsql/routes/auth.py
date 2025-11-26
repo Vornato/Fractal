@@ -108,6 +108,8 @@ def login():
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
     logout_user()
+    session.pop("is_admin", None)
+    session.clear()
     return jsonify({"message": "Logged out"})
 
 

@@ -121,9 +121,7 @@
     const statusOptions = ['permanent', 'temporary', 'door', 'declined'];
     let adminLoggedIn = false;
     let users = [];
-    // Must match backend ADMIN_EMAIL / ADMIN_PASSWORD
-    const AUTO_ADMIN_EMAIL = "FractalAdmin@123";
-    const AUTO_ADMIN_PASSWORD = "Fractalisadmin123";
+    const ADMIN_EMAIL = "FractalAdmin@123"; // for client-side check only; auth via session cookie
     const NON_ADMIN_REDIRECT = "index.html";
 
     function renderStatusBadge(status) {
@@ -290,27 +288,25 @@
       }
     }
 
-    async function autoAdminLogin() {
+    async function ensureAdminSession() {
       adminLoginMessage.textContent = '';
       clearAlert();
-      const payload = { email: AUTO_ADMIN_EMAIL, password: AUTO_ADMIN_PASSWORD };
       try {
-        // Ensure auth login sets user and session cookie
-        await api('/api/auth/login', { method: 'POST', body: payload });
-        // Explicitly set admin session
-        await api('/api/admin/login', { method: 'POST', body: payload });
-        setAdminAuthed(true);
-        await loadUsers();
-      } catch (error) {
-        setAdminAuthed(false);
-        showAlert('Admin auto-login failed', {
-          status: error.status,
-          path: error.path || 'login flow',
-          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
-        });
-        showMessage(adminLoginMessage, error.message || 'Admin login failed', true);
-        throw error;
+        const me = await api('/api/user/me');
+        if (me && me.user && me.user.email === ADMIN_EMAIL) {
+          adminLoggedIn = true;
+          return true;
+        }
+        if (me && me.user && me.user.email) {
+          showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
+          setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
+          return false;
+        }
+      } catch (err) {
+        /* ignore */
       }
+      showMessage(adminLoginMessage, 'Not logged in. Please sign in as admin on the login page.', true);
+      return false;
     }
 
     savePaymentCfg.addEventListener('click', async () => {
@@ -363,12 +359,7 @@
         e.preventDefault();
         try {
           const url = `${API_BASE}/api/admin/users/export`;
-          const headers = {};
-          if (isAdminAuthed()) {
-            const basic = btoa(`${AUTO_ADMIN_EMAIL}:${AUTO_ADMIN_PASSWORD}`);
-            headers['Authorization'] = `Basic ${basic}`;
-          }
-          const res = await fetch(url, { credentials: 'include', headers });
+          const res = await fetch(url, { credentials: 'include' });
           if (!res.ok) throw new Error('Failed to download CSV');
           const blob = await res.blob();
           const link = document.createElement('a');
@@ -390,7 +381,6 @@
       } catch (error) {
         /* ignore */
       }
-      setAdminAuthed(false);
       adminLoggedIn = false;
       adminPanel.classList.add('hidden');
       if (adminPanel !== adminLoginSection) {
@@ -402,22 +392,10 @@
 
     (async function bootstrap() {
       try {
-        // If a logged-in user is not the admin, block access and redirect.
-        try {
-          const me = await api('/api/user/me');
-          if (me && me.user && me.user.email) {
-            if (me.user.email !== AUTO_ADMIN_EMAIL) {
-              showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
-              setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
-              return;
-            }
-            // Recognize existing admin session and allow basic auth on admin endpoints
-            setAdminAuthed(true);
-          }
-        } catch (err) {
-          /* ignore 401; proceed to admin login */
+        const ok = await ensureAdminSession();
+        if (ok) {
+          await loadUsers();
         }
-        await autoAdminLogin();
       } catch (error) {
         adminLoggedIn = false;
         showMessage(adminLoginMessage, 'Admin auto-login failed. Check backend credentials.', true);

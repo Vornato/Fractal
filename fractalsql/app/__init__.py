@@ -5,7 +5,7 @@ from sqlalchemy.engine.url import make_url
 
 from config import Config
 from extensions import bcrypt, db, login_manager, migrate
-from models import User, EventSettings, PasswordResetToken
+from models import User, EventSettings
 
 
 def create_app():
@@ -88,9 +88,5 @@ def create_app():
     @app.route("/health", methods=["GET"])
     def health():
         return {"status": "ok"}, 200
-    with app.app_context():
-        # Ensure new tables (like event_settings) exist without requiring a migration step here
-        EventSettings.__table__.create(db.engine, checkfirst=True)
-        PasswordResetToken.__table__.create(db.engine, checkfirst=True)
 
     return app

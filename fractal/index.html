@@ -892,7 +892,7 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
         payment_id: data.get('paymentId')
       };
       try {
-        const res = await fetch(`${API_BASE}/api/bookings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const res = await fetch(`${API_BASE}/api/bookings`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || 'Booking failed');
         confirmation.textContent = confirmCopy.success(name, tier, selectedEventInput.value);

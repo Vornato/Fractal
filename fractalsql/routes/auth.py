@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import Blueprint, jsonify, request, current_app, session
 from flask_login import current_user, login_user, logout_user
@@ -76,9 +76,21 @@ def login():
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
 
+    user = User.query.filter_by(email=email).first()
+
+    def fail_and_maybe_lock(u: User | None):
+        if not u:
+            return jsonify({"error": "User or Password is incorrect"}), 401
+        u.failed_attempts = (u.failed_attempts or 0) + 1
+        lock_minutes = min((u.failed_attempts // 3) * 10, 60) if u.failed_attempts % 3 == 0 else 0
+        if lock_minutes:
+            u.lock_until = datetime.utcnow() + timedelta(minutes=lock_minutes)
+        db.session.commit()
+        return jsonify({"error": "User or Password is incorrect"}), 401
+
     # Admin fast-path: allow admin credentials without separate admin page
     if email == current_app.config.get("ADMIN_EMAIL") and password == current_app.config.get("ADMIN_PASSWORD"):
-        admin_user = User.query.filter_by(email=email).first()
+        admin_user = user
         if not admin_user:
             admin_user = User(
                 name="Admin",
@@ -89,18 +101,28 @@ def login():
             db.session.add(admin_user)
             db.session.commit()
         else:
-            # keep admin password in sync with env config
             admin_user.set_password(password)
             admin_user.status = UserStatus.PERMANENT
+            admin_user.failed_attempts = 0
+            admin_user.lock_until = None
             db.session.commit()
         login_user(admin_user, remember=True)
         session["is_admin"] = True
         return jsonify({"user": admin_user.to_dict()})
 
-    user = User.query.filter_by(email=email).first()
-    if not user or not user.check_password(password):
-        return jsonify({"error": "Invalid credentials"}), 401
+    if not user:
+        return jsonify({"error": "User or Password is incorrect"}), 401
 
+    if user.lock_until and datetime.utcnow() < user.lock_until:
+        remaining = int((user.lock_until - datetime.utcnow()).total_seconds() // 60) + 1
+        return jsonify({"error": f"Account locked. Try again in ~{remaining} minutes."}), 429
+
+    if not user.check_password(password):
+        return fail_and_maybe_lock(user)
+
+    user.failed_attempts = 0
+    user.lock_until = None
+    db.session.commit()
     login_user(user, remember=True)
     return jsonify({"user": user.to_dict()})
 
@@ -110,7 +132,16 @@ def logout():
     logout_user()
     session.pop("is_admin", None)
     session.clear()
-    return jsonify({"message": "Logged out"})
+    resp = jsonify({"message": "Logged out"})
+    # Explicitly clear session and remember cookies
+    session_cookie_name = current_app.config.get("SESSION_COOKIE_NAME", "session")
+    remember_cookie_name = current_app.config.get("REMEMBER_COOKIE_NAME", "remember_token")
+    cookie_domain = current_app.config.get("SESSION_COOKIE_DOMAIN")
+    cookie_samesite = current_app.config.get("SESSION_COOKIE_SAMESITE", "Lax")
+    cookie_secure = current_app.config.get("SESSION_COOKIE_SECURE", False)
+    resp.set_cookie(session_cookie_name, "", expires=0, samesite=cookie_samesite, secure=cookie_secure, domain=cookie_domain)
+    resp.set_cookie(remember_cookie_name, "", expires=0, samesite=cookie_samesite, secure=cookie_secure, domain=cookie_domain)
+    return resp
 
 
 @auth_bp.route("/forgot-password", methods=["POST"])

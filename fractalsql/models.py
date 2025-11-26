@@ -28,6 +28,8 @@ class User(db.Model, UserMixin):
     social_link = db.Column(db.String(255))
     city = db.Column(db.String(120))
     password_hash = db.Column(db.String(255), nullable=False)
+    failed_attempts = db.Column(db.Integer, default=0, server_default="0")
+    lock_until = db.Column(db.DateTime(timezone=True))
     status = db.Column(
         db.Enum(UserStatus, name="user_status", native_enum=False, length=20),
         default=UserStatus.TEMPORARY,

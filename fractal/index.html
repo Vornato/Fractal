@@ -799,7 +799,7 @@ const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
     async function loadPaymentConfig() {
       if (paymentConfig) return paymentConfig;
       try {
-        const res = await fetch(`${API_BASE}/api/event-settings`);
+        const res = await fetch(`${API_BASE}/api/event-settings`, { credentials: 'include' });
         const data = await res.json();
         paymentConfig = (data && data.settings) || {};
         allowedTiers = (paymentConfig.allowed_tiers && paymentConfig.allowed_tiers.length)

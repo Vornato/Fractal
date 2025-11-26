@@ -1,7 +1,7 @@
 """add user_id to bookings
 
-Revision ID: 0005_add_user_id_to_bookings
-Revises: 0004_add_allowed_tiers
+Revision ID: 0005_user_fk
+Revises: 0004_allowed_tiers
 Create Date: 2025-11-25
 """
 from alembic import op
@@ -9,8 +9,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0005_add_user_id_to_bookings"
-down_revision = "0004_add_allowed_tiers"
+revision = "0005_user_fk"
+down_revision = "0004_allowed_tiers"
 branch_labels = None
 depends_on = None
 

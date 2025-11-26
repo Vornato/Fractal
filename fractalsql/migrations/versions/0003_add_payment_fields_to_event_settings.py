@@ -1,6 +1,6 @@
 """add payment fields to event settings
 
-Revision ID: 0003_add_payment_fields_to_event_settings
+Revision ID: 0003_pay_fields
 Revises: 0002_add_tickets
 Create Date: 2025-11-25
 """
@@ -9,7 +9,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0003_add_payment_fields_to_event_settings"
+revision = "0003_pay_fields"
 down_revision = "0002_add_tickets"
 branch_labels = None
 depends_on = None

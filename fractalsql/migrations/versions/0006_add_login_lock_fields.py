@@ -1,7 +1,7 @@
 """add login lock fields
 
-Revision ID: 0006_add_login_lock_fields
-Revises: 0005_add_user_id_to_bookings
+Revision ID: 0006_login_lock
+Revises: 0005_user_fk
 Create Date: 2025-11-25
 """
 from alembic import op
@@ -9,8 +9,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0006_add_login_lock_fields"
-down_revision = "0005_add_user_id_to_bookings"
+revision = "0006_login_lock"
+down_revision = "0005_user_fk"
 branch_labels = None
 depends_on = None
 

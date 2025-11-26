@@ -1,7 +1,7 @@
 """add allowed_tiers to event_settings
 
-Revision ID: 0004_add_allowed_tiers
-Revises: 0003_add_payment_fields_to_event_settings
+Revision ID: 0004_allowed_tiers
+Revises: 0003_pay_fields
 Create Date: 2025-11-25
 """
 from alembic import op
@@ -9,8 +9,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0004_add_allowed_tiers"
-down_revision = "0003_add_payment_fields_to_event_settings"
+revision = "0004_allowed_tiers"
+down_revision = "0003_pay_fields"
 branch_labels = None
 depends_on = None
 

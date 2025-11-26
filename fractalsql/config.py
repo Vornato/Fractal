@@ -31,6 +31,8 @@ class Config:
 
     # Flask-Login settings
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
+    SESSION_COOKIE_HTTPONLY = True
+    REMEMBER_COOKIE_HTTPONLY = True
     # Cookie settings: default to Lax so cookies survive 127.0.0.1:5000 <-> 127.0.0.1:5500 without requiring HTTPS
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
     _raw_samesite = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")

@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from flask_login import current_user
 
 from models import EventSettings
 
@@ -11,7 +12,8 @@ def public_event_settings():
     if not settings:
         return jsonify({"settings": {}})
     data = settings.to_dict()
-    # Remove admin-only payment details from public response
-    for key in ("tbc_account", "bog_account", "transfer_note", "qr_url"):
-        data.pop(key, None)
+    # Only expose payment details to authenticated users
+    if not current_user.is_authenticated:
+        for key in ("tbc_account", "bog_account", "transfer_note", "qr_url"):
+            data.pop(key, None)
     return jsonify({"settings": data})

@@ -66,6 +66,7 @@ class Booking(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), index=True)
     language = db.Column(db.String(10))
     event_title = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(120), nullable=False)
@@ -76,11 +77,13 @@ class Booking(db.Model):
     payment = db.Column(db.String(50))
     payment_id = db.Column(db.String(120))
     status = db.Column(db.String(50), nullable=False, default="received", server_default="received")
+    user = db.relationship("User", backref="bookings")
 
     def to_dict(self):
         return {
             "id": self.id,
             "created_at": self.created_at.isoformat() if self.created_at else None,
+            "user_id": self.user_id,
             "language": self.language,
             "event_title": self.event_title,
             "name": self.name,

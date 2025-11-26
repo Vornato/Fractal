@@ -4,7 +4,7 @@ from flask import Blueprint, current_app, jsonify, request, session
 from flask_login import current_user
 
 from extensions import db
-from models import User, UserStatus, EventSettings, Ticket
+from models import User, UserStatus, EventSettings, Ticket, Booking
 from services.excel_export import write_users_to_excel
 
 admin_bp = Blueprint("admin", __name__)
@@ -20,17 +20,11 @@ def admin_required(fn):
             if current_user.is_authenticated and current_user.email == admin_email:
                 is_admin = True
                 session["is_admin"] = True
-        # Allow Basic auth with configured admin credentials (keeps admin usable when cookies are blocked)
-        if not is_admin:
-            auth = request.authorization
-            if auth and auth.username == current_app.config.get("ADMIN_EMAIL") and auth.password == current_app.config.get("ADMIN_PASSWORD"):
-                is_admin = True
-                session["is_admin"] = True
         if not is_admin:
             return jsonify(
                 {
                     "error": "Admin authentication required",
-                    "hint": "Missing admin session cookie or invalid admin credentials",
+                    "hint": "Login as admin first",
                 }
             ), 403
         return fn(*args, **kwargs)
@@ -65,7 +59,12 @@ def list_users():
     user_ids = [u.id for u in users]
     tickets = Ticket.query.filter(Ticket.user_id.in_(user_ids)).all() if user_ids else []
     ticket_map = {t.user_id: t.to_dict() for t in tickets}
-    return jsonify({"users": [user.to_dict() for user in users], "tickets": ticket_map})
+    bookings = Booking.query.filter(Booking.user_id.in_(user_ids)).order_by(Booking.created_at.desc()).all() if user_ids else []
+    booking_map = {}
+    for b in bookings:
+        if b.user_id not in booking_map:  # keep latest per user
+            booking_map[b.user_id] = b.to_dict()
+    return jsonify({"users": [user.to_dict() for user in users], "tickets": ticket_map, "bookings": booking_map})
 
 
 @admin_bp.route("/users/<int:user_id>/status", methods=["PATCH"])

@@ -164,6 +164,7 @@
     }
 
     const ticketsByUser = {};
+    const bookingsByUser = {};
 
     const ADMIN_AUTH_FLAG = 'fractalAdminAuthed';
     const isAdminAuthed = () => sessionStorage.getItem(ADMIN_AUTH_FLAG) === '1';
@@ -212,6 +213,10 @@
           .map((opt) => `<option value="${opt}" ${user.status === opt ? 'selected' : ''}>${opt}</option>`)
           .join('')}</select>`;
         const ticketEntry = ticketsByUser[user.id] || {};
+        const bookingEntry = bookingsByUser[user.id] || null;
+        const ticketButton = bookingEntry
+          ? `<button type="button" class="view-booking" data-id="${user.id}">Paid</button>`
+          : `<span class="note">No booking</span>`;
         const ticketInputs = `
           <div class="stack">
             <input type="text" class="ticket-url" data-id="${user.id}" placeholder="Ticket link" value="${ticketEntry.ticket || ''}">
@@ -230,7 +235,7 @@
           <td>${user.social_link ? `<a href="${user.social_link}" target="_blank" style="color:#7affc6;">Link</a>` : ''}</td>
           <td>${renderStatusBadge(user.status)}</td>
           <td>${statusSelect}</td>
-          <td>${ticketInputs}</td>
+          <td>${ticketButton}${ticketInputs}</td>
         `;
         userTable.appendChild(row);
       });
@@ -253,14 +258,15 @@
 
     async function loadUsers() {
       try {
-        const res = await api('/api/admin/users');
-        users = res.users;
-        Object.assign(ticketsByUser, res.tickets || {});
-        renderUsers();
-        adminPanel.classList.remove('hidden');
-        if (adminPanel !== adminLoginSection) {
-          adminLoginSection.classList.add('hidden');
-        }
+      const res = await api('/api/admin/users');
+      users = res.users;
+      Object.assign(ticketsByUser, res.tickets || {});
+      Object.assign(bookingsByUser, res.bookings || {});
+      renderUsers();
+      adminPanel.classList.remove('hidden');
+      if (adminPanel !== adminLoginSection) {
+        adminLoginSection.classList.add('hidden');
+      }
         adminLoggedIn = true;
         loadPaymentForm();
         clearAlert();
@@ -352,6 +358,28 @@
       } catch (error) {
         showMessage(adminLoginMessage, error.message || 'Failed to save ticket', true);
       }
+    });
+
+    userTable.addEventListener('click', (event) => {
+      const btn = event.target.closest('.view-booking');
+      if (!btn) return;
+      const userId = btn.dataset.id;
+      const booking = bookingsByUser[userId];
+      if (!booking) {
+        showMessage(adminLoginMessage, 'No booking found for this user.', true);
+        return;
+      }
+      const detail = `
+Event: ${booking.event_title}
+Tier: ${booking.tier}
+Payment: ${booking.payment} (${booking.payment_id || ''})
+Guests: ${booking.guests}
+Status: ${booking.status}
+Email: ${booking.email}
+Phone: ${booking.phone || ''}
+Created: ${booking.created_at || ''}
+      `;
+      alert(detail);
     });
 
     if (exportLink) {

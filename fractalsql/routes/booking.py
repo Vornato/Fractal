@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_login import current_user, login_required
 
 from extensions import db
 from models import Booking
@@ -8,6 +9,7 @@ booking_bp = Blueprint("booking", __name__)
 
 
 @booking_bp.route("/bookings", methods=["POST"])
+@login_required
 def create_booking():
     data = request.get_json() or {}
 
@@ -33,6 +35,8 @@ def create_booking():
         tier=data.get("tier"),
         payment=data.get("payment"),
         payment_id=data.get("payment_id"),
+        user_id=current_user.id,
+        status="paid",
     )
     db.session.add(booking)
     db.session.commit()

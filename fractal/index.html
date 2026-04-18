@@ -393,11 +393,11 @@
     .hero-title {
       margin: 0;
       font-family: var(--font-display);
-      font-size: clamp(4rem, 7.3vw, 7.6rem);
-      line-height: 0.84;
+      font-size: clamp(3.2rem, 5.6vw, 5.8rem);
+      line-height: 0.94;
       text-transform: uppercase;
       letter-spacing: 0.02em;
-      max-width: 9.4ch;
+      max-width: 11ch;
       text-wrap: balance;
     }
 
@@ -677,11 +677,11 @@
     .section-head h2 {
       margin: 0;
       font-family: var(--font-display);
-      font-size: clamp(2.6rem, 4.7vw, 4.8rem);
+      font-size: clamp(2rem, 3.45vw, 3.55rem);
       text-transform: uppercase;
-      line-height: 0.84;
+      line-height: 1;
       letter-spacing: 0.035em;
-      max-width: 12ch;
+      max-width: 16ch;
     }
 
     .section-head p {
@@ -757,11 +757,11 @@
     .feature-copy h3 {
       margin: 0;
       font-family: var(--font-display);
-      font-size: clamp(2.9rem, 5.1vw, 5rem);
-      line-height: 0.82;
+      font-size: clamp(2rem, 3.6vw, 3.7rem);
+      line-height: 1;
       text-transform: uppercase;
       letter-spacing: 0.035em;
-      max-width: 9ch;
+      max-width: 12ch;
     }
 
     .feature-meta {
@@ -915,9 +915,9 @@
     .scene-card h3 {
       margin: 0 0 0.7rem;
       font-family: var(--font-display);
-      font-size: 1.85rem;
+      font-size: 1.35rem;
       text-transform: uppercase;
-      line-height: 0.88;
+      line-height: 1.06;
       letter-spacing: 0.04em;
     }
 
@@ -956,9 +956,9 @@
     .footer-panel h3 {
       margin: 0;
       font-family: var(--font-display);
-      font-size: clamp(2.5rem, 4.5vw, 4.7rem);
+      font-size: clamp(1.95rem, 3.35vw, 3.45rem);
       text-transform: uppercase;
-      line-height: 0.86;
+      line-height: 1;
       letter-spacing: 0.035em;
     }
 
@@ -1112,27 +1112,29 @@
       font-family: "Noto Sans Georgian", "Manrope", sans-serif;
       letter-spacing: -0.035em;
       text-transform: none;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     html[lang="ka"] .hero-title {
-      font-size: clamp(2.35rem, 3.6vw, 3.9rem);
-      line-height: 1.08;
-      max-width: 15ch;
+      font-size: clamp(1.85rem, 2.55vw, 2.75rem);
+      line-height: 1.18;
+      max-width: 18ch;
     }
 
     html[lang="ka"] .section-head h2 {
-      font-size: clamp(1.85rem, 2.7vw, 2.85rem);
-      line-height: 1.12;
-      max-width: 18ch;
+      font-size: clamp(1.42rem, 1.95vw, 2.05rem);
+      line-height: 1.2;
+      max-width: 22ch;
     }
 
     html[lang="ka"] .feature-copy h3,
     html[lang="ka"] .booking-copy h3,
     html[lang="ka"] .booking-card h3,
     html[lang="ka"] .footer-panel h3 {
-      font-size: clamp(1.75rem, 2.55vw, 2.7rem);
-      line-height: 1.12;
-      max-width: 18ch;
+      font-size: clamp(1.35rem, 1.9vw, 2rem);
+      line-height: 1.2;
+      max-width: 22ch;
     }
 
     html[lang="ka"] .event-card h3,
@@ -1140,9 +1142,30 @@
     html[lang="ka"] .venue-card h3,
     html[lang="ka"] .scene-card h3,
     html[lang="ka"] .poster-copy strong {
-      font-size: 1.28rem;
-      line-height: 1.16;
+      font-size: 0.98rem;
+      line-height: 1.26;
       max-width: none;
+    }
+
+    html[lang="ka"] .poster-copy {
+      padding: 0.7rem 0.85rem 0.95rem;
+    }
+
+    html[lang="ka"] .poster-card:nth-child(1) .poster-copy {
+      padding: 0.75rem 0.9rem 1rem;
+    }
+
+    html[lang="ka"] .hero-lead,
+    html[lang="ka"] .section-head p,
+    html[lang="ka"] .event-card p,
+    html[lang="ka"] .reason-card p,
+    html[lang="ka"] .venue-card p,
+    html[lang="ka"] .scene-card p,
+    html[lang="ka"] .metric span,
+    html[lang="ka"] .fact span,
+    html[lang="ka"] .payment-lines {
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     html[lang="ka"] .brand-copy span,
@@ -1157,7 +1180,17 @@
     html[lang="ka"] .scene-card small,
     html[lang="ka"] .poster-copy span,
     html[lang="ka"] .poster-copy small {
-      letter-spacing: 0.08em;
+      letter-spacing: 0.045em;
+      overflow-wrap: anywhere;
+    }
+
+    html[lang="ka"] .cta,
+    html[lang="ka"] .ghost-link,
+    html[lang="ka"] .chip {
+      font-size: 0.74rem;
+      letter-spacing: 0.055em;
+      white-space: normal;
+      text-align: center;
     }
 
     @media (max-width: 1100px) {
@@ -1266,36 +1299,51 @@
       }
 
       .hero-title {
-        font-size: clamp(4.2rem, 18vw, 5.8rem);
-        max-width: 7.4ch;
+        font-size: clamp(3rem, 13.5vw, 4.4rem);
+        max-width: 8.7ch;
       }
 
       html[lang="ka"] .hero-title {
-        font-size: clamp(1.95rem, 7.8vw, 2.7rem);
-        line-height: 1.12;
-        max-width: 14ch;
+        font-size: clamp(1.35rem, 5.5vw, 1.85rem);
+        line-height: 1.22;
+        max-width: 18ch;
       }
 
       html[lang="ka"] .section-head h2 {
-        font-size: clamp(1.65rem, 6.8vw, 2.25rem);
-        line-height: 1.14;
-        max-width: 16ch;
+        font-size: clamp(1.22rem, 5vw, 1.65rem);
+        line-height: 1.22;
+        max-width: 20ch;
       }
 
       html[lang="ka"] .feature-copy h3,
       html[lang="ka"] .booking-copy h3,
       html[lang="ka"] .booking-card h3,
       html[lang="ka"] .footer-panel h3 {
-        font-size: clamp(1.55rem, 6.2vw, 2.05rem);
-        line-height: 1.14;
-        max-width: 16ch;
+        font-size: clamp(1.16rem, 4.8vw, 1.55rem);
+        line-height: 1.24;
+        max-width: 20ch;
       }
 
       html[lang="ka"] .event-card h3,
       html[lang="ka"] .reason-card h3,
       html[lang="ka"] .venue-card h3,
       html[lang="ka"] .scene-card h3 {
-        font-size: 1.18rem;
+        font-size: 0.94rem;
+        line-height: 1.28;
+      }
+
+      html[lang="ka"] .poster-copy strong,
+      html[lang="ka"] .poster-card:nth-child(1) .poster-copy strong {
+        font-size: 0.92rem;
+        line-height: 1.2;
+      }
+
+      html[lang="ka"] .poster-copy span,
+      html[lang="ka"] .poster-copy small,
+      html[lang="ka"] .poster-card:nth-child(1) .poster-copy span,
+      html[lang="ka"] .poster-card:nth-child(1) .poster-copy small {
+        font-size: 0.55rem;
+        line-height: 1.25;
       }
 
       .hero-lead {
@@ -1592,8 +1640,10 @@
     const fallbackSettings = {
       event_name: "Love In Georgia | Garden Opening",
       event_date: "17 April, 22:00",
-      face_control: "Curated entry and premium crowd flow",
-      tickets_info: "Wave releases open in limited drops and close fast when the room starts moving.",
+      face_control: "Entry style and guest list handled by the team",
+      face_control_ka: "შესვლის ფორმატს გუნდი მართავს.",
+      tickets_info: "Ticket waves are released in limited batches.",
+      tickets_info_ka: "ბილეთები შეზღუდული რაოდენობით გამოდის.",
       ticket_categories: [
         { id: "wave1", label: "Wave I", price: "120 GEL", description: "early release access" },
         { id: "wave2", label: "Wave II", price: "150 GEL", description: "second release access" },
@@ -1601,11 +1651,12 @@
         { id: "door", label: "Door", price: "220 GEL", description: "night-of-event access" }
       ],
       location: "Garden, Tbilisi",
-      booking_description: "Book early, submit your transfer reference, and lock your place before the next Love In Georgia room opens.",
-      event_description: "A high-energy Garden opening built around a late-night timetable, guest artists, drinks, and the crowd pressure that defines Love In Georgia.",
+      booking_description: "Book early, add your transfer reference, and keep your place connected to your account.",
+      event_description: "Garden Opening brings DJs, guest artists, a clear schedule, and warm late-night energy into one Love In Georgia edition.",
       tbc_account: "",
       bog_account: "",
       transfer_note: "Use your full name in the transfer note so the booking can be matched faster.",
+      transfer_note_ka: "გადარიცხვის დანიშნულებაში მიუთითე სახელი და გვარი, რომ დაჯავშნა სწრაფად დადასტურდეს.",
       qr_url: "",
       allowed_tiers: ["wave1", "wave2", "wave3", "door"],
       brand_content: {
@@ -1614,8 +1665,8 @@
           title_ka: "Love In Georgia | Garden Opening",
           date_ka: "17 აპრილი, 22:00",
           location_ka: "Garden, თბილისი",
-          summary_ka: "Garden Opening — ღამე timetable-ით, guest artists-ებით, drinks-ით და Love In Georgia-ს crowd pressure-ით.",
-          booking_copy_ka: "დაჯავშნე ადრე, ატვირთე გადარიცხვის კოდი და დაიჭირე ადგილი Garden Opening-მდე.",
+          summary_ka: "Garden Opening აერთიანებს დიჯეებს, სტუმარ არტისტებს, განრიგს და თბილ ღამის ენერგიას ერთ Love In Georgia გამოცემაში.",
+          booking_copy_ka: "დაჯავშნე ადრე, მიუთითე გადარიცხვის კოდი და შეინარჩუნე ადგილი შენს ანგარიშზე.",
           tag_en: "17 April / opening",
           tag_ka: "17 აპრილი / opening"
         },
@@ -1653,173 +1704,173 @@
 
     const content = {
       en: {
-        brandLine: "Bookings, guest artists, drinks, and Tbilisi nights",
+        brandLine: "Events, music, and nightlife in Tbilisi",
         nav: {
-          featured: "Next Drop",
+          featured: "Next Event",
           archive: "Past Nights",
           venues: "Venues",
           booking: "Booking",
-          member: "წევრის წვდომა",
-          account: "My Access",
+          member: "Member Access",
+          account: "My Account",
           admin: "Admin",
           logout: "Logout"
         },
         hero: {
-          eyebrow: "Love In Georgia | Tbilisi after-dark pressure",
+          eyebrow: "Love In Georgia | Nightlife in Tbilisi",
           title: "Love In Georgia",
-          accent: "Book before the bass hits.",
-          lead: "Guest artists, DJs, drinks, beautiful crowd energy, and venue-hopping editions built for the part of Tbilisi that refuses to go home early.",
-          primaryLoggedOut: "Unlock Booking",
+          accent: "Events made for real nights out.",
+          lead: "Love In Georgia brings people together for music, guest artists, drinks, and memorable nights across Tbilisi. Each event is built around atmosphere, connection, and a room that feels worth showing up for.",
+          primaryLoggedOut: "Book a Place",
           primaryLoggedIn: "Book Your Place",
-          secondary: "Explore Past Nights",
+          secondary: "See Past Events",
           metrics: [
             { value: "15", label: "artists across 2 stages on March 6" },
-            { value: "5", label: "recent standout editions" },
-            { value: "3", label: "key Tbilisi venues in rotation" }
+            { value: "5", label: "recent event highlights" },
+            { value: "3", label: "Tbilisi venues in rotation" }
           ],
           ticker: [
             "Love Bar",
             "Crystal Event Hall",
             "Tsameti Club",
             "Guest artists",
-            "Drinks at the rail",
-            "Beautiful crowd energy",
+            "Music and drinks",
+            "Good crowd energy",
             "Late check-in"
           ]
         },
         featured: {
-          eyebrow: "Live booking signal",
-          heading: "The next edition should feel alive already",
-          intro: "This is the live drop: event details, poster art, booking tiers, and payment rails can all move from the admin panel without turning the site back into a static flyer."
+          eyebrow: "Next event",
+          heading: "A night worth planning for",
+          intro: "Event details, poster art, booking tiers, and payment instructions can be updated from the admin panel, so the page stays ready for each new edition."
         },
         facts: {
           date: "Date",
           venue: "Venue",
-          faceControl: "Entry Tone",
-          tickets: "Ticket Release",
+          faceControl: "Entry Style",
+          tickets: "Ticket Info",
           booking: "Booking",
-          bookingFallback: "Booking details update from the admin panel."
+          bookingFallback: "Booking details can be updated from the admin panel."
         },
         archive: {
-          eyebrow: "Archive pressure",
-          heading: "Recent editions that built the name",
-          intro: "Love In Georgia keeps landing because the nights feel deliberate: strong curation, serious movement, and rooms that stay memorable after the lights come up.",
+          eyebrow: "Past events",
+          heading: "Nights people remember",
+          intro: "These editions show the range of Love In Georgia: intimate rooms, larger halls, guest artists, and nights that kept people talking after they ended.",
           cards: [
             {
               date: "March 27, 2026",
               title: "Crystal Event Hall",
-              copy: "An unforgettable edition with polished production, hard release on the floor, and a room that held tension from start to finish."
+              copy: "A polished Crystal Event Hall edition with strong production, focused music, and a room that stayed active from start to finish."
             },
             {
               date: "March 14, 2026",
               title: "High-demand Tbilisi night",
-              copy: "A city night with clear demand, quick crowd build, and the kind of buzz that makes the next drop feel even more urgent."
+              copy: "A busy Tbilisi night with strong demand, a quickly filled room, and a clear signal that the next edition would move fast."
             },
             {
               date: "March 6, 2026",
               title: "15 artists / 2 stages",
-              copy: "A major Crystal Event Hall statement built for scale, circulation, and nonstop pressure across multiple artist moments."
+              copy: "A larger Crystal Event Hall format with 15 artists, 2 stages, and steady movement through the night."
             },
             {
               date: "February 13, 2026",
               title: "Love Day at Love Bar",
-              copy: "Valentine tension, dressed-up energy, and a tighter room dynamic with chemistry running through the crowd."
+              copy: "A Valentine-themed night at Love Bar with a warmer mood, dressed-up guests, and a close-room feeling."
             },
             {
               date: "January 1, 2026",
               title: "Bedoba at Tsameti Club",
-              copy: "A New Year reset with deep crowd immersion, optimism, and the feeling of starting the year inside a real night."
+              copy: "A New Year night at Tsameti Club with deep energy, optimism, and a fresh start to the year."
             }
           ]
         },
         reasons: {
-          eyebrow: "Why people lock in early",
-          heading: "The draw is more than a flyer",
-          intro: "People book Love In Georgia nights because the brand delivers the full room: music, drinks, styling, attraction, and a crowd that feels chosen.",
+          eyebrow: "Why people come",
+          heading: "More than a flyer",
+          intro: "People come for the full experience: music, people, venues, and the feeling that the night has been considered from start to finish.",
           cards: [
             {
               kicker: "01",
-              title: "Curated sound pressure",
-              copy: "Guest artists and DJs are selected for emotional lift, crowd control, and late-night intensity rather than generic programming."
+              title: "Curated music",
+              copy: "DJs and guest artists are selected for the room, the crowd, and the mood of the night."
             },
             {
               kicker: "02",
-              title: "A better room",
-              copy: "The atmosphere works because the crowd works. Entry tone, styling, drinks, and energy all affect how the night lands."
+              title: "A good crowd",
+              copy: "The night works when the people in the room bring the right energy, style, and openness."
             },
             {
               kicker: "03",
-              title: "Visual identity with edge",
-              copy: "Posters, lights, glossy darkness, and high-contrast staging give each edition a stronger visual recall."
+              title: "Strong visuals",
+              copy: "Posters, lighting, and staging help each edition feel recognizable and memorable."
             },
             {
               kicker: "04",
-              title: "Flexible city movement",
-              copy: "The brand is not trapped in one room. It adapts across Tbilisi while keeping a recognizable emotional signature."
+              title: "Different rooms",
+              copy: "The brand moves across Tbilisi venues while keeping the same Love In Georgia feeling."
             },
             {
               kicker: "05",
-              title: "Booking momentum",
-              copy: "When the right night drops, people move early. The booking flow is part of the pulse, not an afterthought."
+              title: "Simple booking",
+              copy: "Booking gives guests a clear way to reserve a place before the room fills."
             }
           ]
         },
         venues: {
-          eyebrow: "Venue circuit",
-          heading: "Different rooms, one emotional signature",
-          intro: "Love In Georgia moves through notable Tbilisi venues and keeps the same premium edge while shifting the scale of the night.",
+          eyebrow: "Venues",
+          heading: "Different venues, same feeling",
+          intro: "Love In Georgia works across Tbilisi venues, adjusting the format while keeping the mood familiar.",
           cards: [
             {
               kicker: "Love Bar",
-              title: "Closer, warmer, more intimate",
-              copy: "Built for chemistry, dressed-up energy, and nights that feel immediate the moment the room fills."
+              title: "Close and warm",
+              copy: "Good for intimate nights, social energy, and a room that fills quickly."
             },
             {
               kicker: "Crystal Event Hall",
-              title: "Larger-format impact",
-              copy: "The room for more ambitious production, stronger visual statements, and lineups that need space to hit properly."
+              title: "Larger event format",
+              copy: "A space for bigger lineups, stronger production, and a wider crowd."
             },
             {
               kicker: "Tsameti Club",
-              title: "Deep-night immersion",
-              copy: "A sharper after-dark pressure point for heavier momentum, tighter crowd focus, and release that lands later."
+              title: "Late-night energy",
+              copy: "A sharper setting for deeper hours, focused music, and a more intense room."
             }
           ]
         },
         scene: {
-          eyebrow: "Atmosphere notes",
-          heading: "How the night is meant to feel",
-          intro: "The tone is romantic but not soft, premium but never cold, and always driven by rhythm, movement, and connection.",
+          eyebrow: "Atmosphere",
+          heading: "How it should feel",
+          intro: "The mood is stylish and warm: music, lights, movement, drinks, and people who came to be part of the night.",
           cards: [
             {
               kicker: "Lights",
-              title: "Gloss over darkness",
-              copy: "Warm highlights, reflective surfaces, neon edges, and poster-led visuals that make the room feel alive before the headline moment."
+              title: "Warm lights",
+              copy: "Warm lights, darker edges, and poster-led visuals set the tone before the room fills."
             },
             {
               kicker: "Movement",
-              title: "Rhythm that keeps climbing",
-              copy: "The best Love In Georgia nights do not flatten out. The bar stays bright, the floor gets hotter, and the room keeps asking for more."
+              title: "A natural build",
+              copy: "The night should build naturally, with music and crowd energy carrying it forward."
             },
             {
               kicker: "Connection",
-              title: "Stylish, social, memorable",
-              copy: "The brand stays rooted in attraction, chemistry, beautiful people, and shared crowd energy instead of anonymous nightlife repetition."
+              title: "People remember it",
+              copy: "The best nights feel social, open, and easy to remember."
             }
           ]
         },
         booking: {
-          eyebrow: "Booking rail",
-          heading: "Lock your place for the next edition",
-          intro: "Booking is part of the main experience now. Members can reserve places directly here, while the admin panel controls posters, event details, tiers, and payment instructions.",
-          paymentLabel: "Payment rail",
+          eyebrow: "Booking",
+          heading: "Reserve your place",
+          intro: "Booking is part of the website experience. Members can reserve places here, while the admin panel controls event details, posters, tiers, and payment instructions.",
+          paymentLabel: "Payment details",
           paymentMissing: "Payment details appear here after admin setup or once you sign in.",
-          memberLink: "Open Member Access",
-          socialLink: "Instagram Updates",
+          memberLink: "Member Access",
+          socialLink: "Instagram",
           formEyebrow: "Booking form",
-          formHeading: "Reserve your place",
-          gateTitle: "Member sign-in required",
-          gateCopy: "The live booking form unlocks once you sign in. This keeps ticket requests attached to real member accounts.",
+          formHeading: "Book your place",
+          gateTitle: "Sign in to book",
+          gateCopy: "Sign in or register so your booking request stays connected to your account.",
           gateLink: "Sign In / Register",
           labels: {
             event: "Selected event",
@@ -1831,9 +1882,9 @@
             payment: "Payment method",
             paymentId: "Transfer reference / payment ID"
           },
-          paymentDetailTitle: "Selected payment instructions",
+          paymentDetailTitle: "Payment instructions",
           submit: "Submit Booking",
-          success: "Booking received. Your place is now pending final payment confirmation.",
+          success: "Booking received. Your place is pending payment confirmation.",
           loginFirst: "Sign in first to book this edition.",
           methods: {
             bank: "Bank transfer",
@@ -1842,210 +1893,211 @@
           }
         },
         footer: {
-          eyebrow: "Stay close to the next release",
-          heading: "Book early, watch the poster drop, and step into the room before the city catches up.",
-          copy: "The website is where booking happens. Instagram stays as the secondary channel for poster drops, fast updates, and release signals.",
-          book: "Book the Night",
-          member: "წევრის წვდომა",
+          eyebrow: "Stay close to the next event",
+          heading: "Follow the next event and book before the room fills.",
+          copy: "Booking happens here. Instagram remains the place for poster updates, quick announcements, and event signals.",
+          book: "Book a Place",
+          member: "Member Access",
           instagram: "@loveingeorgia1",
-          legal: "Love In Georgia | Premium nightlife editions and booking flow for Tbilisi."
+          legal: "Love In Georgia | Nightlife events and booking in Tbilisi."
         }
       },
       ka: {
-        brandLine: "booking-first ღამის გამოცემები თბილისში",
+        brandLine: "ივენთები, მუსიკა და ღამის ცხოვრება თბილისში",
         nav: {
-          featured: "შემდეგი drop",
+          featured: "შემდეგი ივენთი",
           archive: "გასული ღამეები",
           venues: "სივრცეები",
           booking: "დაჯავშნა",
-          member: "წევრის წვდომა",
-          account: "ჩემი წვდომა",
+          member: "წევრის სივრცე",
+          account: "ჩემი პროფილი",
           admin: "ადმინი",
           logout: "გასვლა"
         },
         hero: {
-          eyebrow: "Love In Georgia | პრემიუმ ღამის იმპულსი",
+          eyebrow: "Love In Georgia | ღამის ცხოვრება თბილისში",
           title: "Love In Georgia",
-          accent: "დაიჭირე შემდეგი ოთახი მანამდე, სანამ პიკს მიაღწევს.",
-          lead: "უფრო მკვეთრი nightlife ბრენდი სტუმარი არტისტებით, ძლიერ ვიზუალებით, ქალაქთან დაკავშირებული სივრცეებით და ისეთი booking flow-ით, რომელიც crowd-ზე ადრე იწყებს მოძრაობას.",
-          primaryLoggedOut: "Booking-ის გახსნა",
+          accent: "ღამეები, რომლებიც მართლა გახსოვს.",
+          lead: "Love In Georgia აერთიანებს მუსიკას, სტუმარ არტისტებს, სასმელებს და ადამიანებს, რომლებიც კარგ ღამეს ეძებენ. თითოეული ივენთი შექმნილია ატმოსფეროსთვის, კავშირისთვის და იმ განცდისთვის, რომ სწორ ადგილას მოხვდი.",
+          primaryLoggedOut: "ადგილის დაჯავშნა",
           primaryLoggedIn: "ადგილის დაჯავშნა",
-          secondary: "გასული ღამეების ნახვა",
+          secondary: "გასული ივენთები",
           metrics: [
-            { value: "15", label: "არტისტი და 2 სცენა 6 მარტის ღამეზე" },
-            { value: "5", label: "ბოლო გამორჩეული გამოცემა" },
-            { value: "3", label: "მთავარი თბილისის სივრცე როტაციაში" }
+            { value: "15", label: "არტისტი და 2 სცენა 6 მარტს" },
+            { value: "5", label: "ბოლო გამორჩეული ივენთი" },
+            { value: "3", label: "თბილისის სივრცე როტაციაში" }
           ],
           ticker: [
             "Love Bar",
             "Crystal Event Hall",
             "Tsameti Club",
             "სტუმარი არტისტები",
-            "პრემიუმ crowd energy"
+            "მუსიკა და სასმელები",
+            "კარგი ენერგია"
           ]
         },
         featured: {
-          eyebrow: "ცოცხალი booking სიგნალი",
-          heading: "შემდეგი გამოცემა უფრო უშუალოდ უნდა იგრძნობოდეს",
-          intro: "ეს სექცია ახლა booking-ზეა აწყობილი და არა მხოლოდ სოციალურ არხებზე. ივენთის დეტალები, პოსტერი, ტიერები და payment rail ადმინ პანელიდან იცვლება."
+          eyebrow: "შემდეგი ივენთი",
+          heading: "ღამე, რომლისთვისაც წინასწარ ემზადები",
+          intro: "ივენთის დეტალები, პოსტერები, ფასები და გადახდის ინსტრუქციები ადმინ პანელიდან იცვლება, ამიტომ გვერდი მზად არის ყოველი ახალი გამოცემისთვის."
         },
         facts: {
           date: "თარიღი",
           venue: "სივრცე",
-          faceControl: "შესვლის ტონი",
-          tickets: "ტიკეტების გამოშვება",
+          faceControl: "შესვლის ფორმატი",
+          tickets: "ბილეთები",
           booking: "დაჯავშნა",
-          bookingFallback: "Booking-ის ტექსტი ადმინ პანელიდან განახლდება."
+          bookingFallback: "დაჯავშნის დეტალები ადმინ პანელიდან განახლდება."
         },
         archive: {
-          eyebrow: "არქივის იმპულსი",
-          heading: "გამოცემები, რომლებმაც სახელი ააწყვეს",
-          intro: "Love In Georgia იმიტომ მუშაობს, რომ ღამეები განზრახ არის აშენებული: ძლიერი კურაცია, ნამდვილი მოძრაობა და ისეთი ოთახები, რომლებიც განათების ჩაქრობის შემდეგაც გახსოვს.",
+          eyebrow: "გასული ივენთები",
+          heading: "ღამეები, რომლებიც დაამახსოვრდათ",
+          intro: "ეს გამოცემები აჩვენებს Love In Georgia-ს ხასიათს: პატარა ოთახები, დიდი დარბაზები, სტუმარი არტისტები და ღამეები, რომლებზეც შემდეგაც საუბრობენ.",
           cards: [
             {
               date: "27 მარტი, 2026",
               title: "Crystal Event Hall",
-              copy: "დაუვიწყარი გამოცემა გამართული პროდაქშენით, ძლიერ floor release-ით და ოთახით, რომელმაც ტენზია თავიდან ბოლომდე შეინარჩუნა."
+              copy: "მოწესრიგებული Crystal Event Hall-ის გამოცემა ძლიერი პროდაქშენით, ზუსტი მუსიკით და აქტიური ოთახით ბოლომდე."
             },
             {
               date: "14 მარტი, 2026",
-              title: "მაღალი მოთხოვნის თბილისური ღამე",
-              copy: "ქალაქური ღამე მკაფიო მოთხოვნით, სწრაფი crowd build-ით და ისეთი buzz-ით, რომელმაც შემდეგი drop კიდევ უფრო მწვავედ გახადა."
+              title: "მაღალი მოთხოვნის ღამე თბილისში",
+              copy: "დატვირთული ღამე თბილისში, სწრაფად შევსებული სივრცით და მკაფიო ნიშნით, რომ შემდეგი გამოცემა სწრაფად გაიყიდებოდა."
             },
             {
               date: "6 მარტი, 2026",
               title: "15 არტისტი / 2 სცენა",
-              copy: "Crystal Event Hall-ის მასშტაბური განცხადება, შექმნილი დიდი ფორმატისთვის, მოძრაობისთვის და ბევრი არტისტის მომენტის სწორად დასასმელად."
+              copy: "უფრო დიდი ფორმატი Crystal Event Hall-ში: 15 არტისტი, 2 სცენა და მუდმივი მოძრაობა მთელი ღამის განმავლობაში."
             },
             {
               date: "13 თებერვალი, 2026",
               title: "Love Day | Love Bar",
-              copy: "ვალენტინობის დაძაბულობა, ჩაცმული crowd და უფრო ინტიმური ოთახის ქიმია ერთ ღამეში."
+              copy: "ვალენტინის თემატური ღამე Love Bar-ში: თბილი განწყობა, მოწესრიგებული სტუმრები და ახლო ოთახის შეგრძნება."
             },
             {
               date: "1 იანვარი, 2026",
               title: "ბედობა | Tsameti Club",
-              copy: "ახალი წლის reset ღრმა crowd immersion-ით, ოპტიმიზმით და იმ განცდით, რომ წელი ნამდვილ ღამეში დაიწყო."
+              copy: "ახალი წლის ღამე Tsameti Club-ში, ღრმა ენერგიით, ოპტიმიზმით და წლის ახალი დასაწყისის განცდით."
             }
           ]
         },
         reasons: {
-          eyebrow: "რატომ ჯავშნიან ადრე",
-          heading: "მიზიდულობა აფიშაზე მეტი არის",
-          intro: "Love In Georgia-ის ღამეებს იმიტომ ჯავშნიან, რომ ბრენდი სრულ სოციალურ mood-ს იძლევა: მუსიკას, სტილს, მიზიდულობას და ოთახს, რომელიც შეგნებულად არის შერჩეული.",
+          eyebrow: "რატომ მოდიან",
+          heading: "აფიშაზე მეტი",
+          intro: "ადამიანები მოდიან სრული გამოცდილებისთვის: მუსიკა, ხალხი, სივრცე და განცდა, რომ ღამე თავიდან ბოლომდე გააზრებულია.",
           cards: [
             {
               kicker: "01",
-              title: "კურირებული საუნდის წნევა",
-              copy: "სტუმარი არტისტები და DJs შეირჩევა ემოციური აწევის, crowd control-ის და გვიანი ღამის ინტენსივობისთვის."
+              title: "კურირებული მუსიკა",
+              copy: "დიჯეები და სტუმარი არტისტები შეირჩევა სივრცის, ხალხის და ღამის განწყობის მიხედვით."
             },
             {
               kicker: "02",
-              title: "უკეთესი ოთახი",
-              copy: "ატმოსფერო იმიტომ მუშაობს, რომ crowd მუშაობს. შესვლის ტონი, სტილი და ენერგია პირდაპირ წყვეტს, როგორ დაჯდება ღამე."
+              title: "კარგი ხალხი",
+              copy: "ღამე მაშინ მუშაობს, როცა ოთახში ადამიანები სწორ ენერგიას, სტილს და გახსნილობას მოიტანენ."
             },
             {
               kicker: "03",
-              title: "უფრო მკვეთრი ვიზუალური ენა",
-              copy: "პოსტერები, განათება, glossy darkness და მაღალი კონტრასტის staging თითოეულ გამოცემას უფრო ძლიერ ვიზუალურ მეხსიერებას აძლევს."
+              title: "ცნობადი ვიზუალი",
+              copy: "პოსტერები, განათება და სცენური დეტალები თითოეულ გამოცემას დასამახსოვრებელს ხდის."
             },
             {
               kicker: "04",
-              title: "ქალაქში მოქნილი მოძრაობა",
-              copy: "ბრენდი ერთ ოთახში არ იჭედება. ის თბილისს მიჰყვება და მაინც ინარჩუნებს ცნობად ემოციურ ხელწერას."
+              title: "სხვადასხვა სივრცე",
+              copy: "ბრენდი მოძრაობს თბილისის სხვადასხვა ადგილას და მაინც ინარჩუნებს ერთიან ხასიათს."
             },
             {
               kicker: "05",
-              title: "booking-ის ინერცია",
-              copy: "როცა სწორი ღამე ეშვება, ხალხი ადრე მოძრაობს. booking flow უკვე pulse-ის ნაწილია და არა დამატება."
+              title: "მარტივი დაჯავშნა",
+              copy: "დაჯავშნა სტუმრებს აძლევს მარტივ გზას, ადგილი წინასწარ დაიჭირონ."
             }
           ]
         },
         venues: {
-          eyebrow: "სივრცეების წრე",
-          heading: "სხვადასხვა ოთახი, ერთი ემოციური ხელწერა",
-          intro: "Love In Georgia თბილისის მთავარ სივრცეებს შორის მოძრაობს და ყოველ ადგილზე ინარჩუნებს პრემიუმ სიმკვეთრეს, მიუხედავად იმისა, რომ ღამის მასშტაბი იცვლება.",
+          eyebrow: "სივრცეები",
+          heading: "სხვადასხვა სივრცე, ერთი ხასიათი",
+          intro: "Love In Georgia მუშაობს თბილისის სხვადასხვა სივრცეში და ფორმატს გარემოს მიხედვით ცვლის, მაგრამ ბრენდის განწყობას ინარჩუნებს.",
           cards: [
             {
               kicker: "Love Bar",
-              title: "უფრო ახლო, უფრო თბილი, უფრო ინტიმური",
-              copy: "ქიმიისთვის, ჩაცმული ენერგიისთვის და ისეთი ღამეებისთვის, რომლებიც ოთახის შევსებისთანავე რეალურ ძალას იძენს."
+              title: "ახლო და თბილი",
+              copy: "სივრცე ინტიმური ღამეებისთვის, სოციალური ენერგიისთვის და ოთახისთვის, რომელიც სწრაფად ივსება."
             },
             {
               kicker: "Crystal Event Hall",
-              title: "დიდი ფორმატის ზემოქმედება",
-              copy: "სივრცე უფრო ამბიციური პროდაქშენისთვის, ძლიერი ვიზუალური განცხადებებისთვის და lineups-ისთვის, რომლებსაც მასშტაბი სჭირდება."
+              title: "უფრო დიდი ფორმატი",
+              copy: "ადგილი დიდი ლაინაფებისთვის, ძლიერი პროდაქშენისთვის და უფრო ფართო აუდიტორიისთვის."
             },
             {
               kicker: "Tsameti Club",
-              title: "ღრმა ღამის immersion",
-              copy: "უფრო მკვეთრი წერტილი გვიანი ღამისთვის, მძიმე იმპულსისთვის და crowd-ის კონცენტრაციისთვის."
+              title: "გვიანი ღამის ენერგია",
+              copy: "უფრო მკვეთრი გარემო ღრმა საათებისთვის, ფოკუსირებული მუსიკისთვის და ინტენსიური ოთახისთვის."
             }
           ]
         },
         scene: {
-          eyebrow: "ატმოსფეროს შენიშვნები",
-          heading: "როგორ უნდა იგრძნობოდეს ეს ღამე",
-          intro: "ტონი რომანტიკულია, მაგრამ არა რბილი; პრემიუმია, მაგრამ არა ცივი; და ყოველთვის დგას რიტმზე, მოძრაობაზე და კავშირზე.",
+          eyebrow: "ატმოსფერო",
+          heading: "როგორ უნდა იგრძნობოდეს",
+          intro: "განწყობა უნდა იყოს თბილი და სტილური: მუსიკა, განათება, მოძრაობა, სასმელები და ადამიანები, რომლებიც ღამის ნაწილი ხდებიან.",
           cards: [
             {
               kicker: "Lights",
-              title: "გლოსი სიბნელეზე",
-              copy: "თბილი აქცენტები, ამრეკლი ზედაპირები და poster-led ვიზუალი, რომელიც ოთახს headline moment-მდე აცოცხლებს."
+              title: "თბილი განათება",
+              copy: "თბილი შუქი, მუქი კიდეები და პოსტერებზე აგებული ვიზუალი ოთახის ტონს თავიდანვე აყენებს."
             },
             {
               kicker: "Movement",
-              title: "რიტმი, რომელიც სულ მაღლა მიდის",
-              copy: "საუკეთესო Love In Georgia ღამეები არ ბრტყელდება. ისინი იკუმშება, იმატებს და crowd-ს მუდმივად მეტს სთხოვს."
+              title: "მოძრაობა",
+              copy: "ღამე ბუნებრივად უნდა იზრდებოდეს, მუსიკამ და ხალხის ენერგიამ კი წინ წაიყვანოს."
             },
             {
               kicker: "Connection",
-              title: "სტილიანი, სოციალური, დასამახსოვრებელი",
-              copy: "ბრენდი attraction-ზე, ქიმიაზე და crowd-ის საერთო ენერგიაზე დგას და არა ანონიმურ nightlife გამეორებაზე."
+              title: "კავშირი",
+              copy: "საუკეთესო ღამეები სოციალურია, ღიაა და მარტივად გახსენდება."
             }
           ]
         },
         booking: {
-          eyebrow: "Booking rail",
-          heading: "დაიჭირე ადგილი შემდეგ გამოცემაზე",
-          intro: "booking ახლა მთავარი გამოცდილების ნაწილია. წევრებს შეუძლიათ ადგილი პირდაპირ აქედან დაჯავშნონ, ხოლო ადმინ პანელი მართავს პოსტერებს, ივენთის დეტალებს, ტიერებს და payment instructions-ს.",
-          paymentLabel: "Payment rail",
-          paymentMissing: "გადახდის დეტალები აქ გამოჩნდება ადმინის დაყენების შემდეგ ან ავტორიზაციისას.",
-          memberLink: "წევრის წვდომა",
-          socialLink: "Instagram განახლებები",
-          formEyebrow: "Booking form",
-          formHeading: "დააჯავშნე ადგილი",
-          gateTitle: "აუცილებელია Member sign-in",
-          gateCopy: "ცოცხალი booking form მხოლოდ ავტორიზაციის შემდეგ იხსნება, რათა მოთხოვნები რეალურ ანგარიშებს მიებას.",
+          eyebrow: "დაჯავშნა",
+          heading: "დაჯავშნე ადგილი",
+          intro: "დაჯავშნა საიტის მთავარი ნაწილია. წევრებს შეუძლიათ ადგილი აქედან დაჯავშნონ, ხოლო ადმინ პანელი მართავს ივენთის დეტალებს, პოსტერებს, ფასებს და გადახდის ინსტრუქციებს.",
+          paymentLabel: "გადახდის დეტალები",
+          paymentMissing: "გადახდის დეტალები გამოჩნდება ადმინის განახლების შემდეგ ან ავტორიზაციისას.",
+          memberLink: "წევრის სივრცე",
+          socialLink: "Instagram",
+          formEyebrow: "დაჯავშნის ფორმა",
+          formHeading: "დაჯავშნე ადგილი",
+          gateTitle: "დაჯავშნისთვის გაიარე ავტორიზაცია",
+          gateCopy: "შედი ან დარეგისტრირდი, რომ დაჯავშნის მოთხოვნა შენს ანგარიშს დაუკავშირდეს.",
           gateLink: "შესვლა / რეგისტრაცია",
           labels: {
             event: "არჩეული ივენთი",
-            name: "სრული სახელი",
+            name: "სახელი და გვარი",
             email: "ელფოსტა",
             phone: "ტელეფონი",
             guests: "სტუმრები",
-            tier: "ტიერი",
+            tier: "ფასი / კატეგორია",
             payment: "გადახდის მეთოდი",
             paymentId: "გადარიცხვის კოდი / payment ID"
           },
-          paymentDetailTitle: "არჩეული payment ინსტრუქცია",
-          submit: "Booking-ის გაგზავნა",
-          success: "booking მიღებულია. შენი ადგილი ახლა საბოლოო payment confirmation-ს ელოდება.",
-          loginFirst: "booking-ისთვის ჯერ ავტორიზაცია გაიარე.",
+          paymentDetailTitle: "გადახდის ინსტრუქცია",
+          submit: "დაჯავშნის გაგზავნა",
+          success: "დაჯავშნა მიღებულია. ადგილი დადასტურდება გადახდის შემოწმების შემდეგ.",
+          loginFirst: "დაჯავშნისთვის ჯერ ავტორიზაცია გაიარე.",
           methods: {
-            bank: "ბანკით გადარიცხვა",
+            bank: "საბანკო გადარიცხვა",
             qr: "QR გადარიცხვა",
             manual: "ხელით დადასტურება"
           }
         },
         footer: {
-          eyebrow: "იყავი ახლოს შემდეგ drop-თან",
-          heading: "დაიჭირე ადგილი ადრე, დაელოდე პოსტერის გამოჩენას და შეხვდი შემდეგ ოთახს მანამდე, სანამ ქალაქი სრულად მიხვდება.",
-          copy: "საიტი არის მთავარი booking სივრცე. Instagram რჩება მეორად არხად პოსტერების გამოჩენისთვის, სწრაფი განახლებებისთვის და სიგნალებისთვის.",
+          eyebrow: "იყავი ახლოს შემდეგ ივენთთან",
+          heading: "მიყევი შემდეგ ივენთს და დაჯავშნე ადგილი მანამდე, სანამ სივრცე შეივსება.",
+          copy: "დაჯავშნა აქ ხდება. Instagram რჩება პოსტერების, სწრაფი განახლებების და ახალი ივენთების სიგნალებისთვის.",
           book: "დაჯავშნა",
-          member: "წევრის წვდომა",
+          member: "წევრის სივრცე",
           instagram: "@loveingeorgia1",
-          legal: "Love In Georgia | პრემიუმ ღამის გამოცემები და booking flow თბილისში."
+          legal: "Love In Georgia | ღამის ივენთები და დაჯავშნა თბილისში."
         }
       }
     };
@@ -2284,11 +2336,13 @@
       elements.featureSummary.textContent = featured.summary;
       elements.featureMeta.innerHTML = [featured.date, featured.location].filter(Boolean).map((item) => `<span>${item}</span>`).join("");
 
+      const faceControl = localize(state.settings.face_control, state.settings.face_control_ka || "შესვლის ფორმატს გუნდი მართავს.");
+      const ticketInfo = localize(state.settings.tickets_info, state.settings.tickets_info_ka || "ბილეთები შეზღუდული რაოდენობით გამოდის.");
       const facts = [
         { label: copy.facts.date, value: featured.date || "-" },
         { label: copy.facts.venue, value: featured.location || "-" },
-        { label: copy.facts.faceControl, value: state.settings.face_control || "-" },
-        { label: copy.facts.tickets, value: state.settings.tickets_info || "-" },
+        { label: copy.facts.faceControl, value: faceControl || "-" },
+        { label: copy.facts.tickets, value: ticketInfo || "-" },
         { label: copy.facts.booking, value: featured.bookingCopy || copy.facts.bookingFallback }
       ];
 
@@ -2359,7 +2413,7 @@
       const copy = currentCopy();
       const loginLabel = state.lang === "ka" ? "შესვლა" : "Login";
       const registerLabel = state.lang === "ka" ? "რეგისტრაცია" : "Register";
-      const accountLabel = state.lang === "ka" ? "ჩემი წვდომა" : "My Access";
+      const accountLabel = state.lang === "ka" ? "ჩემი პროფილი" : "My Account";
       document.documentElement.lang = state.lang;
       document.title = state.lang === "ka"
         ? "Love In Georgia | თბილისის ღამის ცხოვრება და დაჯავშნა"
@@ -2392,9 +2446,10 @@
     function renderPaymentRail() {
       const copy = currentCopy();
       const lines = [];
+      const transferNote = localize(state.settings.transfer_note, state.settings.transfer_note_ka || "გადარიცხვის დანიშნულებაში მიუთითე სახელი და გვარი, რომ დაჯავშნა სწრაფად დადასტურდეს.");
       if (state.settings.tbc_account) lines.push(`TBC: ${state.settings.tbc_account}`);
       if (state.settings.bog_account) lines.push(`Bank of Georgia: ${state.settings.bog_account}`);
-      if (state.settings.transfer_note) lines.push(state.settings.transfer_note);
+      if (transferNote) lines.push(transferNote);
       if (state.settings.qr_url) lines.push(state.settings.qr_url);
 
       elements.paymentLabel.textContent = copy.booking.paymentLabel;
@@ -2459,16 +2514,17 @@
     function renderPaymentDetails() {
       const selected = elements.paymentSelect.value;
       const lines = [];
+      const transferNote = localize(state.settings.transfer_note, state.settings.transfer_note_ka || "გადარიცხვის დანიშნულებაში მიუთითე სახელი და გვარი, რომ დაჯავშნა სწრაფად დადასტურდეს.");
       if (selected.includes("QR") && state.settings.qr_url) {
         lines.push(state.settings.qr_url);
       } else if (selected.includes("Bank") || selected.includes("ბანკ")) {
         if (state.settings.tbc_account) lines.push(`TBC: ${state.settings.tbc_account}`);
         if (state.settings.bog_account) lines.push(`Bank of Georgia: ${state.settings.bog_account}`);
       } else {
-        lines.push(state.settings.transfer_note || currentCopy().booking.paymentMissing);
+        lines.push(transferNote || currentCopy().booking.paymentMissing);
       }
-      if (state.settings.transfer_note && !lines.includes(state.settings.transfer_note)) {
-        lines.push(state.settings.transfer_note);
+      if (transferNote && !lines.includes(transferNote)) {
+        lines.push(transferNote);
       }
       elements.paymentDetailLines.innerHTML = lines.map((line) => `<span>${line}</span>`).join("");
     }

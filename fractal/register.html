@@ -264,8 +264,8 @@
     }
 
     h1 {
-      font-size: clamp(2.6rem, 6vw, 4.8rem);
-      max-width: 14ch;
+      font-size: clamp(2.15rem, 4.8vw, 3.7rem);
+      max-width: 16ch;
     }
 
     h2 {
@@ -585,7 +585,7 @@
       }
 
       h1 {
-        font-size: clamp(2.3rem, 12vw, 3.6rem);
+        font-size: clamp(2rem, 10vw, 3rem);
       }
     }
   </style>
@@ -600,7 +600,7 @@
         <img src="lig logo.png" alt="Love In Georgia logo" />
         <div class="brand-copy">
           <span class="brand-title">Love In Georgia</span>
-          <span class="brand-meta">Member access, booking identity, and ticket control</span>
+          <span class="brand-meta">Member access, reservations, and ticket control</span>
         </div>
       </div>
 
@@ -620,8 +620,8 @@
   <main class="member-shell">
     <section class="intro-panel">
       <p class="eyebrow">Love In Georgia | Register</p>
-      <h1>Create your access before the next room opens.</h1>
-      <p class="intro-copy">Set up your member account here, then move through bookings, payment confirmation, profile approval, and ticket delivery from one place. Registration lives on its own page now so entry feels cleaner and faster.</p>
+      <h1>Create access for your next night out.</h1>
+      <p class="intro-copy">Set up your member account here, then manage reservations, payment confirmation, profile approval, and ticket delivery from one place.</p>
 
       <div class="signal-list">
         <article class="signal-card">
@@ -634,7 +634,7 @@
         </article>
         <article class="signal-card">
           <strong>03</strong>
-          <span>Jump from poster drop to booking confirmation without relying on DMs or scattered payment instructions.</span>
+          <span>Move from event details to booking confirmation without relying on DMs or scattered payment instructions.</span>
         </article>
       </div>
 
@@ -650,7 +650,7 @@
         <div class="panel-headline">
           <p class="eyebrow">Create access</p>
           <h2>Member Registration</h2>
-          <p class="section-copy">Set up your profile once so the next booking, ticket, and approval cycle already knows who you are.</p>
+          <p class="section-copy">Create your profile once so future bookings, ticket delivery, and approvals stay connected to your account.</p>
         </div>
         <form id="registerForm">
           <label>Full name<input type="text" name="name" required /></label>
@@ -672,7 +672,7 @@
         <div class="panel-headline">
           <p class="eyebrow">Return to your access</p>
           <h2>Sign In</h2>
-          <p class="section-copy">Use your member account to reach booking, ticket delivery, and your current approval status.</p>
+          <p class="section-copy">Use your member account to view bookings, ticket delivery, and your current approval status.</p>
         </div>
         <form id="loginForm">
           <label>Email<input type="email" name="email" required /></label>
@@ -703,7 +703,7 @@
           <p class="eyebrow">Member profile</p>
           <h2>Your profile</h2>
         </div>
-        <p class="muted">Manage your identity, photo, booking access, and tickets without leaving the Love In Georgia flow.</p>
+        <p class="muted">Manage your identity, photo, booking access, and tickets from one Love In Georgia account.</p>
       </div>
       <div class="profile-grid">
         <div class="profile-panel">
@@ -725,7 +725,7 @@
         <div class="profile-panel">
           <div class="section-head">
             <h3>Next editions</h3>
-            <p class="muted">Follow the next booking release and jump straight back to the live site when the next room opens.</p>
+            <p class="muted">Follow upcoming event details and return to the live site when booking opens.</p>
           </div>
           <div class="event-grid" id="profileEvents"></div>
         </div>
@@ -778,8 +778,8 @@
         date: 'Next edition to be announced',
         venue: 'Tbilisi, Georgia',
         price: '120 / 150 / 180 GEL',
-        tag: 'Upcoming drop',
-        blurb: 'Use member access to stay close to the next booking release, ticket confirmation, and event updates.'
+        tag: 'Upcoming event',
+        blurb: 'Use member access to stay close to booking, ticket confirmation, and event updates.'
       }
     ];
 
@@ -873,7 +873,7 @@
             date: settings.event_date || upcomingEvents[0].date,
             venue: settings.location || upcomingEvents[0].venue,
             price: priceLine,
-            tag: 'Upcoming drop',
+            tag: 'Upcoming event',
             blurb: settings.event_description || upcomingEvents[0].blurb
           }
         ];
@@ -931,7 +931,7 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'buy-btn';
-        btn.textContent = allowed ? 'Open booking rail' : 'Approval required';
+        btn.textContent = allowed ? 'Open booking' : 'Approval required';
         btn.disabled = !allowed;
         btn.addEventListener('click', () => { window.location.href = 'index.html#book'; });
         card.appendChild(btn);

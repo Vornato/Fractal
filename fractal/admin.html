@@ -166,24 +166,12 @@
     const ticketsByUser = {};
     const bookingsByUser = {};
 
-    const ADMIN_AUTH_FLAG = 'fractalAdminAuthed';
-    const isAdminAuthed = () => sessionStorage.getItem(ADMIN_AUTH_FLAG) === '1';
-    const setAdminAuthed = (val) => {
-      if (val) sessionStorage.setItem(ADMIN_AUTH_FLAG, '1');
-      else sessionStorage.removeItem(ADMIN_AUTH_FLAG);
-    };
-
     async function api(path, { method = 'GET', body, headers } = {}) {
       const opts = {
         method,
         credentials: 'include',
         headers: headers || {}
       };
-      // Always send admin Basic auth for admin endpoints to survive cookie issues
-      if (path.startsWith('/api/admin') && isAdminAuthed()) {
-        const basic = btoa(`${AUTO_ADMIN_EMAIL}:${AUTO_ADMIN_PASSWORD}`);
-        opts.headers['Authorization'] = `Basic ${basic}`;
-      }
       if (body instanceof FormData) {
         opts.body = body;
       } else if (body) {

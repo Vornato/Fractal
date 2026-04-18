@@ -1,4 +1,4 @@
-name: Deploy Fractal Frontend
+name: Deploy Love In Georgia Frontend
 
 on:
   push:

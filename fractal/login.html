@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Love In Georgia | Register</title>
+  <title>Love In Georgia | Login</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Georgian:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -590,7 +590,7 @@
     }
   </style>
 </head>
-<body data-auth-mode="register">
+<body data-auth-mode="login">
   <div class="glow glow-one" aria-hidden="true"></div>
   <div class="glow glow-two" aria-hidden="true"></div>
 
@@ -607,7 +607,7 @@
       <nav class="header-links">
         <a class="nav-link" href="index.html">Main Site</a>
         <a class="nav-link" href="index.html#book">Booking</a>
-        <a class="nav-link" href="login.html">Login</a>
+        <a class="nav-link" href="register.html">Register</a>
       </nav>
 
       <div class="user-ops hidden" id="userOps">
@@ -619,9 +619,9 @@
 
   <main class="member-shell">
     <section class="intro-panel">
-      <p class="eyebrow">Love In Georgia | Register</p>
-      <h1>Create your access before the next room opens.</h1>
-      <p class="intro-copy">Set up your member account here, then move through bookings, payment confirmation, profile approval, and ticket delivery from one place. Registration lives on its own page now so entry feels cleaner and faster.</p>
+      <p class="eyebrow">Love In Georgia | Login</p>
+      <h1>Return to your booking flow.</h1>
+      <p class="intro-copy">Sign in here to reopen booking, payment confirmation, approval status, and ticket delivery from one place. Login now has its own page so returning members can move straight back into the live flow.</p>
 
       <div class="signal-list">
         <article class="signal-card">
@@ -646,7 +646,7 @@
     </section>
 
     <div class="auth-stack">
-      <section class="panel" id="registerSection">
+      <section class="panel hidden" id="registerSection">
         <div class="panel-headline">
           <p class="eyebrow">Create access</p>
           <h2>Member Registration</h2>
@@ -668,7 +668,7 @@
         <p class="auth-switch">Already have an account? <a href="login.html">Log in here</a>.</p>
       </section>
 
-      <section class="panel hidden" id="loginSection">
+      <section class="panel" id="loginSection">
         <div class="panel-headline">
           <p class="eyebrow">Return to your access</p>
           <h2>Sign In</h2>
@@ -744,7 +744,7 @@
 
   <script>
     const API_BASE = window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
-    const AUTH_MODE = document.body.dataset.authMode || "register";
+    const AUTH_MODE = document.body.dataset.authMode || "login";
 
     const registerForm = document.getElementById('registerForm');
     const loginForm = document.getElementById('loginForm');

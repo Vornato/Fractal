@@ -3,418 +3,1389 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fractal Admin</title>
+  <title>Love In Georgia | Admin Control</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Georgian:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    body{margin:0;font-family:'Space Grotesk',sans-serif;background:#030d0d;color:#eafff9;min-height:100vh;}
-    header{padding:1.5rem 2rem;background:#001919;border-bottom:1px solid rgba(122,255,198,.3);display:flex;justify-content:space-between;align-items:center;}
-    main{padding:2rem;}
-    form{display:flex;gap:1rem;flex-wrap:wrap;}
-    input{padding:.8rem 1rem;border-radius:.6rem;border:1px solid rgba(122,255,198,.4);background:#000c0c;color:#fff;}
-    button{padding:.85rem 1.6rem;border-radius:.7rem;border:0;cursor:pointer;background:linear-gradient(120deg,#7affc6,#3bc5ff);color:#001d19;font-weight:600;}
-    table{width:100%;border-collapse:collapse;margin-top:2rem;background:#001313;border-radius:1rem;overflow:hidden;}
-    th,td{padding:0.9rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}
-    tr:last-child td{border-bottom:0;}
-    .status{padding:.25rem .7rem;border-radius:999px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;}
-    .approved{background:rgba(122,255,198,.15);color:#7affc6;}
-    .pending{background:rgba(255,195,113,.15);color:#ffc371;}
-    .actions{display:flex;gap:.5rem;flex-wrap:wrap;}
-    .hidden{display:none;}
-    .note{margin-top:1rem;font-size:.9rem;color:#84bcb0;}
-    .settings{margin-top:1.5rem;background:#001212;padding:1rem;border-radius:1rem;border:1px solid rgba(122,255,198,.25);}
-    .settings h3{margin-top:0;}
-    .stack{display:flex;flex-direction:column;gap:.6rem;}
-    .compact-input{width:180px;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.6rem;}
-    #alertBox{margin:1rem 0;padding:1rem 1.2rem;border-radius:.9rem;border:1px solid rgba(255,125,125,.45);background:rgba(255,99,132,.12);color:#ffdfe6;line-height:1.45;}
-    #alertBox strong{color:#ff8fa5;}
-    #alertBox code{background:rgba(255,255,255,.08);padding:0.2rem 0.35rem;border-radius:0.4rem;font-size:0.9rem;}
-    #alertBox .small{display:block;color:#f9bebe;font-size:0.9rem;margin-top:0.35rem;}
-    #alertBox.hidden{display:none;}
-    .status-badge{display:inline-flex;align-items:center;gap:0.35rem;padding:0.35rem 0.65rem;border-radius:999px;font-size:0.85rem;letter-spacing:0.02em;font-weight:600;}
-    .status-permanent{background:rgba(122,255,198,.18);color:#0fd18a;border:1px solid rgba(122,255,198,.6);}
-    .status-temporary{background:rgba(122,255,198,.08);color:#1be6a1;border:1px dashed rgba(122,255,198,.6);}
-    .status-door{background:rgba(255,214,102,.16);color:#ffc861;border:1px solid rgba(255,214,102,.6);}
-    .status-declined{background:rgba(255,122,122,.18);color:#ff7a7a;border:1px solid rgba(255,122,122,.55);}
-    .status-icon{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;font-size:0.7rem;background:rgba(255,255,255,.08);}
+    :root {
+      --bg: #080509;
+      --panel: rgba(16, 12, 19, 0.92);
+      --panel-2: rgba(25, 18, 28, 0.96);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #f8eff5;
+      --muted: rgba(248, 239, 245, 0.68);
+      --pink: #ff4d9d;
+      --gold: #ffb15d;
+      --lime: #d9ff74;
+      --danger: #ff7f96;
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+      --cut: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+      --content: 1360px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Manrope", "Noto Sans Georgian", sans-serif;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(255, 77, 157, 0.12), transparent 26%),
+        radial-gradient(circle at 85% 8%, rgba(255, 177, 93, 0.1), transparent 24%),
+        linear-gradient(180deg, #050307 0%, #0f0813 48%, #050307 100%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(18px);
+      background: rgba(8, 5, 9, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .topbar-inner,
+    .container {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      min-height: 5.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 1rem;
+      object-fit: cover;
+      box-shadow: 0 0 24px rgba(255, 77, 157, 0.16);
+    }
+
+    .brand strong {
+      display: block;
+      font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: 0.15rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .nav a,
+    .nav button,
+    .primary-btn,
+    .ghost-btn,
+    .upload-btn {
+      min-height: 2.85rem;
+      padding: 0.78rem 1rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav button:hover,
+    .primary-btn:hover,
+    .ghost-btn:hover,
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 77, 157, 0.28);
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      color: #140912;
+      border: 0;
+      box-shadow: 0 18px 36px rgba(255, 77, 157, 0.2);
+    }
+
+    .hero {
+      padding: 1.4rem 0 1rem;
+    }
+
+    .hero-panel,
+    .panel,
+    .table-panel {
+      position: relative;
+      clip-path: var(--cut);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255, 77, 157, 0.09), transparent 34%),
+        linear-gradient(315deg, rgba(255, 177, 93, 0.06), transparent 30%),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-panel {
+      padding: 1.2rem 1.3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .hero-panel h1 {
+      margin: 0;
+      font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 0.96;
+    }
+
+    .hero-panel p {
+      margin: 0.85rem 0 0;
+      max-width: 56rem;
+      color: rgba(248, 239, 245, 0.82);
+    }
+
+    .status-note {
+      min-height: 1.3rem;
+      color: var(--lime);
+      font-size: 0.92rem;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+      padding-bottom: 2rem;
+    }
+
+    .panel {
+      padding: 1.1rem;
+    }
+
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-12 { grid-column: 1 / -1; }
+
+    .panel h2,
+    .panel h3,
+    .table-panel h2 {
+      margin: 0;
+      font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
+      text-transform: uppercase;
+      line-height: 1;
+      font-size: 1.25rem;
+      letter-spacing: 0.03em;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .panel-head p,
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .field-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 0.42rem;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label,
+    .sub-label {
+      color: rgba(248, 239, 245, 0.66);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font: inherit;
+      clip-path: var(--cut);
+    }
+
+    textarea {
+      min-height: 8rem;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: rgba(255, 77, 157, 0.42);
+      box-shadow: 0 0 0 1px rgba(255, 77, 157, 0.16);
+    }
+
+    select option {
+      background: #1b1220;
+      color: #f9f2f7;
+    }
+
+    select option:checked {
+      background: #ff4d9d;
+      color: #12070f;
+    }
+
+    .poster-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .poster-editor {
+      padding: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.03);
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .poster-preview {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      clip-path: var(--cut);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .poster-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-row {
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .upload-row input[type="file"] {
+      flex: 1 1 14rem;
+      padding: 0.65rem;
+    }
+
+    .tier-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .tier-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) minmax(120px, 0.55fr) minmax(0, 1fr);
+      gap: 0.7rem;
+      align-items: center;
+      padding: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tier-row input[type="checkbox"] {
+      width: 1rem;
+      height: 1rem;
+      clip-path: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .table-panel {
+      padding: 1.1rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th,
+    td {
+      padding: 0.85rem 0.9rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: rgba(248, 239, 245, 0.62);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-permanent { color: #1df2a5; border-color: rgba(29, 242, 165, 0.4); }
+    .status-temporary { color: var(--lime); border-color: rgba(217, 255, 116, 0.4); }
+    .status-door { color: var(--gold); border-color: rgba(255, 177, 93, 0.4); }
+    .status-declined { color: var(--danger); border-color: rgba(255, 127, 150, 0.4); }
+
+    .inline-stack {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .inline-stack input,
+    .inline-stack button,
+    .actions select {
+      min-width: 0;
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .booking-dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(4, 3, 6, 0.72);
+      backdrop-filter: blur(10px);
+      z-index: 80;
+    }
+
+    .booking-dialog-backdrop.open {
+      display: flex;
+    }
+
+    .booking-dialog {
+      width: min(42rem, 100%);
+      padding: 1.15rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background:
+        linear-gradient(135deg, rgba(255, 77, 157, 0.09), transparent 34%),
+        linear-gradient(315deg, rgba(255, 177, 93, 0.06), transparent 30%),
+        var(--panel-2);
+      box-shadow: var(--shadow);
+    }
+
+    .booking-dialog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .booking-dialog-head p {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .booking-dialog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .booking-stat {
+      padding: 0.9rem 1rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .booking-stat small {
+      display: block;
+      color: rgba(248, 239, 245, 0.58);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+
+    .booking-stat strong,
+    .booking-stat span {
+      display: block;
+      word-break: break-word;
+    }
+
+    .booking-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 1120px) {
+      .hero-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .span-7,
+      .span-5,
+      .span-12 {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner,
+      .container {
+        width: min(var(--content), calc(100% - 1.2rem));
+      }
+
+      .field-grid,
+      .field-grid.three,
+      .tier-row,
+      .booking-dialog-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <strong>Fractal Admin Panel</strong>
-    <nav>
-      <a href="index.html" style="color:#7affc6;text-decoration:none;margin-right:1rem;">Site</a>
-      <a href="register.html" style="color:#7affc6;text-decoration:none;">Register</a>
-    </nav>
-  </header>
-  <main>
-    <div id="alertBox" class="hidden"></div>
-    <section id="adminPanel" class="">
-      <p id="adminLoginMessage" class="note"></p>
-      <h2>Registered Users</h2>
-      <div class="settings">
-        <h3>Payment details (shows on booking)</h3>
-      <div class="stack">
-        <input id="tbcAccountInput" type="text" class="compact-input" placeholder="TBC account / IBAN" />
-        <input id="bogAccountInput" type="text" class="compact-input" placeholder="Georgian Bank account / IBAN" />
-        <input id="qrUrlInput" type="text" placeholder="QR code URL (optional)" />
-        <input id="transferNoteInput" type="text" placeholder="Note to display (optional)" />
-        <div class="stack" id="tierControls">
-          <label><input type="checkbox" value="wave1" /> Wave I</label>
-          <label><input type="checkbox" value="wave2" /> Wave II</label>
-          <label><input type="checkbox" value="wave3" /> Wave III</label>
-          <label><input type="checkbox" value="door" /> Door</label>
-          <small class="note">Select which tiers are available to users.</small>
-        </div>
-        <button id="savePaymentCfg" type="button">Save payment details</button>
-        <p class="note">These values are stored and shown to buyers selecting bank transfer. <a href="#" id="exportLink" style="color:#7affc6;">Download Excel (CSV) snapshot</a></p>
-      </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="lig logo.png" alt="Love In Georgia logo" />
+        <span>
+          <strong>Love In Georgia</strong>
+          <span>Admin control for posters, booking, and members</span>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Main Site</a>
+        <a href="login.html">Login</a>
+        <button id="logoutBtn" type="button">Logout</button>
+      </nav>
     </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Unique ID</th>
-            <th>Phone</th>
-            <th>ID</th>
-            <th>DOB</th>
-            <th>Gender</th>
-            <th>Social</th>
-            <th>Status</th>
-            <th>Actions</th>
-            <th>Ticket</th>
-          </tr>
-        </thead>
-        <tbody id="userTable"></tbody>
-      </table>
-      <p class="note">Changes automatically update the downloadable Excel (CSV) snapshot.</p>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-panel">
+        <div>
+          <h1>Control the next drop</h1>
+          <p>Update the featured event, change the homepage poster rail, manage booking tiers, and keep the live site moving from one room to the next without editing code again.</p>
+          <p id="statusMessage" class="status-note"></p>
+        </div>
+        <button id="saveSettingsBtn" class="primary-btn" type="button">Save Event Control</button>
+      </div>
+    </section>
+
+    <section class="admin-grid">
+      <article class="panel span-7">
+        <div class="panel-head">
+          <div>
+            <h2>Featured Event Copy</h2>
+            <p>English fields drive the main event card and booking section. Georgian fields fill the bilingual switch without breaking the English flow.</p>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="featuredTagEnInput">Featured tag / EN</label>
+            <input id="featuredTagEnInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="featuredTagKaInput">Featured tag / KA</label>
+            <input id="featuredTagKaInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="eventNameInput">Event title / EN</label>
+            <input id="eventNameInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="eventTitleKaInput">Event title / KA</label>
+            <input id="eventTitleKaInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="eventDateInput">Date line / EN</label>
+            <input id="eventDateInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="eventDateKaInput">Date line / KA</label>
+            <input id="eventDateKaInput" type="text" />
+          </div>
+          <div class="field full">
+            <label for="locationInput">Venue / location / EN</label>
+            <input id="locationInput" type="text" />
+          </div>
+          <div class="field full">
+            <label for="locationKaInput">Venue / location / KA</label>
+            <input id="locationKaInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="faceControlInput">Entry tone</label>
+            <input id="faceControlInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="ticketsInfoInput">Ticket release note</label>
+            <input id="ticketsInfoInput" type="text" />
+          </div>
+          <div class="field full">
+            <label for="eventDescriptionInput">Featured description / EN</label>
+            <textarea id="eventDescriptionInput"></textarea>
+          </div>
+          <div class="field full">
+            <label for="eventSummaryKaInput">Featured description / KA</label>
+            <textarea id="eventSummaryKaInput"></textarea>
+          </div>
+          <div class="field full">
+            <label for="bookingDescriptionInput">Booking intro / EN</label>
+            <textarea id="bookingDescriptionInput"></textarea>
+          </div>
+          <div class="field full">
+            <label for="bookingCopyKaInput">Booking intro / KA</label>
+            <textarea id="bookingCopyKaInput"></textarea>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel span-5">
+        <div class="panel-head">
+          <div>
+            <h2>Poster Studio</h2>
+            <p>Use square 1080x1080 poster art across every slot. The first image is the upcoming-event cover used on the live homepage, and the rail cards follow the same format.</p>
+          </div>
+        </div>
+
+        <div class="poster-stack">
+          <div class="poster-editor">
+            <div class="poster-preview"><img id="featuredPosterPreview" src="poster-placeholder.svg" alt="Upcoming event cover preview" width="1080" height="1080" /></div>
+            <div class="field">
+              <label for="featuredPosterPath">Upcoming event cover path</label>
+              <input id="featuredPosterPath" type="text" />
+            </div>
+            <div class="upload-row">
+              <input id="featuredPosterUpload" class="media-upload" data-target="featuredPosterPath" data-preview="featuredPosterPreview" type="file" accept="image/*" />
+              <button class="upload-btn" type="button">Upload upcoming cover</button>
+            </div>
+          </div>
+
+          <div class="poster-editor">
+            <div class="poster-preview"><img id="poster1Preview" src="poster-placeholder.svg" alt="Poster slot 1 preview" width="1080" height="1080" /></div>
+            <div class="field-grid">
+              <div class="field"><label for="poster1TagEn">Tag / EN</label><input id="poster1TagEn" type="text" /></div>
+              <div class="field"><label for="poster1TagKa">Tag / KA</label><input id="poster1TagKa" type="text" /></div>
+              <div class="field"><label for="poster1TitleEn">Title / EN</label><input id="poster1TitleEn" type="text" /></div>
+              <div class="field"><label for="poster1TitleKa">Title / KA</label><input id="poster1TitleKa" type="text" /></div>
+              <div class="field full"><label for="poster1MetaEn">Meta / EN</label><input id="poster1MetaEn" type="text" /></div>
+              <div class="field full"><label for="poster1MetaKa">Meta / KA</label><input id="poster1MetaKa" type="text" /></div>
+              <div class="field full"><label for="poster1Path">Image path</label><input id="poster1Path" type="text" /></div>
+            </div>
+            <div class="upload-row">
+              <input id="poster1Upload" class="media-upload" data-target="poster1Path" data-preview="poster1Preview" type="file" accept="image/*" />
+              <button class="upload-btn" type="button">Upload rail poster 1</button>
+            </div>
+          </div>
+
+          <div class="poster-editor">
+            <div class="poster-preview"><img id="poster2Preview" src="poster-placeholder.svg" alt="Poster slot 2 preview" width="1080" height="1080" /></div>
+            <div class="field-grid">
+              <div class="field"><label for="poster2TagEn">Tag / EN</label><input id="poster2TagEn" type="text" /></div>
+              <div class="field"><label for="poster2TagKa">Tag / KA</label><input id="poster2TagKa" type="text" /></div>
+              <div class="field"><label for="poster2TitleEn">Title / EN</label><input id="poster2TitleEn" type="text" /></div>
+              <div class="field"><label for="poster2TitleKa">Title / KA</label><input id="poster2TitleKa" type="text" /></div>
+              <div class="field full"><label for="poster2MetaEn">Meta / EN</label><input id="poster2MetaEn" type="text" /></div>
+              <div class="field full"><label for="poster2MetaKa">Meta / KA</label><input id="poster2MetaKa" type="text" /></div>
+              <div class="field full"><label for="poster2Path">Image path</label><input id="poster2Path" type="text" /></div>
+            </div>
+            <div class="upload-row">
+              <input id="poster2Upload" class="media-upload" data-target="poster2Path" data-preview="poster2Preview" type="file" accept="image/*" />
+              <button class="upload-btn" type="button">Upload rail poster 2</button>
+            </div>
+          </div>
+
+          <div class="poster-editor">
+            <div class="poster-preview"><img id="poster3Preview" src="poster-placeholder.svg" alt="Poster slot 3 preview" width="1080" height="1080" /></div>
+            <div class="field-grid">
+              <div class="field"><label for="poster3TagEn">Tag / EN</label><input id="poster3TagEn" type="text" /></div>
+              <div class="field"><label for="poster3TagKa">Tag / KA</label><input id="poster3TagKa" type="text" /></div>
+              <div class="field"><label for="poster3TitleEn">Title / EN</label><input id="poster3TitleEn" type="text" /></div>
+              <div class="field"><label for="poster3TitleKa">Title / KA</label><input id="poster3TitleKa" type="text" /></div>
+              <div class="field full"><label for="poster3MetaEn">Meta / EN</label><input id="poster3MetaEn" type="text" /></div>
+              <div class="field full"><label for="poster3MetaKa">Meta / KA</label><input id="poster3MetaKa" type="text" /></div>
+              <div class="field full"><label for="poster3Path">Image path</label><input id="poster3Path" type="text" /></div>
+            </div>
+            <div class="upload-row">
+              <input id="poster3Upload" class="media-upload" data-target="poster3Path" data-preview="poster3Preview" type="file" accept="image/*" />
+              <button class="upload-btn" type="button">Upload rail poster 3</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel span-5">
+        <div class="panel-head">
+          <div>
+            <h2>Booking Rail</h2>
+            <p>Turn tiers on or off, rename the drop levels, and control the payment information shown on the live booking form.</p>
+          </div>
+        </div>
+
+        <div id="tierList" class="tier-list">
+          <div class="tier-row" data-tier="wave1">
+            <input class="tier-enabled" type="checkbox" />
+            <input class="tier-label" type="text" placeholder="Wave I" />
+            <input class="tier-price" type="text" placeholder="120 GEL" />
+            <input class="tier-description" type="text" placeholder="early access" />
+          </div>
+          <div class="tier-row" data-tier="wave2">
+            <input class="tier-enabled" type="checkbox" />
+            <input class="tier-label" type="text" placeholder="Wave II" />
+            <input class="tier-price" type="text" placeholder="150 GEL" />
+            <input class="tier-description" type="text" placeholder="second release" />
+          </div>
+          <div class="tier-row" data-tier="wave3">
+            <input class="tier-enabled" type="checkbox" />
+            <input class="tier-label" type="text" placeholder="Wave III" />
+            <input class="tier-price" type="text" placeholder="180 GEL" />
+            <input class="tier-description" type="text" placeholder="final release" />
+          </div>
+          <div class="tier-row" data-tier="door">
+            <input class="tier-enabled" type="checkbox" />
+            <input class="tier-label" type="text" placeholder="Door" />
+            <input class="tier-price" type="text" placeholder="220 GEL" />
+            <input class="tier-description" type="text" placeholder="night-of-event access" />
+          </div>
+        </div>
+
+        <div class="field-grid" style="margin-top:1rem;">
+          <div class="field">
+            <label for="tbcAccountInput">TBC account / IBAN</label>
+            <input id="tbcAccountInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="bogAccountInput">Bank of Georgia / IBAN</label>
+            <input id="bogAccountInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="qrUrlInput">QR code URL</label>
+            <input id="qrUrlInput" type="text" />
+          </div>
+          <div class="field">
+            <label for="transferNoteInput">Transfer note</label>
+            <input id="transferNoteInput" type="text" />
+          </div>
+        </div>
+      </article>
+
+      <section class="table-panel span-12">
+        <div class="panel-head">
+          <div>
+            <h2>Members and Tickets</h2>
+            <p>Update member status, inspect the latest booking, and attach ticket or QR links once a payment clears.</p>
+          </div>
+          <a id="exportLink" class="ghost-btn" href="#">Export CSV</a>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Actions</th>
+                <th>Latest Booking</th>
+                <th>Ticket Control</th>
+              </tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+          </table>
+        </div>
+        <p class="small-note" style="margin-top:0.9rem;">Status and ticket changes remain connected to the current backend booking system.</p>
+      </section>
     </section>
   </main>
 
+  <div id="bookingDialogBackdrop" class="booking-dialog-backdrop" aria-hidden="true">
+    <div class="booking-dialog" role="dialog" aria-modal="true" aria-labelledby="bookingDialogTitle">
+      <div class="booking-dialog-head">
+        <div>
+          <h2 id="bookingDialogTitle">Booking detail</h2>
+          <p id="bookingDialogSubtitle">Latest request attached to this member.</p>
+        </div>
+        <button id="closeBookingDialogBtn" class="ghost-btn" type="button">Close</button>
+      </div>
+      <div id="bookingDialogGrid" class="booking-dialog-grid"></div>
+      <div class="booking-dialog-actions">
+        <button id="bookingDialogDoneBtn" class="primary-btn" type="button">Done</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const API_BASE = (() => {
-      // Default to deployed backend; allow override for local testing.
-      return window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
-    })();
+    const API_BASE = window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
+    const ADMIN_EMAIL = "FractalAdmin@123";
+    const DEFAULT_POSTER = "poster-placeholder.svg";
+    const DEFAULT_TIERS = [
+      { id: "wave1", label: "Wave I", price: "120 GEL", description: "early access" },
+      { id: "wave2", label: "Wave II", price: "150 GEL", description: "second release" },
+      { id: "wave3", label: "Wave III", price: "180 GEL", description: "final release" },
+      { id: "door", label: "Door", price: "220 GEL", description: "night-of-event access" }
+    ];
 
-    const adminPanel = document.getElementById('adminPanel');
-    // Legacy compatibility: if there isn't a separate login section, fall back to the main panel element.
-    const adminLoginSection = document.getElementById('adminLoginSection') || adminPanel;
-    const adminLoginMessage = document.getElementById('adminLoginMessage');
-    const alertBox = document.getElementById('alertBox');
-    const userTable = document.getElementById('userTable');
-    const logoutBtn = document.createElement('button');
-    logoutBtn.textContent = 'Logout';
-    logoutBtn.style.marginLeft = '1rem';
-    logoutBtn.style.background = '#ff4f81';
-    logoutBtn.style.color = '#fff';
-    document.querySelector('header nav').appendChild(logoutBtn);
-    const tbcAccountInput = document.getElementById('tbcAccountInput');
-    const bogAccountInput = document.getElementById('bogAccountInput');
-    const transferNoteInput = document.getElementById('transferNoteInput');
-    const qrUrlInput = document.getElementById('qrUrlInput');
-    const exportLink = document.getElementById('exportLink');
-    const tierControls = document.querySelectorAll('#tierControls input[type="checkbox"]');
-    const savePaymentCfg = document.getElementById('savePaymentCfg');
-    const statusOptions = ['permanent', 'temporary', 'door', 'declined'];
-    let adminLoggedIn = false;
-    let users = [];
-    const ADMIN_EMAIL = "FractalAdmin@123"; // for client-side check only; auth via session cookie
-    const NON_ADMIN_REDIRECT = "index.html";
+    const elements = {
+      statusMessage: document.getElementById("statusMessage"),
+      saveSettingsBtn: document.getElementById("saveSettingsBtn"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      exportLink: document.getElementById("exportLink"),
+      userTable: document.getElementById("userTable"),
+      bookingDialogBackdrop: document.getElementById("bookingDialogBackdrop"),
+      bookingDialogGrid: document.getElementById("bookingDialogGrid"),
+      bookingDialogSubtitle: document.getElementById("bookingDialogSubtitle"),
+      closeBookingDialogBtn: document.getElementById("closeBookingDialogBtn"),
+      bookingDialogDoneBtn: document.getElementById("bookingDialogDoneBtn"),
+      featuredTagEnInput: document.getElementById("featuredTagEnInput"),
+      featuredTagKaInput: document.getElementById("featuredTagKaInput"),
+      eventNameInput: document.getElementById("eventNameInput"),
+      eventTitleKaInput: document.getElementById("eventTitleKaInput"),
+      eventDateInput: document.getElementById("eventDateInput"),
+      eventDateKaInput: document.getElementById("eventDateKaInput"),
+      locationInput: document.getElementById("locationInput"),
+      locationKaInput: document.getElementById("locationKaInput"),
+      faceControlInput: document.getElementById("faceControlInput"),
+      ticketsInfoInput: document.getElementById("ticketsInfoInput"),
+      eventDescriptionInput: document.getElementById("eventDescriptionInput"),
+      eventSummaryKaInput: document.getElementById("eventSummaryKaInput"),
+      bookingDescriptionInput: document.getElementById("bookingDescriptionInput"),
+      bookingCopyKaInput: document.getElementById("bookingCopyKaInput"),
+      featuredPosterPath: document.getElementById("featuredPosterPath"),
+      featuredPosterPreview: document.getElementById("featuredPosterPreview"),
+      poster1TagEn: document.getElementById("poster1TagEn"),
+      poster1TagKa: document.getElementById("poster1TagKa"),
+      poster1TitleEn: document.getElementById("poster1TitleEn"),
+      poster1TitleKa: document.getElementById("poster1TitleKa"),
+      poster1MetaEn: document.getElementById("poster1MetaEn"),
+      poster1MetaKa: document.getElementById("poster1MetaKa"),
+      poster1Path: document.getElementById("poster1Path"),
+      poster1Preview: document.getElementById("poster1Preview"),
+      poster2TagEn: document.getElementById("poster2TagEn"),
+      poster2TagKa: document.getElementById("poster2TagKa"),
+      poster2TitleEn: document.getElementById("poster2TitleEn"),
+      poster2TitleKa: document.getElementById("poster2TitleKa"),
+      poster2MetaEn: document.getElementById("poster2MetaEn"),
+      poster2MetaKa: document.getElementById("poster2MetaKa"),
+      poster2Path: document.getElementById("poster2Path"),
+      poster2Preview: document.getElementById("poster2Preview"),
+      poster3TagEn: document.getElementById("poster3TagEn"),
+      poster3TagKa: document.getElementById("poster3TagKa"),
+      poster3TitleEn: document.getElementById("poster3TitleEn"),
+      poster3TitleKa: document.getElementById("poster3TitleKa"),
+      poster3MetaEn: document.getElementById("poster3MetaEn"),
+      poster3MetaKa: document.getElementById("poster3MetaKa"),
+      poster3Path: document.getElementById("poster3Path"),
+      poster3Preview: document.getElementById("poster3Preview"),
+      tbcAccountInput: document.getElementById("tbcAccountInput"),
+      bogAccountInput: document.getElementById("bogAccountInput"),
+      qrUrlInput: document.getElementById("qrUrlInput"),
+      transferNoteInput: document.getElementById("transferNoteInput"),
+      tierRows: Array.from(document.querySelectorAll(".tier-row")),
+      mediaUploads: Array.from(document.querySelectorAll(".media-upload"))
+    };
 
-    function renderStatusBadge(status) {
-      const normalized = (status || '').toLowerCase();
-      const labels = {
-        permanent: { text: 'Permanent', icon: '&#10003;', cls: 'status-permanent' },
-        temporary: { text: 'Temporary', icon: '&#10003;', cls: 'status-temporary' },
-        door: { text: 'Door', icon: '&#9633;', cls: 'status-door' },
-        declined: { text: 'Declined', icon: '&#10007;', cls: 'status-declined' }
+    const state = {
+      settings: {},
+      users: [],
+      ticketsByUser: {},
+      bookingsByUser: {}
+    };
+
+    function defaultBrandContent() {
+      return {
+        featured_event: {
+          poster_url: "1.png",
+          tag_en: "17 April / opening",
+          tag_ka: "17 აპრილი / opening",
+          title_ka: "Love In Georgia | Garden Opening",
+          date_ka: "17 აპრილი, 22:00",
+          location_ka: "Garden, თბილისი",
+          summary_ka: "Garden Opening — ღამე timetable-ით, guest artists-ებით, drinks-ით და Love In Georgia-ს crowd pressure-ით.",
+          booking_copy_ka: "დაჯავშნე ადრე, ატვირთე გადარიცხვის კოდი და დაიჭირე ადგილი Garden Opening-მდე."
+        },
+        poster_items: [
+          {
+            tag_en: "April 4",
+            tag_ka: "4 აპრილი",
+            title_en: "Geminis",
+            title_ka: "Geminis",
+            meta_en: "Hi Georgia edition with Teo Ceo B2B Tatuci and Zuzu B2B Sandalphon",
+            meta_ka: "Hi Georgia edition — Teo Ceo B2B Tatuci და Zuzu B2B Sandalphon",
+            image_url: "2.png"
+          },
+          {
+            tag_en: "March 14",
+            tag_ka: "14 მარტი",
+            title_en: "Love Bar / Emily Sai",
+            title_ka: "Love Bar / Emily Sai",
+            meta_en: "Love In Georgia night at Love Bar",
+            meta_ka: "Love In Georgia-ს ღამე Love Bar-ში",
+            image_url: "3.png"
+          },
+          {
+            tag_en: "February 13",
+            tag_ka: "13 თებერვალი",
+            title_en: "Valentine's Eve",
+            title_ka: "Valentine's Eve",
+            meta_en: "Love In Georgia x Love Bar x Love Day",
+            meta_ka: "Love In Georgia x Love Bar x Love Day",
+            image_url: "4.png"
+          }
+        ]
       };
-      const meta = labels[normalized] || { text: status || 'unknown', icon: '?', cls: '' };
-      return `<span class="status-badge ${meta.cls}"><span class="status-icon">${meta.icon}</span>${meta.text}</span>`;
     }
 
-    function clearAlert() {
-      alertBox.classList.add('hidden');
-      alertBox.innerHTML = '';
+    function resolveMedia(path) {
+      if (!path) return DEFAULT_POSTER;
+      if (/^https?:\/\//i.test(path)) return path;
+      if (path.startsWith("/uploads/")) return `${API_BASE}${path}`;
+      return path;
     }
 
-    function showAlert(_message, _meta = {}) {
-      // Temporarily suppress inline error warnings on the admin panel
-      alertBox.classList.add('hidden');
-      alertBox.innerHTML = '';
-    }
-
-    function showMessage(el, text, isError = false) {
-      el.textContent = text;
-      el.style.color = isError ? '#ff8080' : '#7affc6';
-    }
-
-    function loadPaymentConfig() {
-      try {
-        const stored = localStorage.getItem('fractalPaymentConfig');
-        return stored ? JSON.parse(stored) : {};
-      } catch (e) { return {}; }
-    }
-
-    function savePaymentConfig(cfg) {
-      localStorage.setItem('fractalPaymentConfig', JSON.stringify(cfg));
-    }
-
-    const ticketsByUser = {};
-    const bookingsByUser = {};
-
-    async function api(path, { method = 'GET', body, headers } = {}) {
-      const opts = {
+    async function api(path, { method = "GET", body, headers } = {}) {
+      const options = {
         method,
-        credentials: 'include',
+        credentials: "include",
         headers: headers || {}
       };
       if (body instanceof FormData) {
-        opts.body = body;
+        options.body = body;
       } else if (body) {
-        opts.headers['Content-Type'] = 'application/json';
-        opts.body = JSON.stringify(body);
+        options.headers["Content-Type"] = "application/json";
+        options.body = JSON.stringify(body);
       }
-      const res = await fetch(`${API_BASE}${path}`, opts);
-      const rawText = await res.text();
-      let data = null;
-      try { data = rawText ? JSON.parse(rawText) : null; } catch (e) { /* ignore */ }
-      if (!res.ok) {
-        const detail = (data && data.error) || rawText || `Request failed (${res.status})`;
-        const err = new Error(detail);
-        err.status = res.status;
-        err.path = path;
-        err.body = data || rawText;
-        throw err;
+
+      const response = await fetch(`${API_BASE}${path}`, options);
+      const raw = await response.text();
+      let data = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch (error) {
+        data = {};
       }
-      return data || {};
+      if (!response.ok) {
+        throw new Error(data.error || raw || `Request failed (${response.status})`);
+      }
+      return data;
+    }
+
+    function showStatus(message, isError = false) {
+      elements.statusMessage.textContent = message;
+      elements.statusMessage.style.color = isError ? "var(--danger)" : "var(--lime)";
+    }
+
+    function closeBookingDialog() {
+      elements.bookingDialogBackdrop.classList.remove("open");
+      elements.bookingDialogBackdrop.setAttribute("aria-hidden", "true");
+      elements.bookingDialogGrid.innerHTML = "";
+      elements.bookingDialogSubtitle.textContent = "Latest request attached to this member.";
+    }
+
+    function openBookingDialog(member, booking) {
+      const rows = [
+        ["Member", member && member.name ? member.name : "-"],
+        ["Email", booking.email || member.email || "-"],
+        ["Phone", booking.phone || member.phone || "-"],
+        ["Event", booking.event_title || "-"],
+        ["Tier", booking.tier || "-"],
+        ["Payment", booking.payment || "-"],
+        ["Payment ID", booking.payment_id || "-"],
+        ["Guests", booking.guests || "1"],
+        ["Status", booking.status || "-"],
+        ["Created", booking.created_at || "-"]
+      ];
+
+      elements.bookingDialogSubtitle.textContent = member && member.email
+        ? `Latest booking attached to ${member.email}`
+        : "Latest request attached to this member.";
+      elements.bookingDialogGrid.innerHTML = rows.map(([label, value]) => `
+        <div class="booking-stat">
+          <small>${label}</small>
+          <strong>${value}</strong>
+        </div>
+      `).join("");
+      elements.bookingDialogBackdrop.classList.add("open");
+      elements.bookingDialogBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function ensureBrandContent(settings) {
+      const defaults = defaultBrandContent();
+      const current = settings.brand_content || {};
+      return {
+        ...defaults,
+        ...current,
+        featured_event: {
+          ...defaults.featured_event,
+          ...(current.featured_event || {})
+        },
+        poster_items: (Array.isArray(current.poster_items) && current.poster_items.length ? current.poster_items : defaults.poster_items).map((item, index) => ({
+          ...(defaults.poster_items[index] || defaults.poster_items[0]),
+          ...item
+        }))
+      };
+    }
+
+    function fillTierRows(ticketCategories, allowedTiers) {
+      const categoryMap = new Map((ticketCategories || []).map((item) => [item.id, item]));
+      const allowed = new Set(allowedTiers || []);
+      elements.tierRows.forEach((row, index) => {
+        const tierId = row.dataset.tier;
+        const fallback = DEFAULT_TIERS[index];
+        const value = categoryMap.get(tierId) || fallback;
+        row.querySelector(".tier-enabled").checked = allowed.size ? allowed.has(tierId) : true;
+        row.querySelector(".tier-label").value = value.label || fallback.label;
+        row.querySelector(".tier-price").value = value.price || fallback.price;
+        row.querySelector(".tier-description").value = value.description || fallback.description;
+      });
+    }
+
+    function collectTicketCategories() {
+      return elements.tierRows.map((row) => ({
+        id: row.dataset.tier,
+        label: row.querySelector(".tier-label").value.trim(),
+        price: row.querySelector(".tier-price").value.trim(),
+        description: row.querySelector(".tier-description").value.trim()
+      }));
+    }
+
+    function collectAllowedTiers() {
+      return elements.tierRows
+        .filter((row) => row.querySelector(".tier-enabled").checked)
+        .map((row) => row.dataset.tier);
+    }
+
+    function updatePreview(previewId, path) {
+      const element = document.getElementById(previewId);
+      if (!element) return;
+      element.src = resolveMedia(path);
+    }
+
+    function loadSettingsIntoForm(settings) {
+      const brand = ensureBrandContent(settings);
+      const posters = brand.poster_items;
+
+      elements.featuredTagEnInput.value = brand.featured_event.tag_en || "";
+      elements.featuredTagKaInput.value = brand.featured_event.tag_ka || "";
+      elements.eventNameInput.value = settings.event_name || "";
+      elements.eventTitleKaInput.value = brand.featured_event.title_ka || "";
+      elements.eventDateInput.value = settings.event_date || "";
+      elements.eventDateKaInput.value = brand.featured_event.date_ka || "";
+      elements.locationInput.value = settings.location || "";
+      elements.locationKaInput.value = brand.featured_event.location_ka || "";
+      elements.faceControlInput.value = settings.face_control || "";
+      elements.ticketsInfoInput.value = settings.tickets_info || "";
+      elements.eventDescriptionInput.value = settings.event_description || "";
+      elements.eventSummaryKaInput.value = brand.featured_event.summary_ka || "";
+      elements.bookingDescriptionInput.value = settings.booking_description || "";
+      elements.bookingCopyKaInput.value = brand.featured_event.booking_copy_ka || "";
+      elements.featuredPosterPath.value = brand.featured_event.poster_url || DEFAULT_POSTER;
+      updatePreview("featuredPosterPreview", elements.featuredPosterPath.value);
+
+      const mapPoster = (index, prefix) => {
+        const item = posters[index] || {};
+        elements[`${prefix}TagEn`].value = item.tag_en || "";
+        elements[`${prefix}TagKa`].value = item.tag_ka || "";
+        elements[`${prefix}TitleEn`].value = item.title_en || "";
+        elements[`${prefix}TitleKa`].value = item.title_ka || "";
+        elements[`${prefix}MetaEn`].value = item.meta_en || "";
+        elements[`${prefix}MetaKa`].value = item.meta_ka || "";
+        elements[`${prefix}Path`].value = item.image_url || DEFAULT_POSTER;
+        updatePreview(`${prefix}Preview`, elements[`${prefix}Path`].value);
+      };
+
+      mapPoster(0, "poster1");
+      mapPoster(1, "poster2");
+      mapPoster(2, "poster3");
+
+      fillTierRows(settings.ticket_categories || [], settings.allowed_tiers || []);
+      elements.tbcAccountInput.value = settings.tbc_account || "";
+      elements.bogAccountInput.value = settings.bog_account || "";
+      elements.qrUrlInput.value = settings.qr_url || "";
+      elements.transferNoteInput.value = settings.transfer_note || "";
+    }
+
+    function collectBrandContent() {
+      return {
+        featured_event: {
+          poster_url: elements.featuredPosterPath.value.trim(),
+          tag_en: elements.featuredTagEnInput.value.trim(),
+          tag_ka: elements.featuredTagKaInput.value.trim(),
+          title_ka: elements.eventTitleKaInput.value.trim(),
+          date_ka: elements.eventDateKaInput.value.trim(),
+          location_ka: elements.locationKaInput.value.trim(),
+          summary_ka: elements.eventSummaryKaInput.value.trim(),
+          booking_copy_ka: elements.bookingCopyKaInput.value.trim()
+        },
+        poster_items: [
+          {
+            tag_en: elements.poster1TagEn.value.trim(),
+            tag_ka: elements.poster1TagKa.value.trim(),
+            title_en: elements.poster1TitleEn.value.trim(),
+            title_ka: elements.poster1TitleKa.value.trim(),
+            meta_en: elements.poster1MetaEn.value.trim(),
+            meta_ka: elements.poster1MetaKa.value.trim(),
+            image_url: elements.poster1Path.value.trim()
+          },
+          {
+            tag_en: elements.poster2TagEn.value.trim(),
+            tag_ka: elements.poster2TagKa.value.trim(),
+            title_en: elements.poster2TitleEn.value.trim(),
+            title_ka: elements.poster2TitleKa.value.trim(),
+            meta_en: elements.poster2MetaEn.value.trim(),
+            meta_ka: elements.poster2MetaKa.value.trim(),
+            image_url: elements.poster2Path.value.trim()
+          },
+          {
+            tag_en: elements.poster3TagEn.value.trim(),
+            tag_ka: elements.poster3TagKa.value.trim(),
+            title_en: elements.poster3TitleEn.value.trim(),
+            title_ka: elements.poster3TitleKa.value.trim(),
+            meta_en: elements.poster3MetaEn.value.trim(),
+            meta_ka: elements.poster3MetaKa.value.trim(),
+            image_url: elements.poster3Path.value.trim()
+          }
+        ]
+      };
+    }
+
+    async function saveSettings() {
+      const payload = {
+        event_name: elements.eventNameInput.value.trim(),
+        event_date: elements.eventDateInput.value.trim(),
+        location: elements.locationInput.value.trim(),
+        face_control: elements.faceControlInput.value.trim(),
+        tickets_info: elements.ticketsInfoInput.value.trim(),
+        event_description: elements.eventDescriptionInput.value.trim(),
+        booking_description: elements.bookingDescriptionInput.value.trim(),
+        ticket_categories: collectTicketCategories(),
+        allowed_tiers: collectAllowedTiers(),
+        tbc_account: elements.tbcAccountInput.value.trim(),
+        bog_account: elements.bogAccountInput.value.trim(),
+        qr_url: elements.qrUrlInput.value.trim(),
+        transfer_note: elements.transferNoteInput.value.trim(),
+        brand_content: collectBrandContent()
+      };
+
+      try {
+        await api("/api/admin/event-settings", { method: "PUT", body: payload });
+        showStatus("Event control saved.");
+      } catch (error) {
+        showStatus(error.message || "Failed to save event control.", true);
+      }
+    }
+
+    async function uploadMedia(file, targetId, previewId) {
+      const form = new FormData();
+      form.append("file", file);
+      const result = await api("/api/admin/media", { method: "POST", body: form });
+      const target = document.getElementById(targetId);
+      if (target) target.value = result.path || "";
+      updatePreview(previewId, result.path || "");
+      showStatus("Poster uploaded.");
+    }
+
+    function bindUploadControls() {
+      elements.mediaUploads.forEach((input) => {
+        const trigger = input.nextElementSibling;
+        const runUpload = async () => {
+          const file = input.files && input.files[0];
+          if (!file) return;
+          try {
+            await uploadMedia(file, input.dataset.target, input.dataset.preview);
+          } catch (error) {
+            showStatus(error.message || "Upload failed.", true);
+          } finally {
+            input.value = "";
+          }
+        };
+        input.addEventListener("change", runUpload);
+        if (trigger) trigger.addEventListener("click", runUpload);
+      });
+
+      [
+        ["featuredPosterPath", "featuredPosterPreview"],
+        ["poster1Path", "poster1Preview"],
+        ["poster2Path", "poster2Preview"],
+        ["poster3Path", "poster3Preview"]
+      ].forEach(([fieldId, previewId]) => {
+        document.getElementById(fieldId).addEventListener("input", (event) => updatePreview(previewId, event.target.value));
+      });
+    }
+
+    function renderStatusBadge(status) {
+      const normalized = (status || "").toLowerCase();
+      const labels = {
+        permanent: { text: "Permanent", cls: "status-permanent" },
+        temporary: { text: "Temporary", cls: "status-temporary" },
+        door: { text: "Door", cls: "status-door" },
+        declined: { text: "Declined", cls: "status-declined" }
+      };
+      const meta = labels[normalized] || { text: status || "Unknown", cls: "" };
+      return `<span class="status-badge ${meta.cls}">${meta.text}</span>`;
     }
 
     function renderUsers() {
-      userTable.innerHTML = '';
-      users.forEach((user) => {
-        const row = document.createElement('tr');
-        const statusSelect = `<select data-id="${user.id}" class="status-select">${statusOptions
-          .map((opt) => `<option value="${opt}" ${user.status === opt ? 'selected' : ''}>${opt}</option>`)
-          .join('')}</select>`;
-        const ticketEntry = ticketsByUser[user.id] || {};
-        const bookingEntry = bookingsByUser[user.id] || null;
-        const ticketButton = bookingEntry
-          ? `<button type="button" class="view-booking" data-id="${user.id}">Paid</button>`
-          : `<span class="note">No booking</span>`;
-        const ticketInputs = `
-          <div class="stack">
-            <input type="text" class="ticket-url" data-id="${user.id}" placeholder="Ticket link" value="${ticketEntry.ticket || ''}">
-            <input type="text" class="ticket-qr" data-id="${user.id}" placeholder="QR link" value="${ticketEntry.qr || ''}">
-            <button type="button" class="save-ticket" data-id="${user.id}">Save</button>
-          </div>
-        `;
+      elements.userTable.innerHTML = "";
+      state.users.forEach((user) => {
+        const ticket = state.ticketsByUser[user.id] || {};
+        const booking = state.bookingsByUser[user.id] || null;
+        const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-          <td>FR-${user.id}</td>
-          <td>${user.phone || ''}</td>
-          <td>${user.id_number || ''}</td>
-          <td>${user.dob || ''}</td>
-          <td>${user.gender || ''}</td>
-          <td>${user.social_link ? `<a href="${user.social_link}" target="_blank" style="color:#7affc6;">Link</a>` : ''}</td>
+          <td>${user.name || ""}</td>
+          <td>${user.email || ""}</td>
+          <td>${user.phone || ""}</td>
+          <td>${user.id_number || ""}</td>
           <td>${renderStatusBadge(user.status)}</td>
-          <td>${statusSelect}</td>
-          <td>${ticketButton}${ticketInputs}</td>
+          <td class="actions">
+            <select class="status-select" data-id="${user.id}">
+              <option value="permanent" ${user.status === "permanent" ? "selected" : ""}>permanent</option>
+              <option value="temporary" ${user.status === "temporary" ? "selected" : ""}>temporary</option>
+              <option value="door" ${user.status === "door" ? "selected" : ""}>door</option>
+              <option value="declined" ${user.status === "declined" ? "selected" : ""}>declined</option>
+            </select>
+          </td>
+          <td>${booking ? `<div class="inline-stack"><strong>${booking.event_title}</strong><span class="small-note">${booking.tier} | ${booking.payment} | ${booking.created_at || ""}</span><button type="button" class="ghost-btn view-booking" data-id="${user.id}">Open booking</button></div>` : `<span class="small-note">No booking</span>`}</td>
+          <td>
+            <div class="inline-stack">
+              <input class="ticket-url" data-id="${user.id}" type="text" placeholder="Ticket link" value="${ticket.ticket || ""}" />
+              <input class="ticket-qr" data-id="${user.id}" type="text" placeholder="QR link" value="${ticket.qr || ""}" />
+              <button type="button" class="ghost-btn save-ticket" data-id="${user.id}">Save ticket</button>
+            </div>
+          </td>
         `;
-        userTable.appendChild(row);
+        elements.userTable.appendChild(row);
       });
-    }
-
-    async function loadPaymentForm() {
-      try {
-        const res = await api('/api/admin/event-settings');
-        const s = (res && res.settings) || {};
-        tbcAccountInput.value = s.tbc_account || '';
-        bogAccountInput.value = s.bog_account || '';
-        transferNoteInput.value = s.transfer_note || '';
-        qrUrlInput.value = s.qr_url || '';
-        const allowed = new Set(s.allowed_tiers || ['wave1','wave2','wave3','door']);
-        tierControls.forEach((cb) => { cb.checked = allowed.has(cb.value); });
-      } catch (err) {
-        showMessage(adminLoginMessage, 'Could not load payment details', true);
-      }
     }
 
     async function loadUsers() {
-      try {
-      const res = await api('/api/admin/users');
-      users = res.users;
-      Object.assign(ticketsByUser, res.tickets || {});
-      Object.assign(bookingsByUser, res.bookings || {});
+      const data = await api("/api/admin/users");
+      state.users = data.users || [];
+      state.ticketsByUser = data.tickets || {};
+      state.bookingsByUser = data.bookings || {};
       renderUsers();
-      adminPanel.classList.remove('hidden');
-      if (adminPanel !== adminLoginSection) {
-        adminLoginSection.classList.add('hidden');
-      }
-        adminLoggedIn = true;
-        loadPaymentForm();
-        clearAlert();
-      } catch (error) {
-        showAlert('Failed to load users', {
-          status: error.status,
-          path: '/api/admin/users',
-          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
-        });
-        throw error;
-      }
+    }
+
+    async function loadSettings() {
+      const data = await api("/api/admin/event-settings");
+      state.settings = data.settings || {};
+      loadSettingsIntoForm(state.settings);
     }
 
     async function updateStatus(userId, status) {
-      try {
-        await api(`/api/admin/users/${userId}/status`, { method: 'PATCH', body: { status } });
-        await loadUsers();
-      } catch (error) {
-        showAlert('Failed to update status', {
-          status: error.status,
-          path: `/api/admin/users/${userId}/status`,
-          detail: typeof error.body === 'string' ? error.body : JSON.stringify(error.body || error.message)
-        });
-        showMessage(adminLoginMessage, error.message, true);
-      }
+      await api(`/api/admin/users/${userId}/status`, { method: "PATCH", body: { status } });
+      showStatus(`Member ${userId} status updated.`);
+      await loadUsers();
+    }
+
+    async function saveTicket(userId) {
+      const ticketInput = document.querySelector(`.ticket-url[data-id="${userId}"]`);
+      const qrInput = document.querySelector(`.ticket-qr[data-id="${userId}"]`);
+      await api(`/api/admin/users/${userId}/ticket`, {
+        method: "PUT",
+        body: {
+          ticket: ticketInput.value.trim(),
+          qr: qrInput.value.trim(),
+          note: `Ticket for member ${userId}`,
+          payment_id: `LIG-${userId}`
+        }
+      });
+      showStatus(`Ticket control saved for member ${userId}.`);
+      await loadUsers();
     }
 
     async function ensureAdminSession() {
-      adminLoginMessage.textContent = '';
-      clearAlert();
       try {
-        const me = await api('/api/user/me');
+        const me = await api("/api/user/me");
         if (me && me.user && me.user.email === ADMIN_EMAIL) {
-          adminLoggedIn = true;
           return true;
         }
-        if (me && me.user && me.user.email) {
-          showAlert('Access denied: admin only', { path: '/api/user/me', detail: `Signed in as ${me.user.email}` });
-          setTimeout(() => { window.location.href = NON_ADMIN_REDIRECT; }, 1200);
-          return false;
-        }
-      } catch (err) {
+      } catch (error) {
         /* ignore */
       }
-      showMessage(adminLoginMessage, 'Not logged in. Please sign in as admin on the login page.', true);
+      showStatus("Sign in as the configured admin account on the login page first.", true);
       return false;
     }
 
-    savePaymentCfg.addEventListener('click', async () => {
-      const payload = {
-        tbc_account: tbcAccountInput.value.trim(),
-        bog_account: bogAccountInput.value.trim(),
-        transfer_note: transferNoteInput.value.trim(),
-        qr_url: qrUrlInput.value.trim(),
-        allowed_tiers: Array.from(tierControls).filter((cb) => cb.checked).map((cb) => cb.value)
-      };
+    async function logout() {
       try {
-        await api('/api/admin/event-settings', { method: 'PUT', body: payload });
-        showMessage(adminLoginMessage, 'Payment details saved.');
-      } catch (err) {
-        showMessage(adminLoginMessage, err.message || 'Failed to save payment details', true);
-      }
-    });
-
-    userTable.addEventListener('change', (event) => {
-      const select = event.target.closest('.status-select');
-      if (!select) return;
-      const userId = select.dataset.id;
-      const status = select.value;
-      updateStatus(userId, status);
-    });
-
-    userTable.addEventListener('click', async (event) => {
-      const btn = event.target.closest('.save-ticket');
-      if (!btn) return;
-      const userId = btn.dataset.id;
-      const ticketInput = userTable.querySelector(`.ticket-url[data-id="${userId}"]`);
-      const qrInput = userTable.querySelector(`.ticket-qr[data-id="${userId}"]`);
-      const payload = {
-        ticket: ticketInput.value.trim(),
-        qr: qrInput.value.trim(),
-        note: `Ticket for FR-${userId}`,
-        payment_id: `FR-${userId}`
-      };
-      try {
-        const res = await api(`/api/admin/users/${userId}/ticket`, { method: 'PUT', body: payload });
-        ticketsByUser[userId] = res.ticket || payload;
-        showMessage(adminLoginMessage, `Ticket info saved for user ${userId}.`);
-      } catch (error) {
-        showMessage(adminLoginMessage, error.message || 'Failed to save ticket', true);
-      }
-    });
-
-    userTable.addEventListener('click', (event) => {
-      const btn = event.target.closest('.view-booking');
-      if (!btn) return;
-      const userId = btn.dataset.id;
-      const booking = bookingsByUser[userId];
-      if (!booking) {
-        showMessage(adminLoginMessage, 'No booking found for this user.', true);
-        return;
-      }
-      const detail = `
-Event: ${booking.event_title}
-Tier: ${booking.tier}
-Payment: ${booking.payment} (${booking.payment_id || ''})
-Guests: ${booking.guests}
-Status: ${booking.status}
-Email: ${booking.email}
-Phone: ${booking.phone || ''}
-Created: ${booking.created_at || ''}
-      `;
-      alert(detail);
-    });
-
-    if (exportLink) {
-      exportLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        try {
-          const url = `${API_BASE}/api/admin/users/export`;
-          const res = await fetch(url, { credentials: 'include' });
-          if (!res.ok) throw new Error('Failed to download CSV');
-          const blob = await res.blob();
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = 'users.csv';
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-        } catch (err) {
-          showMessage(adminLoginMessage, err.message || 'Failed to download CSV', true);
-        }
-      });
-    }
-
-    logoutBtn.addEventListener('click', async () => {
-      try {
-        await api('/api/auth/logout', { method: 'POST' });
-        await api('/api/admin/logout', { method: 'POST' });
+        await api("/api/auth/logout", { method: "POST" });
       } catch (error) {
         /* ignore */
       }
-      adminLoggedIn = false;
-      adminPanel.classList.add('hidden');
-      if (adminPanel !== adminLoginSection) {
-        adminLoginSection.classList.remove('hidden');
+      try {
+        await api("/api/admin/logout", { method: "POST" });
+      } catch (error) {
+        /* ignore */
       }
-      showMessage(adminLoginMessage, '');
-      clearAlert();
+      window.location.href = "login.html";
+    }
+
+    elements.saveSettingsBtn.addEventListener("click", saveSettings);
+    elements.logoutBtn.addEventListener("click", logout);
+
+    elements.userTable.addEventListener("change", async (event) => {
+      const select = event.target.closest(".status-select");
+      if (!select) return;
+      try {
+        await updateStatus(select.dataset.id, select.value);
+      } catch (error) {
+        showStatus(error.message || "Failed to update member status.", true);
+      }
     });
 
-    (async function bootstrap() {
-      try {
-        const ok = await ensureAdminSession();
-        if (ok) {
-          await loadUsers();
+    elements.userTable.addEventListener("click", async (event) => {
+      const saveBtn = event.target.closest(".save-ticket");
+      if (saveBtn) {
+        try {
+          await saveTicket(saveBtn.dataset.id);
+        } catch (error) {
+          showStatus(error.message || "Failed to save ticket control.", true);
         }
+        return;
+      }
+
+      const viewBtn = event.target.closest(".view-booking");
+      if (!viewBtn) return;
+      const booking = state.bookingsByUser[viewBtn.dataset.id];
+      if (!booking) {
+        showStatus("No booking found for that member.", true);
+        return;
+      }
+      const member = state.users.find((item) => String(item.id) === String(viewBtn.dataset.id));
+      openBookingDialog(member, booking);
+    });
+
+    elements.closeBookingDialogBtn.addEventListener("click", closeBookingDialog);
+    elements.bookingDialogDoneBtn.addEventListener("click", closeBookingDialog);
+    elements.bookingDialogBackdrop.addEventListener("click", (event) => {
+      if (event.target === elements.bookingDialogBackdrop) {
+        closeBookingDialog();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && elements.bookingDialogBackdrop.classList.contains("open")) {
+        closeBookingDialog();
+      }
+    });
+
+    elements.exportLink.addEventListener("click", async (event) => {
+      event.preventDefault();
+      try {
+        const response = await fetch(`${API_BASE}/api/admin/users/export`, { credentials: "include" });
+        if (!response.ok) throw new Error("Failed to export CSV.");
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "love-in-georgia-members.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        showStatus("CSV export downloaded.");
       } catch (error) {
-        adminLoggedIn = false;
-        showMessage(adminLoginMessage, 'Admin auto-login failed. Check backend credentials.', true);
+        showStatus(error.message || "Failed to export CSV.", true);
+      }
+    });
+
+    bindUploadControls();
+
+    (async function bootstrap() {
+      const ok = await ensureAdminSession();
+      if (!ok) return;
+      try {
+        await Promise.all([loadSettings(), loadUsers()]);
+        showStatus("Admin control loaded.");
+      } catch (error) {
+        showStatus(error.message || "Failed to load admin control.", true);
       }
     })();
   </script>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Love In Georgia square poster placeholder</title>
+  <desc id="desc">Square 1080 by 1080 nightlife poster placeholder for the upcoming event cover and poster slots.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#230719" />
+      <stop offset="40%" stop-color="#070409" />
+      <stop offset="100%" stop-color="#201007" />
+    </linearGradient>
+    <radialGradient id="hot" cx="20%" cy="20%" r="52%">
+      <stop offset="0%" stop-color="#ff365d" stop-opacity="0.58" />
+      <stop offset="100%" stop-color="#ff365d" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="cyan" cx="86%" cy="20%" r="44%">
+      <stop offset="0%" stop-color="#64f7ff" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#64f7ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="gold" cx="74%" cy="78%" r="52%">
+      <stop offset="0%" stop-color="#ffb15d" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#ffb15d" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff365d" />
+      <stop offset="50%" stop-color="#ff4d9d" />
+      <stop offset="100%" stop-color="#ffb15d" />
+    </linearGradient>
+    <pattern id="dots" width="42" height="42" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2" fill="#ffffff" fill-opacity="0.18" />
+    </pattern>
+    <clipPath id="cut">
+      <polygon points="0,0 1038,0 1080,42 1080,1080 42,1080 0,1038" />
+    </clipPath>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)" />
+  <rect width="1080" height="1080" fill="url(#hot)" />
+  <rect width="1080" height="1080" fill="url(#cyan)" />
+  <rect width="1080" height="1080" fill="url(#gold)" />
+  <rect width="1080" height="1080" fill="url(#dots)" opacity="0.42" />
+
+  <g clip-path="url(#cut)">
+    <path d="M-40 220C220 330 450 370 1120 250" fill="none" stroke="#64f7ff" stroke-opacity="0.16" stroke-width="120" />
+    <path d="M-60 810C230 690 630 710 1160 900" fill="none" stroke="#ff365d" stroke-opacity="0.18" stroke-width="150" />
+    <path d="M156 120H924M156 900H924" stroke="#ffffff" stroke-opacity="0.14" stroke-width="2" />
+    <rect x="52" y="52" width="976" height="976" fill="none" stroke="#ffffff" stroke-opacity="0.14" />
+    <rect x="94" y="94" width="892" height="892" fill="none" stroke="#ffffff" stroke-opacity="0.07" />
+
+    <circle cx="540" cy="168" r="44" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2" />
+    <circle cx="540" cy="168" r="20" fill="#ffffff" fill-opacity="0.1" />
+    <path d="M540 212V284M502 192L438 246M578 192L642 246" stroke="#ffffff" stroke-opacity="0.12" stroke-width="2" />
+
+    <text x="540" y="144" text-anchor="middle" fill="#f9f2f7" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="14">LOVE IN GEORGIA</text>
+    <text x="540" y="402" text-anchor="middle" fill="#f9f2f7" font-family="Bebas Neue, Impact, Arial Black, sans-serif" font-size="136" letter-spacing="8">POSTER</text>
+    <text x="540" y="526" text-anchor="middle" fill="#ffb4d2" font-family="Bebas Neue, Impact, Arial Black, sans-serif" font-size="136" letter-spacing="8">DROP</text>
+    <text x="540" y="602" text-anchor="middle" fill="#f9f2f7" fill-opacity="0.74" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="8">UPLOAD EVENT ART FROM ADMIN</text>
+
+    <rect x="310" y="688" width="460" height="104" fill="#050307" fill-opacity="0.42" stroke="url(#neon)" stroke-width="2" />
+    <text x="540" y="754" text-anchor="middle" fill="#d9ff74" font-family="Manrope, Arial, sans-serif" font-size="44" font-weight="800" letter-spacing="8">1080 x 1080</text>
+
+    <text x="540" y="852" text-anchor="middle" fill="#f9f2f7" fill-opacity="0.64" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="9">UPCOMING COVER + POSTER SLOTS</text>
+  </g>
+</svg>

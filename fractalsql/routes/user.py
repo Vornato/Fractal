@@ -12,7 +12,7 @@ from services.excel_export import write_users_to_excel
 
 user_bp = Blueprint("user", __name__)
 
-ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
 
 def _allowed_file(filename: str) -> bool:

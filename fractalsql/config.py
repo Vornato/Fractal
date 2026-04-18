@@ -9,6 +9,10 @@ base_dir = Path(__file__).resolve().parent
 load_dotenv(base_dir / ".env", override=False)
 
 
+def _split_csv(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
     # Default to a writable, ephemeral SQLite path (/tmp) for cloud deploys; override with DATABASE_URL
@@ -26,7 +30,8 @@ class Config:
         "EXCEL_OUTPUT_PATH",
         "/var/data/base.xlsx",
     )
-    PASSWORD_RESET_URL_BASE = os.getenv("PASSWORD_RESET_URL_BASE", "http://127.0.0.1:5500/register.html")
+    PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://vornato.github.io/Fractal")
+    PASSWORD_RESET_URL_BASE = os.getenv("PASSWORD_RESET_URL_BASE", f"{PUBLIC_SITE_URL}/register.html")
     PASSWORD_RESET_TOKEN_MINUTES = int(os.getenv("PASSWORD_RESET_TOKEN_MINUTES", "60"))
 
     # Flask-Login settings
@@ -45,4 +50,10 @@ class Config:
     REMEMBER_COOKIE_SECURE = SESSION_COOKIE_SECURE
 
     CORS_ORIGIN = os.getenv("CORS_ORIGIN", "http://127.0.0.1:5500")
+    EXTRA_CORS_ORIGINS = _split_csv(
+        os.getenv(
+            "EXTRA_CORS_ORIGINS",
+            "http://localhost:5500,https://vornato.github.io",
+        )
+    )
 

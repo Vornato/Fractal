@@ -1,13 +1,17 @@
 from functools import wraps
+from pathlib import Path
+from uuid import uuid4
 
 from flask import Blueprint, current_app, jsonify, request, session
 from flask_login import current_user
+from werkzeug.utils import secure_filename
 
 from extensions import db
 from models import User, UserStatus, EventSettings, Ticket, Booking
 from services.excel_export import write_users_to_excel
 
 admin_bp = Blueprint("admin", __name__)
+ALLOWED_MEDIA_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
 
 def admin_required(fn):
@@ -30,6 +34,10 @@ def admin_required(fn):
         return fn(*args, **kwargs)
 
     return wrapper
+
+
+def _allowed_file(filename: str) -> bool:
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_MEDIA_EXTENSIONS
 
 
 @admin_bp.route("/login", methods=["POST"])
@@ -141,20 +149,29 @@ def update_event_settings():
     data = request.get_json() or {}
     settings = get_or_create_settings()
 
-    settings.event_name = data.get("event_name") or settings.event_name
-    settings.event_date = data.get("event_date") or settings.event_date
-    settings.face_control = data.get("face_control") or settings.face_control
-    settings.tickets_info = data.get("tickets_info") or settings.tickets_info
-    settings.ticket_categories = data.get("ticket_categories") or settings.ticket_categories
-    settings.location = data.get("location") or settings.location
-    settings.booking_description = data.get("booking_description") or settings.booking_description
-    settings.event_description = data.get("event_description") or settings.event_description
-    settings.tbc_account = data.get("tbc_account") or settings.tbc_account
-    settings.bog_account = data.get("bog_account") or settings.bog_account
-    settings.transfer_note = data.get("transfer_note") or settings.transfer_note
-    settings.qr_url = data.get("qr_url") or settings.qr_url
+    scalar_fields = [
+        "event_name",
+        "event_date",
+        "face_control",
+        "tickets_info",
+        "location",
+        "booking_description",
+        "event_description",
+        "tbc_account",
+        "bog_account",
+        "transfer_note",
+        "qr_url",
+    ]
+    for field in scalar_fields:
+        if field in data:
+            setattr(settings, field, data.get(field) or None)
+
+    if "ticket_categories" in data:
+        settings.ticket_categories = data.get("ticket_categories") or []
     if "allowed_tiers" in data:
         settings.allowed_tiers = data.get("allowed_tiers") or []
+    if "brand_content" in data:
+        settings.brand_content = data.get("brand_content") or {}
 
     db.session.commit()
     return jsonify({"settings": settings.to_dict()})
@@ -217,3 +234,28 @@ def export_users_csv():
     resp = current_app.response_class(output.getvalue(), mimetype="text/csv")
     resp.headers["Content-Disposition"] = "attachment; filename=users.csv"
     return resp
+
+
+@admin_bp.route("/media", methods=["POST"])
+@admin_required
+def upload_media():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part 'file'"}), 400
+
+    file = request.files["file"]
+    if not file or file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+    if not _allowed_file(file.filename):
+        return jsonify({"error": "Unsupported file type"}), 400
+
+    filename = secure_filename(file.filename)
+    unique_name = f"event_{uuid4().hex}_{filename}"
+    upload_folder = Path(current_app.config["UPLOAD_FOLDER"])
+    upload_folder.mkdir(parents=True, exist_ok=True)
+
+    file_path = upload_folder / unique_name
+    file.save(file_path)
+
+    relative_path = f"/uploads/{unique_name}"
+    public_url = f"{request.host_url.rstrip('/')}{relative_path}"
+    return jsonify({"path": relative_path, "url": public_url, "filename": unique_name})

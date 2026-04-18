@@ -52,6 +52,7 @@ def create_app():
 
 
     cors_origin = app.config.get("CORS_ORIGIN")
+    extra_cors_origins = set(app.config.get("EXTRA_CORS_ORIGINS") or [])
     allowed_origins = {
         cors_origin,
         cors_origin.replace("127.0.0.1", "localhost") if cors_origin else None,
@@ -59,6 +60,7 @@ def create_app():
         "http://localhost:5500",
         "null",  # allow file:// origin for static admin page during local dev
     }
+    allowed_origins.update(extra_cors_origins)
     allowed_origins = {o for o in allowed_origins if o}
 
     def add_cors_headers(response):

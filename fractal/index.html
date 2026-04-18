@@ -3,919 +3,2598 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fractal Events</title>
+  <title>Love In Georgia | Tbilisi Nightlife & Event Booking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Georgian:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root { --ink:#021311; --deep:#001f1f; --electric:#76ffd5; --lime:#c1ff6b; --aqua:#2deeee; --violet:#2c1361; --glass:rgba(4,16,18,.65); --card:rgba(0,31,31,.75); }
-    *{box-sizing:border-box;}
-    body{margin:0;font-family:'Noto Sans Georgian','Space Grotesk',system-ui,-apple-system,sans-serif;min-height:100vh;background:radial-gradient(circle at 15% 20%,rgba(118,255,213,.2),transparent 55%),radial-gradient(circle at 75% 0,rgba(44,19,97,.45),transparent 50%),#010a0a;color:#e9fff6;line-height:1.6;overflow-x:hidden;}
-    /* Psychedelic flowing backdrop */
-    .plasma {
-      position:fixed;inset:0;pointer-events:none;z-index:-2;
-      background:
-        radial-gradient(60% 40% at 20% 20%, rgba(118,255,213,.14), transparent 60%),
-        radial-gradient(50% 45% at 80% 10%, rgba(179,116,255,.20), transparent 60%),
-        radial-gradient(40% 50% at 70% 70%, rgba(44,255,200,.16), transparent 60%),
-        radial-gradient(45% 35% at 30% 80%, rgba(255,160,88,.14), transparent 60%);
-      filter:blur(18px) saturate(1.2);
-      animation: drift 18s ease-in-out infinite alternate;
+    :root {
+      --bg: #070509;
+      --bg-2: #110815;
+      --panel: rgba(15, 11, 18, 0.82);
+      --panel-2: rgba(23, 15, 25, 0.92);
+      --card: rgba(255, 255, 255, 0.045);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #f9f2f7;
+      --muted: rgba(249, 242, 247, 0.7);
+      --pink: #ff4d9d;
+      --pink-soft: #ffb4d2;
+      --gold: #ffb15d;
+      --lime: #d9ff74;
+      --cyan: #64f7ff;
+      --red: #ff365d;
+      --violet: #7d4dff;
+      --shadow: 0 32px 100px rgba(0, 0, 0, 0.45);
+      --cut: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+      --content: 1240px;
+      --font-body: "Manrope", "Noto Sans Georgian", sans-serif;
+      --font-display: "Bebas Neue", "Noto Sans Georgian", sans-serif;
     }
-    @keyframes drift { from{transform:translate3d(-10px,0,0) scale(1);} to{transform:translate3d(10px,10px,0) scale(1.05);} }
-    header.top-bar{position:sticky;top:0;z-index:10;padding:1.2rem clamp(1.5rem,4vw,4rem);display:flex;justify-content:space-between;align-items:center;gap:1rem;background:rgba(0,20,20,.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(118,255,213,.2);}    
-    .brand{display:inline-flex;align-items:center;gap:.6rem;font-family:'Orbitron','Space Grotesk',sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:1.05rem;color:var(--lime);}    
-    .brand img{height:38px;width:38px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(118,255,213,.5));}
-    .top-actions{display:flex;align-items:center;gap:.75rem;}    
-    .language-switch{display:flex;gap:.4rem;}    
-    .language-switch button{border:1px solid rgba(118,255,213,.4);background:transparent;color:#e8fff6;padding:.4rem .9rem;border-radius:999px;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}    
-    .language-switch button.active{background:linear-gradient(120deg,var(--electric),var(--lime));color:#001615;box-shadow:0 0 18px rgba(118,255,213,.6);}    
-    .profile-link{border:1px solid rgba(118,255,213,.35);color:#e8fff6;text-decoration:none;padding:.45rem 1rem;border-radius:999px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;display:none;align-items:center;gap:.45rem;background:rgba(0,31,31,.45);}    
-    .profile-link::before{content:'⚡';font-size:.8rem;opacity:.8;}    
-    header.hero{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:clamp(2.5rem,4vw,4rem);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:3rem;align-items:center;background:linear-gradient(135deg,rgba(0,10,10,.85),rgba(0,0,0,.55)),url('Poster28.webp') center/cover no-repeat;}    
-    header.hero::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(180deg,rgba(1,10,10,.35),rgba(1,10,10,.65));pointer-events:none;z-index:-1;}    
-    h1{font-family:'Orbitron','Space Grotesk',sans-serif;font-size:clamp(2.8rem,6vw,4.8rem);margin:0 0 1rem;letter-spacing:.08em;text-transform:uppercase;color:#d2ffe9;}    
-    .eyebrow{text-transform:uppercase;letter-spacing:.4em;font-size:.75rem;color:var(--electric);margin-bottom:1rem;display:inline-flex;align-items:center;gap:.5rem;}    
-    .eyebrow::before{content:'';width:40px;height:1px;background:currentColor;opacity:.5;}    
-    .hero-cta{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;}    
-    .cta{text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:.9rem 1.8rem;border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem;transition:transform .3s, box-shadow .3s, background .3s;color:#e9fff6;}    
-    .cta.primary{background:linear-gradient(120deg,var(--electric),var(--lime));color:#001615;box-shadow:0 0 40px rgba(118,255,213,.4);}    
-    .cta.ghost{color:var(--electric);}    
-    .cta:hover{transform:translateY(-4px) scale(1.02);}    
-    .stats{margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;}    
-    .stat{backdrop-filter:blur(18px);background:rgba(0,31,31,.45);border:1px solid rgba(118,255,213,.2);border-radius:1rem;padding:1rem;}    
-    .stat strong{font-family:'Orbitron',sans-serif;font-size:1.35rem;display:block;color:var(--electric);}    
-    .slider{position:relative;overflow:hidden;border-radius:1.5rem;min-height:360px;border:1px solid rgba(118,255,213,.2);backdrop-filter:blur(24px);background:rgba(0,14,14,.8);box-shadow:0 40px 120px rgba(0,16,16,.7);}    
-    .slider-track{display:flex;width:100%;height:100%;transition:transform 1s cubic-bezier(.22,.68,0,1);}    
-    .slide{position:relative;min-width:100%;padding:2.5rem;display:flex;flex-direction:column;justify-content:space-between;color:#fff;overflow:hidden;}    
-    .slide-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.82;filter:saturate(1.25) brightness(1.05) contrast(1.1);transform:scale(1.05);z-index:0;}    
-    .slide::before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(0,10,12,.78),rgba(0,10,12,.55),rgba(0,10,12,.65));z-index:1;}    
-    .slide::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.18),transparent 55%);mix-blend-mode:screen;z-index:1;}    
-    .slide-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:1.5rem;text-shadow:0 3px 14px rgba(0,0,0,.55);}    
-    .slide .tag{text-transform:uppercase;letter-spacing:.3em;font-size:.7rem;color:rgba(255,255,255,.85);}    
-    .slide-footer{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:2;text-shadow:0 3px 12px rgba(0,0,0,.55);}    
-    .slider-dots{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:3;}    
-    .slider-dots button{width:12px;height:12px;border-radius:50%;border:0;background:rgba(255,255,255,.35);cursor:pointer;transition:transform .3s, background .3s;}    
-    .slider-dots button.active{background:var(--electric);transform:scale(1.4);box-shadow:0 0 12px rgba(118,255,213,.8);}    
-    section{padding:clamp(2.5rem,4vw,5rem);}    
-    .event-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}    
-    .event-card{padding:1.8rem;border-radius:1.4rem;background:var(--card);border:1px solid rgba(118,255,213,.18);box-shadow:0 20px 60px rgba(0,10,10,.55);position:relative;overflow:hidden;cursor:pointer;transition:transform .4s ease,border-color .3s;}    
-    .event-card:hover{transform:translateY(-8px) scale(1.01);border-color:var(--electric);}    
-    .card-body{position:relative;z-index:2;display:flex;flex-direction:column;gap:1rem;}    
-    .event-card .tag{font-size:.75rem;letter-spacing:.4em;text-transform:uppercase;color:var(--electric);}    
-    .event-card h3{margin:.4rem 0;font-size:1.35rem;}    
-    .event-description{color:#f1fffb;font-size:.95rem;}    
-    .event-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(233,255,246,.75);}    
-    .micro-label{margin-top:.6rem;margin-bottom:.2rem;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--electric);}    
-    .lineup,.rituals{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem .8rem;}    
-    .lineup li,.rituals li{font-size:.85rem;color:#eafff8;background:rgba(255,255,255,.05);border-radius:.9rem;padding:.35rem .9rem;}    
-    .event-footer{display:flex;justify-content:space-between;align-items:center;}    
-    .price{font-family:'Orbitron',sans-serif;font-size:1.05rem;color:var(--electric);}    
-    .timeline{margin-top:3rem;border-radius:1rem;padding:1.2rem;border:1px solid rgba(118,255,213,.2);display:flex;gap:1rem;overflow-x:auto;scrollbar-width:none;background:rgba(0,20,20,.8);}    
-    .timeline::-webkit-scrollbar{display:none;}    
-    .node{flex:1;min-width:200px;padding:1rem;border-radius:1rem;background:rgba(0,31,31,.45);border:1px solid rgba(118,255,213,.2);text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;}    
-    .node strong{display:block;font-size:1rem;margin-top:.5rem;color:var(--electric);}    
-    .booking-panel{background:radial-gradient(circle at 30% 20%,rgba(118,255,213,.35),transparent 60%),rgba(0,24,24,.9);}    
-    .booking-gate{display:flex;flex-direction:column;gap:.8rem;padding:1.8rem;border-radius:1.2rem;border:1px solid rgba(118,255,213,.25);background:rgba(0,20,20,.85);text-align:center;box-shadow:0 24px 60px rgba(0,10,10,.55);}    
-    .booking-gate .cta{margin-top:.8rem;display:inline-flex;}    
-    .panel-content{display:none;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem;align-items:start;}    
-    .panel-text h3{font-size:clamp(1.6rem,3vw,2.3rem);margin:.4rem 0;letter-spacing:.06em;text-transform:uppercase;}    
-    form{background:rgba(0,16,16,.85);border-radius:1.5rem;padding:2rem;border:1px solid rgba(118,255,213,.2);box-shadow:0 30px 80px rgba(0,8,8,.7);}    
-    .field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.2rem;letter-spacing:.18em;font-size:.7rem;text-transform:uppercase;color:#c0ffe0;}    
-    .field input,.field select{padding:1rem;border-radius:.9rem;border:1px solid rgba(118,255,213,.25);background:rgba(0,31,31,.8);color:#e9fff6;font-size:1rem;font-family:inherit;transition:border .3s,box-shadow .3s;}    
-    .field input:focus,.field select:focus{border-color:var(--electric);outline:none;box-shadow:0 0 20px rgba(118,255,213,.35);}    
-    .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;}    
-    button.stretch{width:100%;}
-    #confirmation{margin-top:1rem;min-height:1.5rem;color:var(--electric);font-size:.95rem;letter-spacing:.08em;opacity:1;}
-    .payment-info{background:rgba(0,31,31,.6);border:1px dashed rgba(118,255,213,.3);border-radius:1rem;padding:1rem;color:#d6fff0;font-size:.95rem;line-height:1.5;}
-    .payment-info h4{margin:0 0 .4rem;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--electric);}
-    .payment-steps{margin:.4rem 0;padding-left:1.2rem;color:#c9fbea;}
-    footer{padding:2rem;text-align:center;font-size:.9rem;color:#9fe6d0;}
-    .footer-link{color:var(--electric);text-decoration:none;border-bottom:1px dashed rgba(118,255,213,.5);}
-    .footer-link:hover{color:var(--lime);}
-    @media (max-width:700px){.hero-cta{flex-direction:column;} .slide{padding:1.8rem;} form{padding:1.5rem;} .top-bar{flex-direction:column;gap:.5rem;}}
-    .user-pill{display:none;align-items:center;gap:.35rem;border:1px solid rgba(118,255,213,.3);padding:.4rem .85rem;border-radius:999px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--electric);background:rgba(0,31,31,.4);}
-    .logout-btn{display:none;border:1px solid rgba(255,255,255,.25);background:transparent;color:#e9fff6;padding:.4rem .8rem;border-radius:999px;font-size:.75rem;letter-spacing:.08em;cursor:pointer;}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 14%, rgba(255, 54, 93, 0.22), transparent 27%),
+        radial-gradient(circle at 84% 8%, rgba(100, 247, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 70% 64%, rgba(255, 77, 157, 0.16), transparent 30%),
+        linear-gradient(180deg, #050307 0%, #120712 42%, #060306 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(104deg, rgba(255, 54, 93, 0.12), transparent 34%),
+        linear-gradient(287deg, rgba(100, 247, 255, 0.1), transparent 32%),
+        linear-gradient(180deg, transparent 0%, rgba(255, 177, 93, 0.06) 54%, transparent 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.26) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 26px 26px, 48px 48px, 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 88%);
+      z-index: -1;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .shell::before,
+    .shell::after {
+      content: "";
+      position: fixed;
+      inset: -18%;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .shell::before {
+      background:
+        conic-gradient(from 215deg at 50% 50%, transparent 0 13%, rgba(255, 54, 93, 0.18) 16%, transparent 20% 45%, rgba(100, 247, 255, 0.13) 49%, transparent 53% 76%, rgba(255, 177, 93, 0.13) 80%, transparent 86% 100%);
+      mix-blend-mode: screen;
+      opacity: 0.72;
+      animation: clubSweep 24s linear infinite;
+    }
+
+    .shell::after {
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 48%, rgba(255, 77, 157, 0.14) 50%, transparent 52% 100%),
+        linear-gradient(180deg, transparent 0 48%, rgba(100, 247, 255, 0.08) 50%, transparent 52% 100%);
+      background-size: 13rem 13rem;
+      mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.55) 20%, transparent 80%);
+      opacity: 0.22;
+    }
+
+    @keyframes clubSweep {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .glow {
+      position: fixed;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 50%;
+      filter: blur(26px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .glow.one {
+      top: 9%;
+      left: -10%;
+      background: radial-gradient(circle, rgba(255, 77, 157, 0.42), transparent 68%);
+    }
+
+    .glow.two {
+      bottom: 6%;
+      right: -10%;
+      background: radial-gradient(circle, rgba(255, 177, 93, 0.34), transparent 68%);
+    }
+
+    .container {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background:
+        linear-gradient(90deg, rgba(255, 54, 93, 0.08), transparent 34%, rgba(100, 247, 255, 0.07)),
+        rgba(6, 3, 8, 0.82);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+
+    .topbar-inner {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 0 auto;
+      min-height: 5.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.95rem;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 3.7rem;
+      height: 3.7rem;
+      object-fit: cover;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 0 28px rgba(255, 77, 157, 0.28),
+        0 0 48px rgba(100, 247, 255, 0.08);
+      flex: 0 0 auto;
+    }
+
+    .brand-copy {
+      min-width: 0;
+      display: grid;
+      gap: 0.12rem;
+    }
+
+    .brand-copy strong {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 1.9vw, 1.7rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(249, 242, 247, 0.82);
+      transition: color 0.22s ease;
+    }
+
+    .nav a:hover {
+      color: var(--pink-soft);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip,
+    .lang-switch button,
+    .icon-link,
+    .ghost-link {
+      min-height: 2.75rem;
+      padding: 0.72rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      gap: 0.25rem;
+      padding: 0.24rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .lang-switch button {
+      min-height: 2.3rem;
+      padding-inline: 0.9rem;
+      border: 0;
+      background: transparent;
+    }
+
+    .lang-switch button.active {
+      background: linear-gradient(135deg, var(--red), var(--pink), var(--gold));
+      color: #12070f;
+      box-shadow: 0 0 22px rgba(255, 77, 157, 0.34);
+    }
+
+    .chip.hidden,
+    .ghost-link.hidden {
+      display: none;
+    }
+
+    .hero {
+      padding: 2.5rem 0 1.5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 1.1rem;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-rail,
+    .feature-panel,
+    .event-card,
+    .reason-card,
+    .venue-card,
+    .scene-card,
+    .booking-copy,
+    .booking-card,
+    .footer-panel {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      clip-path: var(--cut);
+      overflow: hidden;
+    }
+
+    .hero-copy,
+    .booking-copy,
+    .booking-card,
+    .footer-panel {
+      background:
+        radial-gradient(circle at 72% 16%, rgba(100, 247, 255, 0.12), transparent 28%),
+        linear-gradient(135deg, rgba(255, 54, 93, 0.14), transparent 42%),
+        linear-gradient(315deg, rgba(255, 177, 93, 0.1), transparent 38%),
+        var(--panel-2);
+    }
+
+    .hero-copy {
+      min-height: 38rem;
+      padding: clamp(1.6rem, 3vw, 2.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      inset: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      clip-path: var(--cut);
+      pointer-events: none;
+    }
+
+    .hero-copy::after {
+      content: "DANCEFLOOR / DRINKS / BOOKING";
+      position: absolute;
+      top: 2rem;
+      right: -1.2rem;
+      writing-mode: vertical-rl;
+      color: rgba(100, 247, 255, 0.38);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .hero-copy > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: rgba(249, 242, 247, 0.78);
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin: 0 0 1rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2.6rem;
+      height: 1px;
+      background: linear-gradient(90deg, var(--pink), rgba(255, 177, 93, 0.5));
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 7.3vw, 7.6rem);
+      line-height: 0.84;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      max-width: 9.4ch;
+      text-wrap: balance;
+    }
+
+    .hero-title span {
+      display: block;
+      background: linear-gradient(92deg, var(--pink-soft), var(--red) 48%, var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 34px rgba(255, 77, 157, 0.24);
+    }
+
+    .hero-lead {
+      max-width: 34rem;
+      margin: 1.2rem 0 0;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: rgba(249, 242, 247, 0.88);
+    }
+
+    .hero-actions {
+      margin-top: 1.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      min-height: 3.2rem;
+      padding: 0.95rem 1.3rem;
+      clip-path: var(--cut);
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .cta:hover,
+    .chip:hover,
+    .icon-link:hover,
+    .ghost-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .cta.primary {
+      background: linear-gradient(110deg, var(--red), var(--pink) 45%, var(--gold));
+      color: #140912;
+      box-shadow:
+        0 18px 34px rgba(255, 77, 157, 0.28),
+        0 0 30px rgba(255, 177, 93, 0.14);
+    }
+
+    .cta.secondary {
+      border-color: rgba(255, 255, 255, 0.14);
+      background:
+        linear-gradient(135deg, rgba(100, 247, 255, 0.07), transparent 48%),
+        rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .metric {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      clip-path: var(--cut);
+    }
+
+    .metric strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      line-height: 1;
+      color: var(--lime);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 0.3rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .ticker {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      color: rgba(249, 242, 247, 0.75);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .ticker span {
+      padding: 0.55rem 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      clip-path: var(--cut);
+    }
+
+    .hero-rail {
+      min-height: 0;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      align-content: start;
+      background:
+        radial-gradient(circle at 74% 16%, rgba(100, 247, 255, 0.16), transparent 28%),
+        linear-gradient(180deg, rgba(255, 54, 93, 0.16), rgba(11, 8, 12, 0.96)),
+        var(--panel-2);
+    }
+
+    .hero-rail::after {
+      content: "DANCE FLOOR\A BAR GLOW\A GUEST ARTISTS";
+      white-space: pre-line;
+      display: flex;
+      align-items: flex-end;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
+      padding: 1rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background:
+        radial-gradient(circle at 28% 22%, rgba(255, 54, 93, 0.28), transparent 32%),
+        radial-gradient(circle at 86% 74%, rgba(100, 247, 255, 0.18), transparent 36%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+      color: rgba(249, 242, 247, 0.92);
+      font-family: var(--font-display);
+      font-size: clamp(2.15rem, 4vw, 3.6rem);
+      line-height: 0.85;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-rail::before {
+      content: "LATE\A CHECK-IN\A TBILISI";
+      white-space: pre-line;
+      position: absolute;
+      right: 1.2rem;
+      bottom: 1rem;
+      color: rgba(249, 242, 247, 0.07);
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 7.4vw, 7rem);
+      line-height: 0.82;
+      letter-spacing: 0.04em;
+      text-align: right;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .poster-card {
+      position: relative;
+      z-index: 1;
+      min-height: 0;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      background: #140d16;
+    }
+
+    .poster-card:nth-child(1) {
+      grid-area: auto;
+    }
+
+    .poster-card:nth-child(2) {
+      grid-area: auto;
+    }
+
+    .poster-card:nth-child(3) {
+      grid-area: auto;
+    }
+
+    .poster-card:nth-child(n + 4) {
+      display: none;
+    }
+
+    .poster-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      filter: saturate(1.08) contrast(1.04);
+      background:
+        radial-gradient(circle at 16% 18%, rgba(255, 77, 157, 0.14), transparent 28%),
+        radial-gradient(circle at 84% 16%, rgba(255, 177, 93, 0.12), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(9, 6, 11, 0.2));
+    }
+
+    .poster-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(8, 5, 10, 0.08) 36%, rgba(8, 5, 10, 0.9) 100%);
+    }
+
+    .poster-copy {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 0.9rem;
+      z-index: 1;
+      display: grid;
+      gap: 0.3rem;
+      background: linear-gradient(180deg, transparent, rgba(5, 3, 7, 0.78));
+    }
+
+    .poster-copy strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 1.6vw, 1.75rem);
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      max-width: 10ch;
+      text-wrap: balance;
+    }
+
+    .poster-copy span,
+    .poster-copy small {
+      display: block;
+      color: rgba(249, 242, 247, 0.72);
+      font-size: 0.64rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+
+    .poster-copy span {
+      max-width: 26ch;
+    }
+
+    .poster-card:nth-child(1) .poster-copy {
+      padding: 1.15rem;
+    }
+
+    .poster-card:nth-child(1) .poster-copy strong {
+      font-size: clamp(1.3rem, 1.6vw, 1.75rem);
+      max-width: 10ch;
+    }
+
+    .poster-card:nth-child(1) .poster-copy span,
+    .poster-card:nth-child(1) .poster-copy small {
+      font-size: 0.72rem;
+    }
+
+    .section {
+      padding: 1.2rem 0 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 4.7vw, 4.8rem);
+      text-transform: uppercase;
+      line-height: 0.84;
+      letter-spacing: 0.035em;
+      max-width: 12ch;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 34rem;
+      color: var(--muted);
+    }
+
+    .feature-panel {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+      gap: 1rem;
+      padding: 1rem;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255, 54, 93, 0.18), transparent 34%),
+        radial-gradient(circle at 82% 72%, rgba(100, 247, 255, 0.12), transparent 30%),
+        linear-gradient(315deg, rgba(255, 77, 157, 0.12), transparent 36%),
+        var(--panel-2);
+    }
+
+    .feature-poster {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      clip-path: var(--cut);
+      overflow: hidden;
+      background: #120a13;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .feature-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255, 77, 157, 0.14), transparent 28%),
+        radial-gradient(circle at 84% 18%, rgba(255, 177, 93, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(8, 5, 10, 0.18));
+    }
+
+    .feature-poster::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 12%, rgba(8, 5, 10, 0.08) 56%, rgba(8, 5, 10, 0.82) 100%),
+        linear-gradient(90deg, rgba(255, 54, 93, 0.18), transparent 40%, rgba(100, 247, 255, 0.12));
+      mix-blend-mode: screen;
+    }
+
+    .feature-stamp {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 1;
+      padding: 0.7rem 0.85rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(8, 5, 10, 0.6);
+      color: rgba(249, 242, 247, 0.86);
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .feature-copy {
+      padding: 0.4rem 0.2rem;
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .feature-copy h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.9rem, 5.1vw, 5rem);
+      line-height: 0.82;
+      text-transform: uppercase;
+      letter-spacing: 0.035em;
+      max-width: 9ch;
+    }
+
+    .feature-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .feature-meta span {
+      padding: 0.55rem 0.8rem;
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(249, 242, 247, 0.76);
+    }
+
+    .feature-copy p {
+      margin: 0;
+      color: rgba(249, 242, 247, 0.85);
+      max-width: 44rem;
+    }
+
+    .feature-facts,
+    .pricing-grid,
+    .reason-grid,
+    .venue-grid,
+    .scene-grid,
+    .past-grid {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .feature-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .fact {
+      padding: 1rem;
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .fact strong {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(249, 242, 247, 0.62);
+      margin-bottom: 0.45rem;
+    }
+
+    .fact span {
+      color: rgba(249, 242, 247, 0.86);
+      font-size: 0.95rem;
+    }
+
+    .pricing-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .price-card {
+      padding: 0.9rem;
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .price-card strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      text-transform: uppercase;
+    }
+
+    .price-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.3rem;
+    }
+
+    .past-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .event-card,
+    .reason-card,
+    .venue-card,
+    .scene-card {
+      padding: 1.15rem;
+      min-height: 14rem;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    }
+
+    .event-card::before,
+    .reason-card::before,
+    .venue-card::before,
+    .scene-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 22% 16%, rgba(255, 54, 93, 0.18), transparent 34%),
+        radial-gradient(circle at 86% 88%, rgba(100, 247, 255, 0.11), transparent 34%);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+
+    .event-card:hover,
+    .reason-card:hover,
+    .venue-card:hover,
+    .scene-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 77, 157, 0.3);
+    }
+
+    .event-card:hover::before,
+    .reason-card:hover::before,
+    .venue-card:hover::before,
+    .scene-card:hover::before {
+      opacity: 1;
+    }
+
+    .event-card > *,
+    .reason-card > *,
+    .venue-card > *,
+    .scene-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-card time,
+    .reason-card small,
+    .venue-card small,
+    .scene-card small {
+      display: block;
+      color: rgba(249, 242, 247, 0.62);
+      font-size: 0.76rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .event-card h3,
+    .reason-card h3,
+    .venue-card h3,
+    .scene-card h3 {
+      margin: 0 0 0.7rem;
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      text-transform: uppercase;
+      line-height: 0.88;
+      letter-spacing: 0.04em;
+    }
+
+    .event-card p,
+    .reason-card p,
+    .venue-card p,
+    .scene-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .reason-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .venue-grid,
+    .scene-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .booking-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.96fr) minmax(320px, 1.04fr);
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .booking-copy,
+    .booking-card {
+      padding: 1.2rem;
+    }
+
+    .booking-copy h3,
+    .booking-card h3,
+    .footer-panel h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4.5vw, 4.7rem);
+      text-transform: uppercase;
+      line-height: 0.86;
+      letter-spacing: 0.035em;
+    }
+
+    .booking-copy p,
+    .footer-panel p {
+      color: rgba(249, 242, 247, 0.82);
+    }
+
+    .copy-stack,
+    .payment-box,
+    .gate,
+    .mini-actions {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .payment-box,
+    .gate {
+      padding: 1rem;
+      clip-path: var(--cut);
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .payment-box strong,
+    .gate strong {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(249, 242, 247, 0.68);
+    }
+
+    .payment-lines {
+      display: grid;
+      gap: 0.55rem;
+      color: rgba(249, 242, 247, 0.88);
+      font-size: 0.92rem;
+    }
+
+    .booking-form {
+      display: grid;
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .booking-form.hidden,
+    .gate.hidden {
+      display: none;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.42rem;
+    }
+
+    .field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(249, 242, 247, 0.62);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font: inherit;
+      clip-path: var(--cut);
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: rgba(255, 77, 157, 0.5);
+      box-shadow: 0 0 0 1px rgba(255, 77, 157, 0.18);
+    }
+
+    .field select option {
+      background: #1b1220;
+      color: #f9f2f7;
+    }
+
+    .field select option:checked {
+      background: #ff4d9d;
+      color: #12070f;
+    }
+
+    .message {
+      min-height: 1.4rem;
+      color: var(--pink-soft);
+      font-size: 0.92rem;
+    }
+
+    .footer-panel {
+      margin-top: 1.2rem;
+      padding: 1.2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      justify-content: flex-end;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
+
+    .site-footer {
+      padding: 1.4rem 0 2.4rem;
+    }
+
+    .site-footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      color: rgba(249, 242, 247, 0.56);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+    }
+
+    html[lang="ka"] .hero-title,
+    html[lang="ka"] .section-head h2,
+    html[lang="ka"] .feature-copy h3,
+    html[lang="ka"] .event-card h3,
+    html[lang="ka"] .reason-card h3,
+    html[lang="ka"] .venue-card h3,
+    html[lang="ka"] .scene-card h3,
+    html[lang="ka"] .booking-copy h3,
+    html[lang="ka"] .booking-card h3,
+    html[lang="ka"] .footer-panel h3,
+    html[lang="ka"] .poster-copy strong {
+      font-family: "Noto Sans Georgian", "Manrope", sans-serif;
+      letter-spacing: -0.035em;
+      text-transform: none;
+    }
+
+    html[lang="ka"] .hero-title {
+      font-size: clamp(2.35rem, 3.6vw, 3.9rem);
+      line-height: 1.08;
+      max-width: 15ch;
+    }
+
+    html[lang="ka"] .section-head h2 {
+      font-size: clamp(1.85rem, 2.7vw, 2.85rem);
+      line-height: 1.12;
+      max-width: 18ch;
+    }
+
+    html[lang="ka"] .feature-copy h3,
+    html[lang="ka"] .booking-copy h3,
+    html[lang="ka"] .booking-card h3,
+    html[lang="ka"] .footer-panel h3 {
+      font-size: clamp(1.75rem, 2.55vw, 2.7rem);
+      line-height: 1.12;
+      max-width: 18ch;
+    }
+
+    html[lang="ka"] .event-card h3,
+    html[lang="ka"] .reason-card h3,
+    html[lang="ka"] .venue-card h3,
+    html[lang="ka"] .scene-card h3,
+    html[lang="ka"] .poster-copy strong {
+      font-size: 1.28rem;
+      line-height: 1.16;
+      max-width: none;
+    }
+
+    html[lang="ka"] .brand-copy span,
+    html[lang="ka"] .nav a,
+    html[lang="ka"] .eyebrow,
+    html[lang="ka"] .ticker,
+    html[lang="ka"] .field label,
+    html[lang="ka"] .feature-meta span,
+    html[lang="ka"] .event-card time,
+    html[lang="ka"] .reason-card small,
+    html[lang="ka"] .venue-card small,
+    html[lang="ka"] .scene-card small,
+    html[lang="ka"] .poster-copy span,
+    html[lang="ka"] .poster-copy small {
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 1100px) {
+      .topbar-inner {
+        padding: 0.85rem 0;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .brand,
+      .nav,
+      .top-actions {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero-grid,
+      .feature-panel,
+      .booking-grid,
+      .footer-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .reason-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .past-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .container,
+      .topbar-inner {
+        width: min(var(--content), calc(100% - 1.2rem));
+      }
+
+      .topbar-inner {
+        min-height: 4.9rem;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .nav {
+        gap: 0.75rem;
+      }
+
+      .nav a {
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+      }
+
+      .top-actions {
+        gap: 0.55rem;
+      }
+
+      .ghost-link,
+      .lang-switch button {
+        min-height: 2.5rem;
+        padding: 0.62rem 0.9rem;
+      }
+
+      .hero-copy,
+      .hero-rail {
+        min-height: 0;
+      }
+
+      .hero-copy {
+        padding: 1.35rem;
+      }
+
+      .hero-metrics,
+      .feature-facts,
+      .pricing-grid,
+      .reason-grid,
+      .venue-grid,
+      .scene-grid,
+      .past-grid,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-rail {
+        grid-template-columns: 1fr;
+        grid-template-areas: none;
+        grid-template-rows: none;
+        align-content: start;
+      }
+
+      .hero-rail::before {
+        display: none;
+      }
+
+      .poster-card {
+        min-height: 0;
+        aspect-ratio: 1 / 1;
+      }
+
+      .poster-card:nth-child(1),
+      .poster-card:nth-child(2),
+      .poster-card:nth-child(3) {
+        grid-area: auto;
+      }
+
+      .hero-title {
+        font-size: clamp(4.2rem, 18vw, 5.8rem);
+        max-width: 7.4ch;
+      }
+
+      html[lang="ka"] .hero-title {
+        font-size: clamp(1.95rem, 7.8vw, 2.7rem);
+        line-height: 1.12;
+        max-width: 14ch;
+      }
+
+      html[lang="ka"] .section-head h2 {
+        font-size: clamp(1.65rem, 6.8vw, 2.25rem);
+        line-height: 1.14;
+        max-width: 16ch;
+      }
+
+      html[lang="ka"] .feature-copy h3,
+      html[lang="ka"] .booking-copy h3,
+      html[lang="ka"] .booking-card h3,
+      html[lang="ka"] .footer-panel h3 {
+        font-size: clamp(1.55rem, 6.2vw, 2.05rem);
+        line-height: 1.14;
+        max-width: 16ch;
+      }
+
+      html[lang="ka"] .event-card h3,
+      html[lang="ka"] .reason-card h3,
+      html[lang="ka"] .venue-card h3,
+      html[lang="ka"] .scene-card h3 {
+        font-size: 1.18rem;
+      }
+
+      .hero-lead {
+        font-size: 0.96rem;
+      }
+
+      .footer-links,
+      .site-footer .container {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .shell::before {
+        animation: none;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="plasma" aria-hidden="true"></div>
-  <header class="top-bar">
-    <span class="brand"><img src="Fractal.png" alt="Fractal logo" />Fractal Events</span>
-    <div class="top-actions">
-      <div class="language-switch" role="tablist" aria-label="Language switcher">
-        <button type="button" data-lang="geo">KA</button>
-        <button type="button" data-lang="eng" class="active">EN</button>
-      </div>
-      <span id="userBadge" class="user-pill"></span>
-      <a id="profileLink" class="profile-link" href="register.html">Profile</a>
-      <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
-    </div>
-  </header>
+  <div class="shell">
+    <div class="glow one" aria-hidden="true"></div>
+    <div class="glow two" aria-hidden="true"></div>
 
-  <header class="hero">
-    <div class="hero-content">
-      <p class="eyebrow" id="heroEyebrow"></p>
-      <h1 id="heroTitle">Fractal Events</h1>
-      <p id="heroIntro"></p>
-      <div class="hero-cta">
-        <a href="#book" class="cta primary" id="ctaPrimary"></a>
-        <a href="#events" class="cta ghost" id="ctaSecondary"></a>
-        <a href="register.html" class="cta ghost" style="border-color:rgba(118,255,213,.4);color:var(--lime);">Register</a>
-      </div>
-      <div class="stats" id="statsPanel"></div>
-    </div>
-    <div class="slider" aria-live="polite">
-      <div class="slider-track"></div>
-      <div class="slider-dots" role="tablist"></div>
-    </div>
-  </header>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#top">
+          <img src="lig logo.png" alt="Love In Georgia logo" />
+          <span class="brand-copy">
+            <strong>Love In Georgia</strong>
+            <span id="brandLine"></span>
+          </span>
+        </a>
 
-  <section class="events" id="events">
-    <div class="section-head">
-      <p class="eyebrow" id="eventSectionEyebrow"></p>
-      <h2 id="eventSectionHeading"></h2>
-      <p id="eventSectionCopy"></p>
-    </div>
-    <div class="event-grid" aria-live="polite"></div>
-    <div class="timeline" aria-label="Event orbit timeline"></div>
-  </section>
+        <nav class="nav" aria-label="Primary navigation">
+          <a id="navFeatured" href="#featured"></a>
+          <a id="navArchive" href="#archive"></a>
+          <a id="navVenues" href="#venues"></a>
+          <a id="navBooking" href="#book"></a>
+        </nav>
 
-  <section class="booking-panel" id="book">
-    <div id="bookingGate" class="booking-gate" aria-live="polite">
-      <p id="bookingGateMessage">Please sign in or register to book tickets.</p>
-      <a class="cta primary" href="register.html">Register / Login</a>
-    </div>
-    <div class="panel-content">
-      <div class="panel-text">
-        <p class="eyebrow" id="bookingEyebrow"></p>
-        <h3 id="eventFocus"></h3>
-        <p id="eventCopy"></p>
-        <ul class="perks" id="perksList"></ul>
-      </div>
-      <form id="bookingForm">
-        <label class="field">
-          <span id="labelEvent"></span>
-          <input type="text" id="selectedEvent" name="event" required readonly />
-        </label>
-        <div class="two-col">
-          <label class="field">
-            <span id="labelName"></span>
-            <input type="text" id="nameInput" name="name" required />
-          </label>
-          <label class="field">
-            <span id="labelEmail"></span>
-            <input type="email" id="emailInput" name="email" required />
-          </label>
+        <div class="top-actions">
+          <a id="loginLink" class="ghost-link" href="login.html"></a>
+          <a id="registerLink" class="ghost-link" href="register.html"></a>
+          <a id="profileLink" class="ghost-link hidden" href="login.html"></a>
+          <a id="adminLink" class="ghost-link hidden" href="admin.html"></a>
+          <span id="userBadge" class="chip hidden"></span>
+          <button id="logoutBtn" class="ghost-link hidden" type="button"></button>
+          <div class="lang-switch" role="tablist" aria-label="Language switcher">
+            <button type="button" data-lang="en" class="active">EN</button>
+            <button type="button" data-lang="ka">KA</button>
+          </div>
         </div>
-        <div class="two-col">
-          <label class="field">
-            <span id="labelPhone"></span>
-            <input type="tel" id="phoneInput" name="phone" required />
-          </label>
-          <label class="field">
-            <span id="labelGuests"></span>
-            <input type="number" id="ticketsInput" name="tickets" min="1" max="8" value="1" required />
-          </label>
-        </div>
-        <label class="field">
-          <span id="labelTier"></span>
-          <select name="tier" id="tierSelect" required></select>
-        </label>
-        <div class="two-col">
-          <label class="field">
-            <span id="labelPayment"></span>
-            <select name="payment" id="paymentSelect" required></select>
-          </label>
-          <label class="field">
-            <span id="labelPaymentId"></span>
-            <input type="text" id="paymentIdInput" name="paymentId" placeholder="XXXX-XXXX-XXXX" required />
-          </label>
-        </div>
-        <div id="paymentInfo" class="payment-info" aria-live="polite"></div>
-        <button type="submit" class="cta primary stretch" id="submitLabel"></button>
-        <p id="confirmation" role="status"></p>
-      </form>
-    </div>
-  </section>
+      </div>
+    </header>
 
-  <footer>
-    © 2025 Fractal Events - All rights reserved. Site designed by <a href="https://levanisportfolio.com/" target="_blank" rel="noopener" class="footer-link">Vornato (Levani Esitashvili)</a>.
-  </footer>
+    <main id="top">
+      <section class="hero">
+        <div class="container hero-grid">
+          <article class="hero-copy">
+            <div>
+              <p id="heroEyebrow" class="eyebrow"></p>
+              <h1 id="heroTitle" class="hero-title"></h1>
+              <p id="heroLead" class="hero-lead"></p>
+              <div class="hero-actions">
+                <a id="heroPrimary" class="cta primary" href="#book"></a>
+                <a id="heroSecondary" class="cta secondary" href="#archive"></a>
+              </div>
+            </div>
+
+            <div>
+              <div id="heroMetrics" class="hero-metrics"></div>
+              <div id="heroTicker" class="ticker"></div>
+            </div>
+          </article>
+
+          <aside id="posterRail" class="hero-rail" aria-label="Poster rail"></aside>
+        </div>
+      </section>
+
+      <section id="featured" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p id="featuredEyebrow" class="eyebrow"></p>
+              <h2 id="featuredHeading"></h2>
+            </div>
+            <p id="featuredIntro"></p>
+          </div>
+
+          <div class="feature-panel">
+            <div class="feature-poster">
+              <span id="featureStamp" class="feature-stamp"></span>
+              <img id="featuredPoster" src="poster-placeholder.svg" alt="Love In Georgia upcoming event cover" width="1080" height="1080" />
+            </div>
+            <div class="feature-copy">
+              <div>
+                <h3 id="featureTitle"></h3>
+                <div id="featureMeta" class="feature-meta"></div>
+              </div>
+              <p id="featureSummary"></p>
+              <div id="featureFacts" class="feature-facts"></div>
+              <div id="pricingGrid" class="pricing-grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="archive" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p id="archiveEyebrow" class="eyebrow"></p>
+              <h2 id="archiveHeading"></h2>
+            </div>
+            <p id="archiveIntro"></p>
+          </div>
+          <div id="pastGrid" class="past-grid"></div>
+        </div>
+      </section>
+
+      <section id="reasons" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p id="reasonEyebrow" class="eyebrow"></p>
+              <h2 id="reasonHeading"></h2>
+            </div>
+            <p id="reasonIntro"></p>
+          </div>
+          <div id="reasonGrid" class="reason-grid"></div>
+        </div>
+      </section>
+
+      <section id="venues" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p id="venueEyebrow" class="eyebrow"></p>
+              <h2 id="venueHeading"></h2>
+            </div>
+            <p id="venueIntro"></p>
+          </div>
+          <div id="venueGrid" class="venue-grid"></div>
+        </div>
+      </section>
+
+      <section id="scene" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p id="sceneEyebrow" class="eyebrow"></p>
+              <h2 id="sceneHeading"></h2>
+            </div>
+            <p id="sceneIntro"></p>
+          </div>
+          <div id="sceneGrid" class="scene-grid"></div>
+        </div>
+      </section>
+
+      <section id="book" class="section">
+        <div class="container booking-grid">
+          <article class="booking-copy">
+            <div class="copy-stack">
+              <p id="bookingEyebrow" class="eyebrow"></p>
+              <h3 id="bookingHeading"></h3>
+              <p id="bookingIntro"></p>
+            </div>
+
+            <div class="payment-box">
+              <strong id="paymentLabel"></strong>
+              <div id="paymentLines" class="payment-lines"></div>
+            </div>
+
+            <div class="mini-actions">
+              <a id="bookingLoginLink" class="cta secondary" href="login.html"></a>
+              <a id="bookingRegisterLink" class="cta secondary" href="register.html"></a>
+              <a id="bookingSocialLink" class="cta secondary" href="https://www.instagram.com/loveingeorgia1/" target="_blank" rel="noopener"></a>
+            </div>
+          </article>
+
+          <article class="booking-card">
+            <p id="formEyebrow" class="eyebrow"></p>
+            <h3 id="formHeading"></h3>
+
+            <div id="bookingGate" class="gate">
+              <strong id="gateTitle"></strong>
+              <p id="gateCopy"></p>
+              <div class="mini-actions">
+                <a id="gateLoginLink" class="cta primary" href="login.html"></a>
+                <a id="gateRegisterLink" class="cta secondary" href="register.html"></a>
+              </div>
+            </div>
+
+            <form id="bookingForm" class="booking-form hidden">
+              <div class="field">
+                <label id="labelEvent" for="selectedEvent"></label>
+                <input id="selectedEvent" name="event" type="text" readonly />
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label id="labelName" for="nameInput"></label>
+                  <input id="nameInput" name="name" type="text" required />
+                </div>
+                <div class="field">
+                  <label id="labelEmail" for="emailInput"></label>
+                  <input id="emailInput" name="email" type="email" required />
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label id="labelPhone" for="phoneInput"></label>
+                  <input id="phoneInput" name="phone" type="tel" required />
+                </div>
+                <div class="field">
+                  <label id="labelGuests" for="guestsInput"></label>
+                  <input id="guestsInput" name="guests" type="number" min="1" max="8" value="1" required />
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label id="labelTier" for="tierSelect"></label>
+                  <select id="tierSelect" name="tier" required></select>
+                </div>
+                <div class="field">
+                  <label id="labelPaymentMethod" for="paymentSelect"></label>
+                  <select id="paymentSelect" name="payment" required></select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label id="labelPaymentId" for="paymentIdInput"></label>
+                <input id="paymentIdInput" name="paymentId" type="text" required />
+              </div>
+
+              <div class="payment-box">
+                <strong id="paymentDetailTitle"></strong>
+                <div id="paymentDetailLines" class="payment-lines"></div>
+              </div>
+
+              <button id="submitButton" class="cta primary" type="submit"></button>
+              <p id="bookingMessage" class="message"></p>
+            </form>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="footer-panel">
+            <div>
+              <p id="footerEyebrow" class="eyebrow"></p>
+              <h3 id="footerHeading"></h3>
+              <p id="footerCopy"></p>
+            </div>
+            <div class="footer-links">
+              <a id="footerBook" class="cta primary" href="#book"></a>
+              <a id="footerLogin" class="cta secondary" href="login.html"></a>
+              <a id="footerRegister" class="cta secondary" href="register.html"></a>
+              <a id="footerInstagram" class="cta secondary" href="https://www.instagram.com/loveingeorgia1/" target="_blank" rel="noopener"></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span id="footerLegal"></span>
+        <span>182 Nikoloz Baratashvili, Left Bank, Tbilisi</span>
+      </div>
+    </footer>
+  </div>
 
   <script>
-    const translations = {
-  "geo": {
-    "hero": {
-      "eyebrow": "NEXT CHAPTER | ცამეტი",
-      "title": "Fractal Events",
-      "copy": "Animato ბრუნდება Tsameti-ში UV დეკორაციებით, SHALA ირანიდან და განახლებული ქართული სცენის ენერგიით.",
-      "primary": "ბილეთების დაჯავშნა",
-      "secondary": "დეტალები"
-    },
-    "stats": [
-      {
-        "value": "23+",
-        "label": "Face Control"
-      },
-      {
-        "value": "6",
-        "label": "არტისტი სცენაზე"
-      },
-      {
-        "value": "22:00",
-        "label": "დაწყება"
-      }
-    ],
-    "slider": [
-      {
-        "title": "ANIMATO - NEXT CHAPTER",
-        "tag": "ჰედლაინერი",
-        "copy": "მზად ხარ ახალი ფსიქოდელიური თავგადასავლისთვის? 28 ნოემბერს Fractal ცამეტის სცენას აანთებს Animato-ს, SHALA-ს და განახლებულ ადგილობრივ გუნდთან ერთად.",
-        "meta": "28 ნოემბერი | Tsameti Restaurant | თბილისი",
-        "image": "Poster28.webp",
-        "accent": "#7affc6"
-      }
-    ],
-    "eventSection": {
-      "eyebrow": "სცენის პულსი",
-      "heading": "ANIMATO - NEXT CHAPTER",
-      "blurb": "ლოკალური ბილეთები, ქართული არტისტები, გლობალური ხარისხის პროდაქშენი."
-    },
-    "events": [
-      {
-        "title": "ANIMATO - NEXT CHAPTER TBILISI",
-        "date": "28 ნოემბერი 2024 | პარასკევი",
-        "city": "Tsameti Restaurant, თამარაშვილის 13e, თბილისი",
-        "price": "I კალათა: 60 ₾ | II კალათა: 80 ₾ | კარზე: 120 ₾",
-        "vibe": "თბილისის ჰედლაინერი",
-        "capacity": "Face Control 23+",
-        "description": "NEXT CHAPTER — 28 ნოემბერს Fractal უფრო მეტი მუხტით და განახლებული ენერგიით ბრუნდება და ცამეტის სცენაზე იწვევს ფსაიტრანსის წამყვან ვარსკვლავ Animato-ს. მასთან ერთად ჰიპნოზურ სეტს უკრავს SHALA ირანიდან და ქართველი არტისტების ძლიერი შემადგენლობა. ბასი, ლაზერები და UV ინსტალაციები ქმნის უწყვეტ ღამეს.",
-        "accent": "#7affc6",
-        "poster": "Poster28.webp",
-        "lineup": [
-          "ANIMATO",
-          "SHALA",
-          "MARCUSS",
-          "INFEST",
-          "HOLO",
-          "NAKAMURA"
-        ],
-        "rituals": [
-          "ახალი UV დეკორაციები და ინტერაქტიული ინსტალაციები",
-          "ლაზერები და პროექციის მეფინგი, ძლიერი ბასი",
-          "ჩილ და საგამოფენო ზონა",
-          "სახის/სხეულის UV მოხატვა"
-        ],
-        "timeline": [
-          {
-            "label": "თარიღი",
-            "value": "28 ნოემბერი",
-            "copy": "პარასკევი | 22:00+"
-          },
-          {
-            "label": "Face Control",
-            "value": "23+",
-            "copy": "Dress code: ფსაი/ტრაიბალ"
-          },
-          {
-            "label": "ბილეთები",
-            "value": "60/80/120 ₾",
-            "copy": "I | II | კარზე"
-          },
-          {
-            "label": "ლოკაცია",
-            "value": "Tsameti",
-            "copy": "თამარაშვილის 13e"
-          }
-        ],
-        "blurb": "პარასკევი, 28 ნოემბერი | 22:00+ | Tsameti Restaurant, თბილისი"
-      }
-    ],
-    "perks": [
-      "ახალი UV დეკორაციები და ინტერაქტიული ინსტალაციები",
-      "ლაზერები, მეფინგი და ძლიერი ბასი",
-      "ჩილ + საგამოფენო ზონა და UV face/body art"
-    ],
-    "booking": {
-      "eyebrow": "დაჯავშნა",
-      "focus": "ANIMATO - NEXT CHAPTER TBILISI",
-      "copy": "პარასკევი, 28 ნოემბერი | 22:00+ | Tsameti Restaurant, თამარაშვილის 13e, თბილისი",
-      "placeholderEvent": "აირჩიე ღონისძიება",
-      "namePlaceholder": "მაგ. ნიკა მოსულიშვილი",
-      "phonePlaceholder": "+995 5XX XX XX XX",
-      "paymentPlaceholder": "აირჩიე გადახდის მეთოდი"
-    },
-    "form": {
-      "labels": {
-        "event": "ღონისძიება",
-        "name": "სრული სახელი",
-        "email": "ელ.ფოსტა",
-        "phone": "ტელეფონი",
-        "guests": "სტუმრები",
-        "tier": "ბილეთის კატეგორია",
-        "payment": "გადახდა",
-        "paymentId": "ბარათი / საფულის ID"
-      },
-      "tiers": [
-        { "value": "tier1", "label": "I კალათა" },
-        { "value": "tier2", "label": "II კალათა" },
-        { "value": "door", "label": "კარზე" }
-      ],
-      "payments": [
-        {
-          "value": "",
-          "label": "აირჩიე გადახდა",
-          "disabled": true
-        },
-        { "value": "card", "label": "ბარათი" },
-        { "value": "transfer-tbc", "label": "ბანკი (TBC)" },
-        { "value": "transfer-bog", "label": "ბანკი (Georgian Bank)" },
-        { "value": "crypto", "label": "კრიპტო" },
-        { "value": "apple", "label": "Apple Pay" }
-      ],
-      "submit": "დადასტურება",
-      "download": "Excel ჩამოტვირთვა"
-    },
-    "confirm": {
-      "missingEvent": "გთხოვ, აირჩიე ღონისძიება.",
-      "success": (name, tier, eventTitle) => `${name}, შენი ${tier} ბილეთი ${eventTitle}-ზე დადასტურებულია.`,
-      "excel": "Excel ფაილი განახლდა."
-    }
-  },
-  "eng": {
-    "hero": {
-      "eyebrow": "Next Chapter | Tbilisi",
-      "title": "Fractal Events",
-      "copy": "Animato returns to Tsameti with UV decor, SHALA from Iran, and a reborn Georgian squad.",
-      "primary": "Book Tickets",
-      "secondary": "See Details"
-    },
-    "stats": [
-      {
-        "value": "23+",
-        "label": "Face Control"
-      },
-      {
-        "value": "6",
-        "label": "Artists On Deck"
-      },
-      {
-        "value": "22:00",
-        "label": "Launch Time"
-      }
-    ],
-    "slider": [
-      {
-        "title": "ANIMATO - NEXT CHAPTER",
-        "tag": "Headliner portal",
-        "copy": "Ready for a new psychedelic quest? On 28 Nov, Fractal reignites Tsameti with Animato, SHALA, and a recharged local crew.",
-        "meta": "28 Nov | Tsameti Restaurant | Tbilisi",
-        "image": "Poster28.webp",
-        "accent": "#7affc6"
-      }
-    ],
-    "eventSection": {
-      "eyebrow": "Scene Pulse",
-      "heading": "ANIMATO - NEXT CHAPTER",
-      "blurb": "Local tickets, local artists, global-grade production."
-    },
-    "events": [
-      {
-        "title": "ANIMATO - NEXT CHAPTER TBILISI",
-        "date": "28 November 2024 | Friday",
-        "city": "Tsameti Restaurant, 13e Mikheil Tamarashvili St, Tbilisi",
-        "price": "Wave I: 60 ₾ | Wave II: 80 ₾ | Door: 120 ₾",
-        "vibe": "Tbilisi headliner",
-        "capacity": "Face Control 23+",
-        "description": "Animato, SHALA, and elite Georgian selectors deliver lasers, UV art, and heavy bass for a nonstop night.",
-        "accent": "#7affc6",
-        "poster": "Poster28.webp",
-        "lineup": [
-          "ANIMATO",
-          "SHALA",
-          "MARCUSS",
-          "INFEST",
-          "HOLO",
-          "NAKAMURA"
-        ],
-        "rituals": [
-          "Next-gen UV decor and interactive installations",
-          "Lasers and projection mapping with heavy bass",
-          "Chill and exhibit lounge",
-          "UV face/body art corners"
-        ],
-        "timeline": [
-          {
-            "label": "Date",
-            "value": "28 Nov",
-            "copy": "Friday | 22:00+"
-          },
-          {
-            "label": "Face Control",
-            "value": "23+",
-            "copy": "Dress code: Psy/Tribal"
-          },
-          {
-            "label": "Tickets",
-            "value": "60/80/120 ₾",
-            "copy": "Wave I | Wave II | Door"
-          },
-          {
-            "label": "Venue",
-            "value": "Tsameti",
-            "copy": "13e Mikheil Tamarashvili St"
-          }
-        ],
-        "blurb": "Friday, 28 Nov | 22:00+ | Tsameti Restaurant, Tbilisi"
-      }
-    ],
-    "perks": [
-      "Next-gen UV decor & interactive installations",
-      "Lasers, mapping, and earth-shaking bass",
-      "Chill + exhibit zones with UV face/body art"
-    ],
-    "booking": {
-      "eyebrow": "Reserve your passage",
-      "focus": "ANIMATO - NEXT CHAPTER TBILISI",
-      "copy": "Friday, 28 Nov | 22:00+ | Tsameti Restaurant, 13e Mikheil Tamarashvili St, Tbilisi",
-      "placeholderEvent": "Tap an event card",
-      "namePlaceholder": "e.g. Nova Traveler",
-      "phonePlaceholder": "+995 5XX XX XX XX",
-      "paymentPlaceholder": "Choose a method"
-    },
-    "form": {
-      "labels": {
-        "event": "Event",
-        "name": "Full name",
-        "email": "Email address",
-        "phone": "Phone",
-        "guests": "Guests",
-        "tier": "Ticket tier",
-        "payment": "Payment method",
-        "paymentId": "Card / Wallet ID"
-      },
-      "tiers": [
-        {
-          "value": "tier1",
-          "label": "Wave I"
-        },
-        {
-          "value": "tier2",
-          "label": "Wave II"
-        },
-        {
-          "value": "door",
-          "label": "Door"
-        }
-      ],
-      "payments": [
-        {
-          "value": "",
-          "label": "Choose a method",
-          "disabled": true
-        },
-        {
-          "value": "card",
-          "label": "Card"
-        },
-        {
-          "value": "transfer-tbc",
-          "label": "Bank transfer (TBC)"
-        },
-        {
-          "value": "transfer-bog",
-          "label": "Bank transfer (Georgian Bank)"
-        },
-        {
-          "value": "crypto",
-          "label": "Crypto wallet"
-        },
-        {
-          "value": "apple",
-          "label": "Apple Pay"
-        }
-      ],
-      "submit": "Confirm & Pay",
-      "download": "Download Excel file"
-    },
-    "confirm": {
-      "missingEvent": "Please select an event to continue.",
-      "success": (name, tier, eventTitle) => `${name}, your ${tier} access to ${eventTitle} is locked in.`,
-      "excel": "Excel file updated with your booking."
-    }
-  }
-}
-const API_BASE = "https://fractal-ns5x.onrender.com"; // production backend
+    const API_BASE = window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
+    const ADMIN_EMAIL = "FractalAdmin@123";
 
-    const heroEyebrow = document.getElementById('heroEyebrow');
-    const heroTitle = document.getElementById('heroTitle');
-    const heroIntro = document.getElementById('heroIntro');
-    const ctaPrimary = document.getElementById('ctaPrimary');
-    const ctaSecondary = document.getElementById('ctaSecondary');
-    const statsPanel = document.getElementById('statsPanel');
-    const sliderTrack = document.querySelector('.slider-track');
-    const sliderDots = document.querySelector('.slider-dots');
-    const eventGrid = document.querySelector('.event-grid');
-    const timeline = document.querySelector('.timeline');
-    const eventSectionEyebrow = document.getElementById('eventSectionEyebrow');
-    const eventSectionHeading = document.getElementById('eventSectionHeading');
-    const eventSectionCopy = document.getElementById('eventSectionCopy');
-    const bookingEyebrow = document.getElementById('bookingEyebrow');
-    const eventFocus = document.getElementById('eventFocus');
-    const eventCopy = document.getElementById('eventCopy');
-    const perksList = document.getElementById('perksList');
-    const selectedEventInput = document.getElementById('selectedEvent');
-    const nameInput = document.getElementById('nameInput');
-    const emailInput = document.getElementById('emailInput');
-    const phoneInput = document.getElementById('phoneInput');
-    const ticketsInput = document.getElementById('ticketsInput');
-    const tierSelect = document.getElementById('tierSelect');
-    const paymentSelect = document.getElementById('paymentSelect');
-    const paymentIdInput = document.getElementById('paymentIdInput');
-    const submitLabel = document.getElementById('submitLabel');
-    const confirmation = document.getElementById('confirmation');
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingGate = document.getElementById('bookingGate');
-    const bookingGateMessage = document.getElementById('bookingGateMessage');
-    const bookingContent = document.querySelector('#book .panel-content');
-    const profileLink = document.getElementById('profileLink');
-    const paymentInfo = document.getElementById('paymentInfo');
-    const userBadge = document.getElementById('userBadge');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    const labelMap = {
-      event: document.getElementById('labelEvent'),
-      name: document.getElementById('labelName'),
-      email: document.getElementById('labelEmail'),
-      phone: document.getElementById('labelPhone'),
-      guests: document.getElementById('labelGuests'),
-      tier: document.getElementById('labelTier'),
-      payment: document.getElementById('labelPayment'),
-      paymentId: document.getElementById('labelPaymentId')
+    const fallbackSettings = {
+      event_name: "Love In Georgia | Garden Opening",
+      event_date: "17 April, 22:00",
+      face_control: "Curated entry and premium crowd flow",
+      tickets_info: "Wave releases open in limited drops and close fast when the room starts moving.",
+      ticket_categories: [
+        { id: "wave1", label: "Wave I", price: "120 GEL", description: "early release access" },
+        { id: "wave2", label: "Wave II", price: "150 GEL", description: "second release access" },
+        { id: "wave3", label: "Wave III", price: "180 GEL", description: "final release access" },
+        { id: "door", label: "Door", price: "220 GEL", description: "night-of-event access" }
+      ],
+      location: "Garden, Tbilisi",
+      booking_description: "Book early, submit your transfer reference, and lock your place before the next Love In Georgia room opens.",
+      event_description: "A high-energy Garden opening built around a late-night timetable, guest artists, drinks, and the crowd pressure that defines Love In Georgia.",
+      tbc_account: "",
+      bog_account: "",
+      transfer_note: "Use your full name in the transfer note so the booking can be matched faster.",
+      qr_url: "",
+      allowed_tiers: ["wave1", "wave2", "wave3", "door"],
+      brand_content: {
+        featured_event: {
+          poster_url: "1.png",
+          title_ka: "Love In Georgia | Garden Opening",
+          date_ka: "17 აპრილი, 22:00",
+          location_ka: "Garden, თბილისი",
+          summary_ka: "Garden Opening — ღამე timetable-ით, guest artists-ებით, drinks-ით და Love In Georgia-ს crowd pressure-ით.",
+          booking_copy_ka: "დაჯავშნე ადრე, ატვირთე გადარიცხვის კოდი და დაიჭირე ადგილი Garden Opening-მდე.",
+          tag_en: "17 April / opening",
+          tag_ka: "17 აპრილი / opening"
+        },
+        poster_items: [
+          {
+            tag_en: "April 4",
+            tag_ka: "4 აპრილი",
+            title_en: "Geminis",
+            title_ka: "Geminis",
+            meta_en: "Hi Georgia edition with Teo Ceo B2B Tatuci and Zuzu B2B Sandalphon",
+            meta_ka: "Hi Georgia edition — Teo Ceo B2B Tatuci და Zuzu B2B Sandalphon",
+            image_url: "2.png"
+          },
+          {
+            tag_en: "March 14",
+            tag_ka: "14 მარტი",
+            title_en: "Love Bar / Emily Sai",
+            title_ka: "Love Bar / Emily Sai",
+            meta_en: "Love In Georgia night at Love Bar",
+            meta_ka: "Love In Georgia-ს ღამე Love Bar-ში",
+            image_url: "3.png"
+          },
+          {
+            tag_en: "February 13",
+            tag_ka: "13 თებერვალი",
+            title_en: "Valentine's Eve",
+            title_ka: "Valentine's Eve",
+            meta_en: "Love In Georgia x Love Bar x Love Day",
+            meta_ka: "Love In Georgia x Love Bar x Love Day",
+            image_url: "4.png"
+          }
+        ]
+      }
     };
 
-    const DEFAULT_TIER_VALUES = ["wave1", "wave2", "wave3", "door"];
-    const TIER_LABELS = {
-      eng: { wave1: "Wave I", wave2: "Wave II", wave3: "Wave III", door: "Door" },
-      geo: { wave1: "Wave I", wave2: "Wave II", wave3: "Wave III", door: "Door" },
-    };
-    const ALLOWED_PAYMENTS = ["transfer-tbc", "transfer-bog"];
-    let currentLang = 'eng';
-    let currentSlides = [];
-    let currentEvents = [];
-    let sliderIndex = 0;
-    let sliderInterval = null;
-    let confirmCopy = translations.geo.confirm;
-    let cachedUser = null;
-    let paymentConfig = null;
-    let allowedTiers = DEFAULT_TIER_VALUES.slice();
-
-    function getTierLabel(value, lang) {
-      const labels = TIER_LABELS[lang] || TIER_LABELS.eng;
-      return labels[value] || value;
-    }
-
-    function rebuildTierSelect(lang) {
-      tierSelect.innerHTML = '';
-      const tierValues = (allowedTiers && allowedTiers.length) ? allowedTiers : DEFAULT_TIER_VALUES;
-      tierValues.forEach((value) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = getTierLabel(value, lang);
-        tierSelect.appendChild(option);
-      });
-    }
-
-    function renderContent(lang) {
-      const data = translations[lang];
-      currentLang = lang;
-      document.documentElement.lang = lang === 'geo' ? 'ka' : 'en';
-      confirmCopy = data.confirm;
-      heroEyebrow.textContent = data.hero.eyebrow;
-      heroTitle.textContent = data.hero.title;
-      heroIntro.textContent = data.hero.copy;
-      ctaPrimary.textContent = data.hero.primary;
-      ctaSecondary.textContent = data.hero.secondary;
-
-      statsPanel.innerHTML = '';
-      data.stats.forEach((stat) => {
-        const card = document.createElement('div');
-        card.className = 'stat';
-        card.innerHTML = `<strong>${stat.value}</strong><span>${stat.label}</span>`;
-        statsPanel.appendChild(card);
-      });
-
-      eventSectionEyebrow.textContent = data.eventSection.eyebrow;
-      eventSectionHeading.textContent = data.eventSection.heading;
-      eventSectionCopy.textContent = data.eventSection.blurb;
-
-      bookingEyebrow.textContent = data.booking.eyebrow;
-      eventFocus.textContent = data.booking.focus;
-      eventCopy.textContent = data.booking.copy;
-      selectedEventInput.placeholder = data.booking.placeholderEvent;
-      nameInput.placeholder = data.booking.namePlaceholder;
-      phoneInput.placeholder = data.booking.phonePlaceholder;
-
-      Object.entries(data.form.labels).forEach(([key, value]) => {
-        labelMap[key].textContent = value;
-      });
-      submitLabel.textContent = data.form.submit;
-
-      rebuildTierSelect(lang);
-
-      paymentSelect.innerHTML = '';
-      data.form.payments
-        .filter((method) => ALLOWED_PAYMENTS.includes(method.value) || method.value === "")
-        .forEach((method) => {
-          const option = document.createElement('option');
-          option.value = method.value;
-          option.textContent = method.label;
-          if (method.disabled) { option.disabled = true; option.selected = true; }
-          paymentSelect.appendChild(option);
-        });
-
-      perksList.innerHTML = '';
-      data.perks.forEach((perk) => {
-        const item = document.createElement('li');
-        item.textContent = perk;
-        perksList.appendChild(item);
-      });
-
-      currentSlides = data.slider;
-      buildSlider();
-      currentEvents = data.events;
-      buildEvents();
-      if (currentEvents.length) { selectEvent(currentEvents[0], false); }
-      updatePaymentInfo();
-      syncBookingVisibility();
-    }
-
-    function buildSlider() {
-      sliderTrack.innerHTML = '';
-      sliderDots.innerHTML = '';
-      sliderIndex = 0;
-      currentSlides.forEach((slide, index) => {
-        const article = document.createElement('article');
-        article.className = 'slide';
-        article.style.background = `linear-gradient(135deg, rgba(0,0,0,.7), ${slide.accent || '#7affc6'})`;
-        article.innerHTML = `
-          ${slide.image ? `<img src="${slide.image}" alt="Poster for ${slide.title}" class="slide-poster" loading="lazy" />` : ''}
-          <div class="slide-content">
-            <span class="tag">${slide.tag}</span>
-            <h3>${slide.title}</h3>
-            <p>${slide.copy}</p>
-          </div>
-          <div class="slide-footer">
-            <span>${slide.meta}</span>
-            <span>${currentLang === 'geo' ? 'ჰედლაინერი' : 'Headliner'}</span>
-          </div>
-        `;
-        sliderTrack.appendChild(article);
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.setAttribute('aria-label', 'Show ' + slide.title);
-        dot.addEventListener('click', () => goToSlide(index));
-        sliderDots.appendChild(dot);
-      });
-      goToSlide(0);
-      if (sliderInterval) clearInterval(sliderInterval);
-      if (currentSlides.length > 1) {
-        sliderInterval = setInterval(() => { sliderIndex = (sliderIndex + 1) % currentSlides.length; goToSlide(sliderIndex); }, 5200);
-      }
-    }
-
-    function goToSlide(index) {
-      sliderIndex = index;
-      sliderTrack.style.transform = `translateX(-${index * 100}%)`;
-      document.querySelectorAll('.slider-dots button').forEach((dot, idx) => dot.classList.toggle('active', idx === index));
-    }
-
-    function syncBookingVisibility() {
-      const isLoggedIn = !!cachedUser;
-      if (bookingContent) bookingContent.style.display = isLoggedIn ? 'grid' : 'none';
-      if (bookingGate) bookingGate.style.display = isLoggedIn ? 'none' : 'flex';
-      if (bookingGateMessage) bookingGateMessage.textContent = 'Please sign in or register to book tickets.';
-      if (ctaPrimary) ctaPrimary.href = isLoggedIn ? '#book' : 'register.html';
-      if (userBadge) {
-        userBadge.style.display = isLoggedIn ? 'inline-flex' : 'none';
-        userBadge.textContent = isLoggedIn ? (cachedUser.name || cachedUser.email || 'User') : '';
-      }
-      if (logoutBtn) logoutBtn.style.display = isLoggedIn ? 'inline-flex' : 'none';
-      if (profileLink) profileLink.style.display = isLoggedIn ? 'inline-flex' : 'none';
-    }
-
-    function buildEvents() {
-      eventGrid.innerHTML = '';
-      timeline.innerHTML = '';
-      currentEvents.forEach((event) => {
-        const card = document.createElement('article');
-        card.className = 'event-card';
-        if (event.poster) { card.style.backgroundImage = `url('${event.poster}')`; card.style.backgroundSize = 'cover'; card.style.backgroundBlendMode = 'overlay'; }
-        const lineupList = (event.lineup || []).map((artist) => `<li>${artist}</li>`).join('');
-        const ritualList = (event.rituals || []).map((item) => `<li>${item}</li>`).join('');
-        card.innerHTML = `
-          <div class="card-body">
-            <span class="tag">${event.vibe}</span>
-            <h3>${event.title}</h3>
-            <p class="event-description">${event.description}</p>
-            <div class="event-meta">
-              <span>${event.date}</span>
-              <span>${event.city}</span>
-            </div>
-            ${lineupList ? `<p class="micro-label">${currentLang === 'geo' ? 'Line-up' : 'Line-up'}</p><ul class="lineup">${lineupList}</ul>` : ''}
-            ${ritualList ? `<p class="micro-label">${currentLang === 'geo' ? 'რას უნდა ელოდოთ' : 'What to expect'}</p><ul class="rituals">${ritualList}</ul>` : ''}
-            <div class="event-footer">
-              <span class="price">${event.price}</span>
-              <button class="mini-cta" type="button">${currentLang === 'geo' ? 'დაჯავშნა' : 'Book'}</button>
-            </div>
-          </div>
-        `;
-        card.addEventListener('click', () => selectEvent(event));
-        card.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); selectEvent(event); });
-        eventGrid.appendChild(card);
-        (event.timeline || []).forEach((nodeData) => {
-          const node = document.createElement('article');
-          node.className = 'node';
-          node.style.borderColor = event.accent;
-          node.innerHTML = `<span>${nodeData.label}</span><strong>${nodeData.value}</strong><small>${nodeData.copy || ''}</small>`;
-          timeline.appendChild(node);
-        });
-      });
-    }
-
-    function selectEvent(event, scrollToForm = true) {
-      selectedEventInput.value = event.title;
-      eventFocus.textContent = event.title;
-      eventCopy.textContent = event.blurb || `${event.city} | ${event.date}`;
-      if (event.accent) document.documentElement.style.setProperty('--electric', event.accent);
-      if (scrollToForm) {
-        const bookingSection = document.getElementById('book');
-        if (cachedUser && bookingSection) {
-          bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else if (!cachedUser && bookingGate) {
-          bookingGate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const content = {
+      en: {
+        brandLine: "Bookings, guest artists, drinks, and Tbilisi nights",
+        nav: {
+          featured: "Next Drop",
+          archive: "Past Nights",
+          venues: "Venues",
+          booking: "Booking",
+          member: "წევრის წვდომა",
+          account: "My Access",
+          admin: "Admin",
+          logout: "Logout"
+        },
+        hero: {
+          eyebrow: "Love In Georgia | Tbilisi after-dark pressure",
+          title: "Love In Georgia",
+          accent: "Book before the bass hits.",
+          lead: "Guest artists, DJs, drinks, beautiful crowd energy, and venue-hopping editions built for the part of Tbilisi that refuses to go home early.",
+          primaryLoggedOut: "Unlock Booking",
+          primaryLoggedIn: "Book Your Place",
+          secondary: "Explore Past Nights",
+          metrics: [
+            { value: "15", label: "artists across 2 stages on March 6" },
+            { value: "5", label: "recent standout editions" },
+            { value: "3", label: "key Tbilisi venues in rotation" }
+          ],
+          ticker: [
+            "Love Bar",
+            "Crystal Event Hall",
+            "Tsameti Club",
+            "Guest artists",
+            "Drinks at the rail",
+            "Beautiful crowd energy",
+            "Late check-in"
+          ]
+        },
+        featured: {
+          eyebrow: "Live booking signal",
+          heading: "The next edition should feel alive already",
+          intro: "This is the live drop: event details, poster art, booking tiers, and payment rails can all move from the admin panel without turning the site back into a static flyer."
+        },
+        facts: {
+          date: "Date",
+          venue: "Venue",
+          faceControl: "Entry Tone",
+          tickets: "Ticket Release",
+          booking: "Booking",
+          bookingFallback: "Booking details update from the admin panel."
+        },
+        archive: {
+          eyebrow: "Archive pressure",
+          heading: "Recent editions that built the name",
+          intro: "Love In Georgia keeps landing because the nights feel deliberate: strong curation, serious movement, and rooms that stay memorable after the lights come up.",
+          cards: [
+            {
+              date: "March 27, 2026",
+              title: "Crystal Event Hall",
+              copy: "An unforgettable edition with polished production, hard release on the floor, and a room that held tension from start to finish."
+            },
+            {
+              date: "March 14, 2026",
+              title: "High-demand Tbilisi night",
+              copy: "A city night with clear demand, quick crowd build, and the kind of buzz that makes the next drop feel even more urgent."
+            },
+            {
+              date: "March 6, 2026",
+              title: "15 artists / 2 stages",
+              copy: "A major Crystal Event Hall statement built for scale, circulation, and nonstop pressure across multiple artist moments."
+            },
+            {
+              date: "February 13, 2026",
+              title: "Love Day at Love Bar",
+              copy: "Valentine tension, dressed-up energy, and a tighter room dynamic with chemistry running through the crowd."
+            },
+            {
+              date: "January 1, 2026",
+              title: "Bedoba at Tsameti Club",
+              copy: "A New Year reset with deep crowd immersion, optimism, and the feeling of starting the year inside a real night."
+            }
+          ]
+        },
+        reasons: {
+          eyebrow: "Why people lock in early",
+          heading: "The draw is more than a flyer",
+          intro: "People book Love In Georgia nights because the brand delivers the full room: music, drinks, styling, attraction, and a crowd that feels chosen.",
+          cards: [
+            {
+              kicker: "01",
+              title: "Curated sound pressure",
+              copy: "Guest artists and DJs are selected for emotional lift, crowd control, and late-night intensity rather than generic programming."
+            },
+            {
+              kicker: "02",
+              title: "A better room",
+              copy: "The atmosphere works because the crowd works. Entry tone, styling, drinks, and energy all affect how the night lands."
+            },
+            {
+              kicker: "03",
+              title: "Visual identity with edge",
+              copy: "Posters, lights, glossy darkness, and high-contrast staging give each edition a stronger visual recall."
+            },
+            {
+              kicker: "04",
+              title: "Flexible city movement",
+              copy: "The brand is not trapped in one room. It adapts across Tbilisi while keeping a recognizable emotional signature."
+            },
+            {
+              kicker: "05",
+              title: "Booking momentum",
+              copy: "When the right night drops, people move early. The booking flow is part of the pulse, not an afterthought."
+            }
+          ]
+        },
+        venues: {
+          eyebrow: "Venue circuit",
+          heading: "Different rooms, one emotional signature",
+          intro: "Love In Georgia moves through notable Tbilisi venues and keeps the same premium edge while shifting the scale of the night.",
+          cards: [
+            {
+              kicker: "Love Bar",
+              title: "Closer, warmer, more intimate",
+              copy: "Built for chemistry, dressed-up energy, and nights that feel immediate the moment the room fills."
+            },
+            {
+              kicker: "Crystal Event Hall",
+              title: "Larger-format impact",
+              copy: "The room for more ambitious production, stronger visual statements, and lineups that need space to hit properly."
+            },
+            {
+              kicker: "Tsameti Club",
+              title: "Deep-night immersion",
+              copy: "A sharper after-dark pressure point for heavier momentum, tighter crowd focus, and release that lands later."
+            }
+          ]
+        },
+        scene: {
+          eyebrow: "Atmosphere notes",
+          heading: "How the night is meant to feel",
+          intro: "The tone is romantic but not soft, premium but never cold, and always driven by rhythm, movement, and connection.",
+          cards: [
+            {
+              kicker: "Lights",
+              title: "Gloss over darkness",
+              copy: "Warm highlights, reflective surfaces, neon edges, and poster-led visuals that make the room feel alive before the headline moment."
+            },
+            {
+              kicker: "Movement",
+              title: "Rhythm that keeps climbing",
+              copy: "The best Love In Georgia nights do not flatten out. The bar stays bright, the floor gets hotter, and the room keeps asking for more."
+            },
+            {
+              kicker: "Connection",
+              title: "Stylish, social, memorable",
+              copy: "The brand stays rooted in attraction, chemistry, beautiful people, and shared crowd energy instead of anonymous nightlife repetition."
+            }
+          ]
+        },
+        booking: {
+          eyebrow: "Booking rail",
+          heading: "Lock your place for the next edition",
+          intro: "Booking is part of the main experience now. Members can reserve places directly here, while the admin panel controls posters, event details, tiers, and payment instructions.",
+          paymentLabel: "Payment rail",
+          paymentMissing: "Payment details appear here after admin setup or once you sign in.",
+          memberLink: "Open Member Access",
+          socialLink: "Instagram Updates",
+          formEyebrow: "Booking form",
+          formHeading: "Reserve your place",
+          gateTitle: "Member sign-in required",
+          gateCopy: "The live booking form unlocks once you sign in. This keeps ticket requests attached to real member accounts.",
+          gateLink: "Sign In / Register",
+          labels: {
+            event: "Selected event",
+            name: "Full name",
+            email: "Email",
+            phone: "Phone",
+            guests: "Guests",
+            tier: "Tier",
+            payment: "Payment method",
+            paymentId: "Transfer reference / payment ID"
+          },
+          paymentDetailTitle: "Selected payment instructions",
+          submit: "Submit Booking",
+          success: "Booking received. Your place is now pending final payment confirmation.",
+          loginFirst: "Sign in first to book this edition.",
+          methods: {
+            bank: "Bank transfer",
+            qr: "QR transfer",
+            manual: "Manual confirmation"
+          }
+        },
+        footer: {
+          eyebrow: "Stay close to the next release",
+          heading: "Book early, watch the poster drop, and step into the room before the city catches up.",
+          copy: "The website is where booking happens. Instagram stays as the secondary channel for poster drops, fast updates, and release signals.",
+          book: "Book the Night",
+          member: "წევრის წვდომა",
+          instagram: "@loveingeorgia1",
+          legal: "Love In Georgia | Premium nightlife editions and booking flow for Tbilisi."
+        }
+      },
+      ka: {
+        brandLine: "booking-first ღამის გამოცემები თბილისში",
+        nav: {
+          featured: "შემდეგი drop",
+          archive: "გასული ღამეები",
+          venues: "სივრცეები",
+          booking: "დაჯავშნა",
+          member: "წევრის წვდომა",
+          account: "ჩემი წვდომა",
+          admin: "ადმინი",
+          logout: "გასვლა"
+        },
+        hero: {
+          eyebrow: "Love In Georgia | პრემიუმ ღამის იმპულსი",
+          title: "Love In Georgia",
+          accent: "დაიჭირე შემდეგი ოთახი მანამდე, სანამ პიკს მიაღწევს.",
+          lead: "უფრო მკვეთრი nightlife ბრენდი სტუმარი არტისტებით, ძლიერ ვიზუალებით, ქალაქთან დაკავშირებული სივრცეებით და ისეთი booking flow-ით, რომელიც crowd-ზე ადრე იწყებს მოძრაობას.",
+          primaryLoggedOut: "Booking-ის გახსნა",
+          primaryLoggedIn: "ადგილის დაჯავშნა",
+          secondary: "გასული ღამეების ნახვა",
+          metrics: [
+            { value: "15", label: "არტისტი და 2 სცენა 6 მარტის ღამეზე" },
+            { value: "5", label: "ბოლო გამორჩეული გამოცემა" },
+            { value: "3", label: "მთავარი თბილისის სივრცე როტაციაში" }
+          ],
+          ticker: [
+            "Love Bar",
+            "Crystal Event Hall",
+            "Tsameti Club",
+            "სტუმარი არტისტები",
+            "პრემიუმ crowd energy"
+          ]
+        },
+        featured: {
+          eyebrow: "ცოცხალი booking სიგნალი",
+          heading: "შემდეგი გამოცემა უფრო უშუალოდ უნდა იგრძნობოდეს",
+          intro: "ეს სექცია ახლა booking-ზეა აწყობილი და არა მხოლოდ სოციალურ არხებზე. ივენთის დეტალები, პოსტერი, ტიერები და payment rail ადმინ პანელიდან იცვლება."
+        },
+        facts: {
+          date: "თარიღი",
+          venue: "სივრცე",
+          faceControl: "შესვლის ტონი",
+          tickets: "ტიკეტების გამოშვება",
+          booking: "დაჯავშნა",
+          bookingFallback: "Booking-ის ტექსტი ადმინ პანელიდან განახლდება."
+        },
+        archive: {
+          eyebrow: "არქივის იმპულსი",
+          heading: "გამოცემები, რომლებმაც სახელი ააწყვეს",
+          intro: "Love In Georgia იმიტომ მუშაობს, რომ ღამეები განზრახ არის აშენებული: ძლიერი კურაცია, ნამდვილი მოძრაობა და ისეთი ოთახები, რომლებიც განათების ჩაქრობის შემდეგაც გახსოვს.",
+          cards: [
+            {
+              date: "27 მარტი, 2026",
+              title: "Crystal Event Hall",
+              copy: "დაუვიწყარი გამოცემა გამართული პროდაქშენით, ძლიერ floor release-ით და ოთახით, რომელმაც ტენზია თავიდან ბოლომდე შეინარჩუნა."
+            },
+            {
+              date: "14 მარტი, 2026",
+              title: "მაღალი მოთხოვნის თბილისური ღამე",
+              copy: "ქალაქური ღამე მკაფიო მოთხოვნით, სწრაფი crowd build-ით და ისეთი buzz-ით, რომელმაც შემდეგი drop კიდევ უფრო მწვავედ გახადა."
+            },
+            {
+              date: "6 მარტი, 2026",
+              title: "15 არტისტი / 2 სცენა",
+              copy: "Crystal Event Hall-ის მასშტაბური განცხადება, შექმნილი დიდი ფორმატისთვის, მოძრაობისთვის და ბევრი არტისტის მომენტის სწორად დასასმელად."
+            },
+            {
+              date: "13 თებერვალი, 2026",
+              title: "Love Day | Love Bar",
+              copy: "ვალენტინობის დაძაბულობა, ჩაცმული crowd და უფრო ინტიმური ოთახის ქიმია ერთ ღამეში."
+            },
+            {
+              date: "1 იანვარი, 2026",
+              title: "ბედობა | Tsameti Club",
+              copy: "ახალი წლის reset ღრმა crowd immersion-ით, ოპტიმიზმით და იმ განცდით, რომ წელი ნამდვილ ღამეში დაიწყო."
+            }
+          ]
+        },
+        reasons: {
+          eyebrow: "რატომ ჯავშნიან ადრე",
+          heading: "მიზიდულობა აფიშაზე მეტი არის",
+          intro: "Love In Georgia-ის ღამეებს იმიტომ ჯავშნიან, რომ ბრენდი სრულ სოციალურ mood-ს იძლევა: მუსიკას, სტილს, მიზიდულობას და ოთახს, რომელიც შეგნებულად არის შერჩეული.",
+          cards: [
+            {
+              kicker: "01",
+              title: "კურირებული საუნდის წნევა",
+              copy: "სტუმარი არტისტები და DJs შეირჩევა ემოციური აწევის, crowd control-ის და გვიანი ღამის ინტენსივობისთვის."
+            },
+            {
+              kicker: "02",
+              title: "უკეთესი ოთახი",
+              copy: "ატმოსფერო იმიტომ მუშაობს, რომ crowd მუშაობს. შესვლის ტონი, სტილი და ენერგია პირდაპირ წყვეტს, როგორ დაჯდება ღამე."
+            },
+            {
+              kicker: "03",
+              title: "უფრო მკვეთრი ვიზუალური ენა",
+              copy: "პოსტერები, განათება, glossy darkness და მაღალი კონტრასტის staging თითოეულ გამოცემას უფრო ძლიერ ვიზუალურ მეხსიერებას აძლევს."
+            },
+            {
+              kicker: "04",
+              title: "ქალაქში მოქნილი მოძრაობა",
+              copy: "ბრენდი ერთ ოთახში არ იჭედება. ის თბილისს მიჰყვება და მაინც ინარჩუნებს ცნობად ემოციურ ხელწერას."
+            },
+            {
+              kicker: "05",
+              title: "booking-ის ინერცია",
+              copy: "როცა სწორი ღამე ეშვება, ხალხი ადრე მოძრაობს. booking flow უკვე pulse-ის ნაწილია და არა დამატება."
+            }
+          ]
+        },
+        venues: {
+          eyebrow: "სივრცეების წრე",
+          heading: "სხვადასხვა ოთახი, ერთი ემოციური ხელწერა",
+          intro: "Love In Georgia თბილისის მთავარ სივრცეებს შორის მოძრაობს და ყოველ ადგილზე ინარჩუნებს პრემიუმ სიმკვეთრეს, მიუხედავად იმისა, რომ ღამის მასშტაბი იცვლება.",
+          cards: [
+            {
+              kicker: "Love Bar",
+              title: "უფრო ახლო, უფრო თბილი, უფრო ინტიმური",
+              copy: "ქიმიისთვის, ჩაცმული ენერგიისთვის და ისეთი ღამეებისთვის, რომლებიც ოთახის შევსებისთანავე რეალურ ძალას იძენს."
+            },
+            {
+              kicker: "Crystal Event Hall",
+              title: "დიდი ფორმატის ზემოქმედება",
+              copy: "სივრცე უფრო ამბიციური პროდაქშენისთვის, ძლიერი ვიზუალური განცხადებებისთვის და lineups-ისთვის, რომლებსაც მასშტაბი სჭირდება."
+            },
+            {
+              kicker: "Tsameti Club",
+              title: "ღრმა ღამის immersion",
+              copy: "უფრო მკვეთრი წერტილი გვიანი ღამისთვის, მძიმე იმპულსისთვის და crowd-ის კონცენტრაციისთვის."
+            }
+          ]
+        },
+        scene: {
+          eyebrow: "ატმოსფეროს შენიშვნები",
+          heading: "როგორ უნდა იგრძნობოდეს ეს ღამე",
+          intro: "ტონი რომანტიკულია, მაგრამ არა რბილი; პრემიუმია, მაგრამ არა ცივი; და ყოველთვის დგას რიტმზე, მოძრაობაზე და კავშირზე.",
+          cards: [
+            {
+              kicker: "Lights",
+              title: "გლოსი სიბნელეზე",
+              copy: "თბილი აქცენტები, ამრეკლი ზედაპირები და poster-led ვიზუალი, რომელიც ოთახს headline moment-მდე აცოცხლებს."
+            },
+            {
+              kicker: "Movement",
+              title: "რიტმი, რომელიც სულ მაღლა მიდის",
+              copy: "საუკეთესო Love In Georgia ღამეები არ ბრტყელდება. ისინი იკუმშება, იმატებს და crowd-ს მუდმივად მეტს სთხოვს."
+            },
+            {
+              kicker: "Connection",
+              title: "სტილიანი, სოციალური, დასამახსოვრებელი",
+              copy: "ბრენდი attraction-ზე, ქიმიაზე და crowd-ის საერთო ენერგიაზე დგას და არა ანონიმურ nightlife გამეორებაზე."
+            }
+          ]
+        },
+        booking: {
+          eyebrow: "Booking rail",
+          heading: "დაიჭირე ადგილი შემდეგ გამოცემაზე",
+          intro: "booking ახლა მთავარი გამოცდილების ნაწილია. წევრებს შეუძლიათ ადგილი პირდაპირ აქედან დაჯავშნონ, ხოლო ადმინ პანელი მართავს პოსტერებს, ივენთის დეტალებს, ტიერებს და payment instructions-ს.",
+          paymentLabel: "Payment rail",
+          paymentMissing: "გადახდის დეტალები აქ გამოჩნდება ადმინის დაყენების შემდეგ ან ავტორიზაციისას.",
+          memberLink: "წევრის წვდომა",
+          socialLink: "Instagram განახლებები",
+          formEyebrow: "Booking form",
+          formHeading: "დააჯავშნე ადგილი",
+          gateTitle: "აუცილებელია Member sign-in",
+          gateCopy: "ცოცხალი booking form მხოლოდ ავტორიზაციის შემდეგ იხსნება, რათა მოთხოვნები რეალურ ანგარიშებს მიებას.",
+          gateLink: "შესვლა / რეგისტრაცია",
+          labels: {
+            event: "არჩეული ივენთი",
+            name: "სრული სახელი",
+            email: "ელფოსტა",
+            phone: "ტელეფონი",
+            guests: "სტუმრები",
+            tier: "ტიერი",
+            payment: "გადახდის მეთოდი",
+            paymentId: "გადარიცხვის კოდი / payment ID"
+          },
+          paymentDetailTitle: "არჩეული payment ინსტრუქცია",
+          submit: "Booking-ის გაგზავნა",
+          success: "booking მიღებულია. შენი ადგილი ახლა საბოლოო payment confirmation-ს ელოდება.",
+          loginFirst: "booking-ისთვის ჯერ ავტორიზაცია გაიარე.",
+          methods: {
+            bank: "ბანკით გადარიცხვა",
+            qr: "QR გადარიცხვა",
+            manual: "ხელით დადასტურება"
+          }
+        },
+        footer: {
+          eyebrow: "იყავი ახლოს შემდეგ drop-თან",
+          heading: "დაიჭირე ადგილი ადრე, დაელოდე პოსტერის გამოჩენას და შეხვდი შემდეგ ოთახს მანამდე, სანამ ქალაქი სრულად მიხვდება.",
+          copy: "საიტი არის მთავარი booking სივრცე. Instagram რჩება მეორად არხად პოსტერების გამოჩენისთვის, სწრაფი განახლებებისთვის და სიგნალებისთვის.",
+          book: "დაჯავშნა",
+          member: "წევრის წვდომა",
+          instagram: "@loveingeorgia1",
+          legal: "Love In Georgia | პრემიუმ ღამის გამოცემები და booking flow თბილისში."
         }
       }
+    };
+
+    const state = {
+      lang: getInitialLanguage(),
+      user: null,
+      settings: normalizeSettings({}),
+    };
+
+    const elements = {
+      brandLine: document.getElementById("brandLine"),
+      navFeatured: document.getElementById("navFeatured"),
+      navArchive: document.getElementById("navArchive"),
+      navVenues: document.getElementById("navVenues"),
+      navBooking: document.getElementById("navBooking"),
+      loginLink: document.getElementById("loginLink"),
+      registerLink: document.getElementById("registerLink"),
+      profileLink: document.getElementById("profileLink"),
+      adminLink: document.getElementById("adminLink"),
+      userBadge: document.getElementById("userBadge"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      heroEyebrow: document.getElementById("heroEyebrow"),
+      heroTitle: document.getElementById("heroTitle"),
+      heroLead: document.getElementById("heroLead"),
+      heroPrimary: document.getElementById("heroPrimary"),
+      heroSecondary: document.getElementById("heroSecondary"),
+      heroMetrics: document.getElementById("heroMetrics"),
+      heroTicker: document.getElementById("heroTicker"),
+      posterRail: document.getElementById("posterRail"),
+      featuredEyebrow: document.getElementById("featuredEyebrow"),
+      featuredHeading: document.getElementById("featuredHeading"),
+      featuredIntro: document.getElementById("featuredIntro"),
+      featureStamp: document.getElementById("featureStamp"),
+      featuredPoster: document.getElementById("featuredPoster"),
+      featureTitle: document.getElementById("featureTitle"),
+      featureMeta: document.getElementById("featureMeta"),
+      featureSummary: document.getElementById("featureSummary"),
+      featureFacts: document.getElementById("featureFacts"),
+      pricingGrid: document.getElementById("pricingGrid"),
+      archiveEyebrow: document.getElementById("archiveEyebrow"),
+      archiveHeading: document.getElementById("archiveHeading"),
+      archiveIntro: document.getElementById("archiveIntro"),
+      pastGrid: document.getElementById("pastGrid"),
+      reasonEyebrow: document.getElementById("reasonEyebrow"),
+      reasonHeading: document.getElementById("reasonHeading"),
+      reasonIntro: document.getElementById("reasonIntro"),
+      reasonGrid: document.getElementById("reasonGrid"),
+      venueEyebrow: document.getElementById("venueEyebrow"),
+      venueHeading: document.getElementById("venueHeading"),
+      venueIntro: document.getElementById("venueIntro"),
+      venueGrid: document.getElementById("venueGrid"),
+      sceneEyebrow: document.getElementById("sceneEyebrow"),
+      sceneHeading: document.getElementById("sceneHeading"),
+      sceneIntro: document.getElementById("sceneIntro"),
+      sceneGrid: document.getElementById("sceneGrid"),
+      bookingEyebrow: document.getElementById("bookingEyebrow"),
+      bookingHeading: document.getElementById("bookingHeading"),
+      bookingIntro: document.getElementById("bookingIntro"),
+      paymentLabel: document.getElementById("paymentLabel"),
+      paymentLines: document.getElementById("paymentLines"),
+      bookingLoginLink: document.getElementById("bookingLoginLink"),
+      bookingRegisterLink: document.getElementById("bookingRegisterLink"),
+      bookingSocialLink: document.getElementById("bookingSocialLink"),
+      formEyebrow: document.getElementById("formEyebrow"),
+      formHeading: document.getElementById("formHeading"),
+      bookingGate: document.getElementById("bookingGate"),
+      gateTitle: document.getElementById("gateTitle"),
+      gateCopy: document.getElementById("gateCopy"),
+      gateLoginLink: document.getElementById("gateLoginLink"),
+      gateRegisterLink: document.getElementById("gateRegisterLink"),
+      bookingForm: document.getElementById("bookingForm"),
+      selectedEvent: document.getElementById("selectedEvent"),
+      nameInput: document.getElementById("nameInput"),
+      emailInput: document.getElementById("emailInput"),
+      phoneInput: document.getElementById("phoneInput"),
+      guestsInput: document.getElementById("guestsInput"),
+      tierSelect: document.getElementById("tierSelect"),
+      paymentSelect: document.getElementById("paymentSelect"),
+      paymentIdInput: document.getElementById("paymentIdInput"),
+      paymentDetailTitle: document.getElementById("paymentDetailTitle"),
+      paymentDetailLines: document.getElementById("paymentDetailLines"),
+      submitButton: document.getElementById("submitButton"),
+      bookingMessage: document.getElementById("bookingMessage"),
+      labelEvent: document.getElementById("labelEvent"),
+      labelName: document.getElementById("labelName"),
+      labelEmail: document.getElementById("labelEmail"),
+      labelPhone: document.getElementById("labelPhone"),
+      labelGuests: document.getElementById("labelGuests"),
+      labelTier: document.getElementById("labelTier"),
+      labelPaymentMethod: document.getElementById("labelPaymentMethod"),
+      labelPaymentId: document.getElementById("labelPaymentId"),
+      footerEyebrow: document.getElementById("footerEyebrow"),
+      footerHeading: document.getElementById("footerHeading"),
+      footerCopy: document.getElementById("footerCopy"),
+      footerBook: document.getElementById("footerBook"),
+      footerLogin: document.getElementById("footerLogin"),
+      footerRegister: document.getElementById("footerRegister"),
+      footerInstagram: document.getElementById("footerInstagram"),
+      footerLegal: document.getElementById("footerLegal"),
+      languageButtons: Array.from(document.querySelectorAll(".lang-switch button"))
+    };
+
+    function getInitialLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const fromQuery = params.get("lang");
+      if (fromQuery === "en" || fromQuery === "ka") return fromQuery;
+      const stored = window.localStorage.getItem("lig-language");
+      return stored === "ka" ? "ka" : "en";
     }
 
-    const languageButtons = document.querySelectorAll('[data-lang]');
-    languageButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        languageButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
-        renderContent(button.dataset.lang);
-      });
-    });
+    function normalizeSettings(raw) {
+      const brandContent = raw.brand_content || {};
+      const featuredEvent = {
+        ...fallbackSettings.brand_content.featured_event,
+        ...(brandContent.featured_event || {})
+      };
+      const posterItems = (Array.isArray(brandContent.poster_items) && brandContent.poster_items.length
+        ? brandContent.poster_items
+        : fallbackSettings.brand_content.poster_items
+      ).map((item, index) => ({
+        ...(fallbackSettings.brand_content.poster_items[index] || fallbackSettings.brand_content.poster_items[0]),
+        ...item
+      }));
 
-    paymentSelect.addEventListener('change', () => {
-      const option = paymentSelect.selectedOptions[0];
-      if (option && option.disabled) { paymentSelect.value = ''; return; }
-      updatePaymentInfo();
-    });
+      return {
+        ...fallbackSettings,
+        ...raw,
+        ticket_categories: Array.isArray(raw.ticket_categories) && raw.ticket_categories.length ? raw.ticket_categories : fallbackSettings.ticket_categories,
+        allowed_tiers: Array.isArray(raw.allowed_tiers) && raw.allowed_tiers.length ? raw.allowed_tiers : fallbackSettings.allowed_tiers,
+        brand_content: {
+          ...fallbackSettings.brand_content,
+          ...brandContent,
+          featured_event: featuredEvent,
+          poster_items: posterItems
+        }
+      };
+    }
+
+    function currentCopy() {
+      return content[state.lang];
+    }
+
+    function localize(enValue, kaValue) {
+      if (state.lang === "ka") return kaValue || enValue || "";
+      return enValue || kaValue || "";
+    }
+
+    function resolveMedia(path) {
+      if (!path) return "poster-placeholder.svg";
+      if (/^https?:\/\//i.test(path)) return path;
+      if (path.startsWith("/uploads/")) return `${API_BASE}${path}`;
+      return path;
+    }
+
+    function getFeatured() {
+      const settings = state.settings;
+      const featured = settings.brand_content.featured_event || {};
+      return {
+        tag: localize(featured.tag_en || "Upcoming edition", featured.tag_ka || "მომავალი გამოცემა"),
+        title: localize(settings.event_name, featured.title_ka || featured.title_en),
+        date: localize(settings.event_date, featured.date_ka || featured.date_en),
+        location: localize(settings.location, featured.location_ka || featured.location_en),
+        summary: localize(settings.event_description, featured.summary_ka || featured.summary_en),
+        bookingCopy: localize(settings.booking_description, featured.booking_copy_ka || featured.booking_copy_en),
+        poster: resolveMedia(featured.poster_url)
+      };
+    }
+
+    function getPosterItems() {
+      return state.settings.brand_content.poster_items.map((item) => ({
+        tag: localize(item.tag_en, item.tag_ka),
+        title: localize(item.title_en, item.title_ka),
+        meta: localize(item.meta_en, item.meta_ka),
+        image: resolveMedia(item.image_url)
+      }));
+    }
+
+    function getAvailableTiers() {
+      const allowed = new Set(state.settings.allowed_tiers || []);
+      const tiers = (state.settings.ticket_categories || fallbackSettings.ticket_categories).filter((item) => {
+        return !item.id || allowed.size === 0 || allowed.has(item.id);
+      });
+      return tiers.length ? tiers : fallbackSettings.ticket_categories;
+    }
+
+    function getPaymentModes() {
+      const labels = currentCopy().booking.methods;
+      const modes = [{ value: "bank-transfer", label: labels.bank }];
+      if (state.settings.qr_url) modes.push({ value: "qr-transfer", label: labels.qr });
+      modes.push({ value: "manual-confirmation", label: labels.manual });
+      return modes;
+    }
+
+    function renderHero() {
+      const copy = currentCopy();
+      elements.heroEyebrow.textContent = copy.hero.eyebrow;
+      elements.heroTitle.innerHTML = `${copy.hero.title}<span>${copy.hero.accent}</span>`;
+      elements.heroLead.textContent = copy.hero.lead;
+      elements.heroPrimary.textContent = state.user ? copy.hero.primaryLoggedIn : copy.hero.primaryLoggedOut;
+      elements.heroPrimary.href = state.user ? "#book" : "login.html";
+      elements.heroSecondary.textContent = copy.hero.secondary;
+
+      elements.heroMetrics.innerHTML = copy.hero.metrics.map((item) => `
+        <div class="metric">
+          <strong>${item.value}</strong>
+          <span>${item.label}</span>
+        </div>
+      `).join("");
+
+      elements.heroTicker.innerHTML = copy.hero.ticker.map((item) => `<span>${item}</span>`).join("");
+
+      elements.posterRail.innerHTML = getPosterItems().map((item) => `
+        <article class="poster-card">
+          <img src="${item.image}" alt="${item.title}" />
+          <div class="poster-copy">
+            <small>${item.tag}</small>
+            <strong>${item.title}</strong>
+            <span>${item.meta}</span>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderFeatured() {
+      const copy = currentCopy();
+      const featured = getFeatured();
+      const tiers = getAvailableTiers();
+
+      elements.featuredEyebrow.textContent = copy.featured.eyebrow;
+      elements.featuredHeading.textContent = copy.featured.heading;
+      elements.featuredIntro.textContent = copy.featured.intro;
+      elements.featureStamp.textContent = featured.tag;
+      elements.featuredPoster.src = featured.poster;
+      elements.featureTitle.textContent = featured.title;
+      elements.featureSummary.textContent = featured.summary;
+      elements.featureMeta.innerHTML = [featured.date, featured.location].filter(Boolean).map((item) => `<span>${item}</span>`).join("");
+
+      const facts = [
+        { label: copy.facts.date, value: featured.date || "-" },
+        { label: copy.facts.venue, value: featured.location || "-" },
+        { label: copy.facts.faceControl, value: state.settings.face_control || "-" },
+        { label: copy.facts.tickets, value: state.settings.tickets_info || "-" },
+        { label: copy.facts.booking, value: featured.bookingCopy || copy.facts.bookingFallback }
+      ];
+
+      elements.featureFacts.innerHTML = facts.map((item) => `
+        <div class="fact">
+          <strong>${item.label}</strong>
+          <span>${item.value}</span>
+        </div>
+      `).join("");
+
+      elements.pricingGrid.innerHTML = tiers.map((tier) => `
+        <div class="price-card">
+          <strong>${tier.label}</strong>
+          <span>${tier.price || tier.description || ""}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderStaticSections() {
+      const copy = currentCopy();
+
+      elements.archiveEyebrow.textContent = copy.archive.eyebrow;
+      elements.archiveHeading.textContent = copy.archive.heading;
+      elements.archiveIntro.textContent = copy.archive.intro;
+      elements.pastGrid.innerHTML = copy.archive.cards.map((card) => `
+        <article class="event-card">
+          <time>${card.date}</time>
+          <h3>${card.title}</h3>
+          <p>${card.copy}</p>
+        </article>
+      `).join("");
+
+      elements.reasonEyebrow.textContent = copy.reasons.eyebrow;
+      elements.reasonHeading.textContent = copy.reasons.heading;
+      elements.reasonIntro.textContent = copy.reasons.intro;
+      elements.reasonGrid.innerHTML = copy.reasons.cards.map((card) => `
+        <article class="reason-card">
+          <small>${card.kicker}</small>
+          <h3>${card.title}</h3>
+          <p>${card.copy}</p>
+        </article>
+      `).join("");
+
+      elements.venueEyebrow.textContent = copy.venues.eyebrow;
+      elements.venueHeading.textContent = copy.venues.heading;
+      elements.venueIntro.textContent = copy.venues.intro;
+      elements.venueGrid.innerHTML = copy.venues.cards.map((card) => `
+        <article class="venue-card">
+          <small>${card.kicker}</small>
+          <h3>${card.title}</h3>
+          <p>${card.copy}</p>
+        </article>
+      `).join("");
+
+      elements.sceneEyebrow.textContent = copy.scene.eyebrow;
+      elements.sceneHeading.textContent = copy.scene.heading;
+      elements.sceneIntro.textContent = copy.scene.intro;
+      elements.sceneGrid.innerHTML = copy.scene.cards.map((card) => `
+        <article class="scene-card">
+          <small>${card.kicker}</small>
+          <h3>${card.title}</h3>
+          <p>${card.copy}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderHeader() {
+      const copy = currentCopy();
+      const loginLabel = state.lang === "ka" ? "შესვლა" : "Login";
+      const registerLabel = state.lang === "ka" ? "რეგისტრაცია" : "Register";
+      const accountLabel = state.lang === "ka" ? "ჩემი წვდომა" : "My Access";
+      document.documentElement.lang = state.lang;
+      document.title = state.lang === "ka"
+        ? "Love In Georgia | თბილისის ღამის ცხოვრება და დაჯავშნა"
+        : "Love In Georgia | Tbilisi Nightlife & Event Booking";
+
+      elements.brandLine.textContent = copy.brandLine;
+      elements.navFeatured.textContent = copy.nav.featured;
+      elements.navArchive.textContent = copy.nav.archive;
+      elements.navVenues.textContent = copy.nav.venues;
+      elements.navBooking.textContent = copy.nav.booking;
+      elements.loginLink.textContent = loginLabel;
+      elements.registerLink.textContent = registerLabel;
+      elements.profileLink.textContent = accountLabel;
+      elements.adminLink.textContent = copy.nav.admin;
+      elements.logoutBtn.textContent = copy.nav.logout;
+
+      elements.loginLink.classList.toggle("hidden", !!state.user);
+      elements.registerLink.classList.toggle("hidden", !!state.user);
+      elements.profileLink.classList.toggle("hidden", !state.user);
+      elements.userBadge.classList.toggle("hidden", !state.user);
+      elements.logoutBtn.classList.toggle("hidden", !state.user);
+      elements.adminLink.classList.toggle("hidden", !(state.user && state.user.email === ADMIN_EMAIL));
+      elements.userBadge.textContent = state.user ? (state.user.name || state.user.email || "Member") : "";
+
+      elements.languageButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === state.lang);
+      });
+    }
+
+    function renderPaymentRail() {
+      const copy = currentCopy();
+      const lines = [];
+      if (state.settings.tbc_account) lines.push(`TBC: ${state.settings.tbc_account}`);
+      if (state.settings.bog_account) lines.push(`Bank of Georgia: ${state.settings.bog_account}`);
+      if (state.settings.transfer_note) lines.push(state.settings.transfer_note);
+      if (state.settings.qr_url) lines.push(state.settings.qr_url);
+
+      elements.paymentLabel.textContent = copy.booking.paymentLabel;
+      elements.paymentLines.innerHTML = lines.length
+        ? lines.map((line) => `<span>${line}</span>`).join("")
+        : `<span>${copy.booking.paymentMissing}</span>`;
+    }
+
+    function renderBookingForm() {
+      const copy = currentCopy();
+      const loginLabel = state.lang === "ka" ? "შესვლა" : "Login";
+      const registerLabel = state.lang === "ka" ? "რეგისტრაცია" : "Register";
+      const featured = getFeatured();
+      const tiers = getAvailableTiers();
+      const paymentModes = getPaymentModes();
+
+      elements.bookingEyebrow.textContent = copy.booking.eyebrow;
+      elements.bookingHeading.textContent = copy.booking.heading;
+      elements.bookingIntro.textContent = copy.booking.intro;
+      elements.bookingLoginLink.textContent = loginLabel;
+      elements.bookingRegisterLink.textContent = registerLabel;
+      elements.bookingSocialLink.textContent = copy.booking.socialLink;
+      elements.formEyebrow.textContent = copy.booking.formEyebrow;
+      elements.formHeading.textContent = copy.booking.formHeading;
+      elements.gateTitle.textContent = copy.booking.gateTitle;
+      elements.gateCopy.textContent = copy.booking.gateCopy;
+      elements.gateLoginLink.textContent = loginLabel;
+      elements.gateRegisterLink.textContent = registerLabel;
+      elements.paymentDetailTitle.textContent = copy.booking.paymentDetailTitle;
+      elements.submitButton.textContent = copy.booking.submit;
+
+      elements.labelEvent.textContent = copy.booking.labels.event;
+      elements.labelName.textContent = copy.booking.labels.name;
+      elements.labelEmail.textContent = copy.booking.labels.email;
+      elements.labelPhone.textContent = copy.booking.labels.phone;
+      elements.labelGuests.textContent = copy.booking.labels.guests;
+      elements.labelTier.textContent = copy.booking.labels.tier;
+      elements.labelPaymentMethod.textContent = copy.booking.labels.payment;
+      elements.labelPaymentId.textContent = copy.booking.labels.paymentId;
+
+      elements.selectedEvent.value = featured.title;
+
+      elements.tierSelect.innerHTML = tiers.map((tier) => `
+        <option value="${tier.label}">${tier.label}${tier.price ? ` | ${tier.price}` : ""}</option>
+      `).join("");
+
+      elements.paymentSelect.innerHTML = paymentModes.map((mode) => `
+        <option value="${mode.label}">${mode.label}</option>
+      `).join("");
+
+      if (state.user) {
+        elements.nameInput.value = state.user.name || "";
+        elements.emailInput.value = state.user.email || "";
+        elements.phoneInput.value = state.user.phone || "";
+      }
+
+      elements.bookingGate.classList.toggle("hidden", !!state.user);
+      elements.bookingForm.classList.toggle("hidden", !state.user);
+      renderPaymentDetails();
+    }
+
+    function renderPaymentDetails() {
+      const selected = elements.paymentSelect.value;
+      const lines = [];
+      if (selected.includes("QR") && state.settings.qr_url) {
+        lines.push(state.settings.qr_url);
+      } else if (selected.includes("Bank") || selected.includes("ბანკ")) {
+        if (state.settings.tbc_account) lines.push(`TBC: ${state.settings.tbc_account}`);
+        if (state.settings.bog_account) lines.push(`Bank of Georgia: ${state.settings.bog_account}`);
+      } else {
+        lines.push(state.settings.transfer_note || currentCopy().booking.paymentMissing);
+      }
+      if (state.settings.transfer_note && !lines.includes(state.settings.transfer_note)) {
+        lines.push(state.settings.transfer_note);
+      }
+      elements.paymentDetailLines.innerHTML = lines.map((line) => `<span>${line}</span>`).join("");
+    }
+
+    function renderFooter() {
+      const copy = currentCopy();
+      const loginLabel = state.lang === "ka" ? "შესვლა" : "Login";
+      const registerLabel = state.lang === "ka" ? "რეგისტრაცია" : "Register";
+      elements.footerEyebrow.textContent = copy.footer.eyebrow;
+      elements.footerHeading.textContent = copy.footer.heading;
+      elements.footerCopy.textContent = copy.footer.copy;
+      elements.footerBook.textContent = copy.footer.book;
+      elements.footerLogin.textContent = loginLabel;
+      elements.footerRegister.textContent = registerLabel;
+      elements.footerInstagram.textContent = copy.footer.instagram;
+      elements.footerLegal.textContent = copy.footer.legal;
+    }
+
+    function renderAll() {
+      renderHeader();
+      renderHero();
+      renderFeatured();
+      renderStaticSections();
+      renderPaymentRail();
+      renderBookingForm();
+      renderFooter();
+    }
 
     async function fetchCurrentUser() {
       try {
-        const res = await fetch(`${API_BASE}/api/user/me`, { credentials: 'include' });
-        if (!res.ok) throw new Error('unauthenticated');
-        const body = await res.json();
-        cachedUser = body.user;
-        if (profileLink) {
-          profileLink.style.display = 'inline-flex';
-          profileLink.textContent = (cachedUser && cachedUser.name) ? cachedUser.name : 'Profile';
-        }
-        if (userBadge) {
-          userBadge.style.display = 'inline-flex';
-          userBadge.textContent = cachedUser.name || cachedUser.email || 'User';
-        }
+        const response = await fetch(`${API_BASE}/api/user/me`, { credentials: "include" });
+        if (!response.ok) throw new Error("unauthorized");
+        const data = await response.json();
+        state.user = data.user || null;
       } catch (error) {
-        cachedUser = null;
-        if (profileLink) profileLink.style.display = 'none';
-        if (userBadge) userBadge.style.display = 'none';
+        state.user = null;
       }
-      updatePaymentInfo();
-      syncBookingVisibility();
     }
 
-    async function loadPaymentConfig() {
-      if (paymentConfig) return paymentConfig;
+    async function fetchSettings() {
       try {
-        const res = await fetch(`${API_BASE}/api/event-settings`, { credentials: 'include' });
-        const data = await res.json();
-        paymentConfig = (data && data.settings) || {};
-        allowedTiers = (paymentConfig.allowed_tiers && paymentConfig.allowed_tiers.length)
-          ? paymentConfig.allowed_tiers
-          : DEFAULT_TIER_VALUES.slice();
-        rebuildTierSelect(currentLang);
-      } catch (e) {
-        paymentConfig = {};
+        const response = await fetch(`${API_BASE}/api/event-settings`, { credentials: "include" });
+        if (!response.ok) throw new Error("settings");
+        const data = await response.json();
+        state.settings = normalizeSettings((data && data.settings) || {});
+      } catch (error) {
+        state.settings = normalizeSettings({});
       }
-      return paymentConfig;
     }
 
-    function getPaymentId() {
-      if (cachedUser && cachedUser.id) return `FR-${cachedUser.id}`;
-      if (cachedUser && cachedUser.email) return 'FR-' + btoa(cachedUser.email).replace(/[^A-Z0-9]/gi, '').slice(0, 8);
-      return null;
-    }
+    async function handleBookingSubmit(event) {
+      event.preventDefault();
+      const copy = currentCopy();
+      elements.bookingMessage.textContent = "";
 
-        function updatePaymentInfo() {
-      if (!paymentInfo) return;
-      const method = paymentSelect.value;
-      loadPaymentConfig().then((cfg) => {
-        const payId = getPaymentId();
-        const descriptionLabel = `Use payment description: "Ticket for ${payId || 'FR-XXXX'}"`;
-        const intro = 'Payment instructions';
-        const missing = 'Transfer details not set. Please contact admin.';
-        paymentInfo.innerHTML = '';
-        if (!cachedUser) {
-          paymentInfo.innerHTML = 'Please sign in to see payment details and complete booking.';
-          return;
-        }
-        if (method === 'transfer-tbc' || method === 'transfer-bog') {
-          const bankLabel = method === 'transfer-tbc' ? 'TBC Bank' : 'Georgian Bank';
-          const account = method === 'transfer-tbc' ? cfg.tbc_account : cfg.bog_account;
-          if (paymentIdInput) paymentIdInput.value = payId || '';
-          const details = account ? `
-            <h4>${intro} - ${bankLabel}</h4>
-            <p>Send transfer to this account and include in description:</p>
-            <div class="payment-steps">
-              <div>${descriptionLabel}</div>
-              <div>Amount: match your ticket category (I/II/Door)</div>
-            </div>
-            <p>Account: <strong>${account}</strong></p>
-            ${cfg.transfer_note ? `<p>${cfg.transfer_note}</p>` : ''}
-            ${cfg.qr_url ? `<p>QR code: <a href="${cfg.qr_url}" target="_blank" style="color:var(--electric);">Open</a></p>` : ''}
-          ` : `<p>${missing}</p>`;
-          paymentInfo.innerHTML = details;
-        } else if (method === 'card') {
-          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Pay directly with your card.</p>`;
-        } else if (method === 'crypto') {
-          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Crypto wallet accepted; include your transfer TX in the booking.</p>`;
-        } else if (method === 'apple') {
-          paymentInfo.innerHTML = `<h4>${intro}</h4><p>Apple Pay supported.</p>`;
-        } else {
-          paymentInfo.innerHTML = '';
-        }
-      });
-    }
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        try {
-          await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' });
-        } catch (e) { /* ignore */ }
-        cachedUser = null;
-        syncBookingVisibility();
-      });
-    }
-
-    bookingForm.addEventListener('submit', async (eventObj) => {
-      eventObj.preventDefault();
-      confirmation.textContent = '';
-      if (!cachedUser) {
-        confirmation.textContent = currentLang === 'geo' ? 'დაჯავშნისთვის გთხოვ, შეხვიდე ანგარიშში.' : 'Please sign in to book tickets.';
+      if (!state.user) {
+        elements.bookingMessage.textContent = copy.booking.loginFirst;
         return;
       }
-      if (!selectedEventInput.value) { confirmation.textContent = confirmCopy.missingEvent; return; }
-      const data = new FormData(bookingForm);
-      const name = data.get('name') || (currentLang === 'geo' ? 'მეგობარო' : 'Explorer');
-      const tier = data.get('tier');
+
       const payload = {
-        language: currentLang,
-        event_title: selectedEventInput.value,
-        name,
-        email: data.get('email'),
-        phone: data.get('phone'),
-        guests: data.get('tickets'),
-        tier,
-        payment: data.get('payment'),
-        payment_id: data.get('paymentId')
+        language: state.lang,
+        event_title: elements.selectedEvent.value.trim(),
+        name: elements.nameInput.value.trim(),
+        email: elements.emailInput.value.trim(),
+        phone: elements.phoneInput.value.trim(),
+        guests: elements.guestsInput.value,
+        tier: elements.tierSelect.value,
+        payment: elements.paymentSelect.value,
+        payment_id: elements.paymentIdInput.value.trim()
       };
+
       try {
-        const res = await fetch(`${API_BASE}/api/bookings`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const body = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(body.error || 'Booking failed');
-        confirmation.textContent = confirmCopy.success(name, tier, selectedEventInput.value);
-        bookingForm.reset();
-        if (currentEvents.length) selectEvent(currentEvents[0], false);
-      } catch (error) { confirmation.textContent = error.message; }
+        const response = await fetch(`${API_BASE}/api/bookings`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error((data && data.error) || `Request failed (${response.status})`);
+        }
+        elements.bookingMessage.textContent = copy.booking.success;
+        elements.paymentIdInput.value = "";
+        elements.guestsInput.value = "1";
+      } catch (error) {
+        elements.bookingMessage.textContent = error.message || "Booking failed.";
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch(`${API_BASE}/api/auth/logout`, {
+          method: "POST",
+          credentials: "include"
+        });
+      } catch (error) {
+        /* ignore */
+      }
+      state.user = null;
+      await fetchSettings();
+      renderAll();
+    }
+
+    function setLanguage(language) {
+      state.lang = language;
+      window.localStorage.setItem("lig-language", language);
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", language);
+      window.history.replaceState(null, "", url);
+      renderAll();
+    }
+
+    elements.languageButtons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
     });
+    elements.paymentSelect.addEventListener("change", renderPaymentDetails);
+    elements.bookingForm.addEventListener("submit", handleBookingSubmit);
+    elements.logoutBtn.addEventListener("click", logout);
 
-    const yearEl = document.getElementById('year');
-    if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
-
-    function init() {
-      currentLang = 'eng';
-      renderContent(currentLang);
-      languageButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.lang === currentLang));
-      fetchCurrentUser();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    (async function bootstrap() {
+      renderAll();
+      await Promise.allSettled([fetchCurrentUser(), fetchSettings()]);
+      renderAll();
+    })();
   </script>
 </body>
 </html>

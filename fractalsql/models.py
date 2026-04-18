@@ -116,6 +116,7 @@ class EventSettings(db.Model):
     transfer_note = db.Column(db.Text)
     qr_url = db.Column(db.String(500))
     allowed_tiers = db.Column(db.JSON)
+    brand_content = db.Column(db.JSON)
 
     def to_dict(self):
         return {
@@ -132,6 +133,7 @@ class EventSettings(db.Model):
           "transfer_note": self.transfer_note,
           "qr_url": self.qr_url,
           "allowed_tiers": self.allowed_tiers or [],
+          "brand_content": self.brand_content or {},
         }
 
 

@@ -14,11 +14,14 @@ def _split_csv(value: str) -> list[str]:
 
 
 class Config:
+    _IS_RENDER = bool(os.getenv("RENDER") or os.getenv("RENDER_SERVICE_ID") or os.getenv("RENDER_EXTERNAL_URL"))
+
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
     # Default to a writable, ephemeral SQLite path (/tmp) for cloud deploys; override with DATABASE_URL
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:////tmp/app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(base_dir / "uploads"))
+    _DEFAULT_UPLOAD_FOLDER = "/var/data/uploads" if _IS_RENDER and Path("/var/data").exists() else str(base_dir / "uploads")
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", _DEFAULT_UPLOAD_FOLDER)
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB
 
     # Admin credentials
@@ -38,9 +41,9 @@ class Config:
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_HTTPONLY = True
-    # Cookie settings: default to Lax so cookies survive 127.0.0.1:5000 <-> 127.0.0.1:5500 without requiring HTTPS
-    SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
-    _raw_samesite = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+    # Local dev can use Lax over HTTP. Render/GitHub Pages need None+Secure for cross-site fetch cookies.
+    SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "true" if _IS_RENDER else "false").lower() == "true"
+    _raw_samesite = os.getenv("SESSION_COOKIE_SAMESITE", "None" if _IS_RENDER else "Lax")
     if _raw_samesite.lower() == "none" and not SESSION_COOKIE_SECURE:
         # Browsers reject SameSite=None when Secure is false (HTTP), so fallback to Lax for local dev
         SESSION_COOKIE_SAMESITE = "Lax"

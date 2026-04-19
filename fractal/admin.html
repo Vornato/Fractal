@@ -25,15 +25,54 @@
     }
 
     * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
+      position: relative;
+      isolation: isolate;
       margin: 0;
+      min-height: 100vh;
       font-family: "Manrope", "Noto Sans Georgian", sans-serif;
       background:
-        radial-gradient(circle at 15% 12%, rgba(255, 77, 157, 0.12), transparent 26%),
-        radial-gradient(circle at 85% 8%, rgba(255, 177, 93, 0.1), transparent 24%),
-        linear-gradient(180deg, #050307 0%, #0f0813 48%, #050307 100%);
+        radial-gradient(circle at 14% 8%, rgba(255, 77, 157, 0.2), transparent 25rem),
+        radial-gradient(circle at 78% 4%, rgba(255, 177, 93, 0.14), transparent 25rem),
+        radial-gradient(circle at 72% 84%, rgba(76, 212, 255, 0.1), transparent 26rem),
+        linear-gradient(180deg, #050307 0%, #120817 44%, #060408 100%);
       color: var(--text);
       line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(255, 77, 157, 0.12), transparent 38rem);
+      background-size: 44px 44px, 44px 44px, auto;
+      mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.5) 70%, transparent);
+    }
+
+    body::after {
+      content: "LOVE IN GEORGIA CONTROL";
+      position: fixed;
+      right: -6rem;
+      bottom: -2rem;
+      z-index: -1;
+      color: rgba(255, 255, 255, 0.025);
+      font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
+      font-size: clamp(7rem, 16vw, 18rem);
+      letter-spacing: 0.04em;
+      line-height: 0.8;
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     a { color: inherit; }
@@ -44,8 +83,9 @@
       top: 0;
       z-index: 30;
       backdrop-filter: blur(18px);
-      background: rgba(8, 5, 9, 0.78);
+      background: rgba(8, 5, 9, 0.82);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.28);
     }
 
     .topbar-inner,
@@ -55,7 +95,7 @@
     }
 
     .topbar-inner {
-      min-height: 5.5rem;
+      min-height: 5.85rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -71,11 +111,12 @@
     }
 
     .brand img {
-      width: 3.5rem;
-      height: 3.5rem;
-      border-radius: 1rem;
+      width: 3.8rem;
+      height: 3.8rem;
+      border-radius: 1.1rem;
       object-fit: cover;
-      box-shadow: 0 0 24px rgba(255, 77, 157, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 0 36px rgba(255, 77, 157, 0.22);
     }
 
     .brand strong {
@@ -109,10 +150,10 @@
     .ghost-btn,
     .upload-btn {
       min-height: 2.85rem;
-      padding: 0.78rem 1rem;
+      padding: 0.82rem 1.05rem;
       clip-path: var(--cut);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.045);
       color: var(--text);
       text-decoration: none;
       font: inherit;
@@ -132,15 +173,22 @@
       border-color: rgba(255, 77, 157, 0.28);
     }
 
+    button:disabled {
+      cursor: wait;
+      opacity: 0.62;
+      transform: none;
+    }
+
     .primary-btn {
       background: linear-gradient(135deg, var(--pink), var(--gold));
       color: #140912;
       border: 0;
       box-shadow: 0 18px 36px rgba(255, 77, 157, 0.2);
+      font-weight: 800;
     }
 
     .hero {
-      padding: 1.4rem 0 1rem;
+      padding: 4.4rem 0 1.6rem;
     }
 
     .hero-panel,
@@ -158,25 +206,114 @@
     }
 
     .hero-panel {
-      padding: 1.2rem 1.3rem;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 1rem;
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
+      gap: clamp(1rem, 3vw, 2.2rem);
       align-items: center;
+    }
+
+    .hero-panel::before,
+    .panel::before,
+    .table-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 100% 0%, rgba(255, 77, 157, 0.12), transparent 18rem);
+      opacity: 0.85;
+    }
+
+    .hero-panel > *,
+    .panel > *,
+    .table-panel > * {
+      position: relative;
+      z-index: 1;
     }
 
     .hero-panel h1 {
       margin: 0;
       font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
       text-transform: uppercase;
-      font-size: clamp(2rem, 4vw, 3.1rem);
-      line-height: 0.96;
+      font-size: clamp(3rem, 8vw, 7.6rem);
+      line-height: 0.82;
+      letter-spacing: -0.02em;
+      max-width: 11ch;
     }
 
     .hero-panel p {
       margin: 0.85rem 0 0;
       max-width: 56rem;
       color: rgba(248, 239, 245, 0.82);
+    }
+
+    .section-kicker {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin: 0 0 1rem;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 3.2rem;
+      height: 1px;
+      background: linear-gradient(90deg, var(--pink), var(--gold));
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 1.4rem;
+    }
+
+    .hero-meta span,
+    .publish-card span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.2rem;
+      padding: 0.5rem 0.7rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.045);
+      color: rgba(248, 239, 245, 0.74);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .publish-card {
+      display: grid;
+      gap: 0.85rem;
+      align-content: start;
+      padding: 1rem;
+      clip-path: var(--cut);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background:
+        linear-gradient(135deg, rgba(255, 77, 157, 0.12), transparent 44%),
+        rgba(255, 255, 255, 0.05);
+    }
+
+    .publish-card strong {
+      display: block;
+      font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+      line-height: 1.05;
+    }
+
+    .publish-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
 
     .status-note {
@@ -188,12 +325,12 @@
     .admin-grid {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 1rem;
-      padding-bottom: 2rem;
+      gap: 1.45rem;
+      padding-bottom: 5rem;
     }
 
     .panel {
-      padding: 1.1rem;
+      padding: clamp(1.15rem, 2vw, 1.55rem);
     }
 
     .span-7 { grid-column: span 7; }
@@ -207,7 +344,7 @@
       font-family: "Bebas Neue", "Noto Sans Georgian", sans-serif;
       text-transform: uppercase;
       line-height: 1;
-      font-size: 1.25rem;
+      font-size: clamp(1.45rem, 2.8vw, 2.4rem);
       letter-spacing: 0.03em;
     }
 
@@ -225,6 +362,10 @@
       margin: 0;
       color: var(--muted);
       font-size: 0.93rem;
+    }
+
+    .panel-head p {
+      max-width: 56rem;
     }
 
     .field-grid {
@@ -258,9 +399,9 @@
     textarea,
     select {
       width: 100%;
-      padding: 0.9rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.04);
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      background: rgba(8, 5, 10, 0.58);
       color: var(--text);
       font: inherit;
       clip-path: var(--cut);
@@ -294,13 +435,25 @@
       gap: 1rem;
     }
 
+    .poster-panel .poster-stack {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
     .poster-editor {
-      padding: 0.95rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       clip-path: var(--cut);
-      background: rgba(255, 255, 255, 0.03);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 77, 157, 0.12), transparent 13rem),
+        rgba(255, 255, 255, 0.035);
       display: grid;
+      align-content: start;
       gap: 0.8rem;
+    }
+
+    .poster-panel .field-grid {
+      grid-template-columns: 1fr;
     }
 
     .poster-preview {
@@ -309,7 +462,8 @@
       clip-path: var(--cut);
       overflow: hidden;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.32);
     }
 
     .poster-preview img {
@@ -355,7 +509,7 @@
     }
 
     .table-panel {
-      padding: 1.1rem;
+      padding: clamp(1.15rem, 2vw, 1.55rem);
     }
 
     .table-wrap {
@@ -502,6 +656,10 @@
         grid-template-columns: 1fr;
       }
 
+      .poster-panel .poster-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .span-7,
       .span-5,
       .span-12 {
@@ -518,8 +676,17 @@
       .field-grid,
       .field-grid.three,
       .tier-row,
-      .booking-dialog-grid {
+      .booking-dialog-grid,
+      .poster-panel .poster-stack {
         grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 2rem;
+      }
+
+      .hero-panel h1 {
+        max-width: none;
       }
 
       .nav {
@@ -551,20 +718,32 @@
     <section class="hero">
       <div class="hero-panel">
         <div>
-          <h1>Manage the next event</h1>
-          <p>Update the featured event, change the homepage posters, manage booking tiers, and keep the live site ready without editing code again.</p>
+          <p class="section-kicker">Live event control</p>
+          <h1>Love In Georgia control room</h1>
+          <p>Change the event copy, homepage poster, past-night visuals, booking tiers, and member tickets from one branded control panel. Saved settings are served by the Render API and pulled into the public website.</p>
+          <div class="hero-meta">
+            <span>Homepage copy</span>
+            <span>Poster studio</span>
+            <span>Booking flow</span>
+            <span>Members</span>
+          </div>
           <p id="statusMessage" class="status-note"></p>
         </div>
-        <button id="saveSettingsBtn" class="primary-btn" type="button">Save Event Settings</button>
+        <div class="publish-card">
+          <span>Publishing</span>
+          <strong>Upload images, then publish the website changes.</strong>
+          <p>Poster uploads create a media path first. Press publish after edits so the live homepage receives the new content.</p>
+          <button id="saveSettingsBtn" class="primary-btn" type="button">Publish Website Changes</button>
+        </div>
       </div>
     </section>
 
     <section class="admin-grid">
-      <article class="panel span-7">
+      <article class="panel span-12">
         <div class="panel-head">
           <div>
             <h2>Featured Event Copy</h2>
-            <p>English fields update the main event card and booking section. Georgian fields keep the language switch clear and consistent.</p>
+            <p>English and Georgian fields update the same live event. Keep the text short enough for the public design and use the Georgian fields for natural localized wording, not direct copy-paste translations.</p>
           </div>
         </div>
 
@@ -628,11 +807,11 @@
         </div>
       </article>
 
-      <article class="panel span-5">
+      <article class="panel span-12 poster-panel">
         <div class="panel-head">
           <div>
             <h2>Poster Studio</h2>
-            <p>Use square 1080x1080 poster art across every slot. The first image is the upcoming-event cover used on the live homepage, and the poster cards follow the same format.</p>
+            <p>Use square 1080x1080 poster art across every slot. The first image controls the upcoming-event cover on the homepage. The next three posters feed the past-nights strip.</p>
           </div>
         </div>
 
@@ -702,11 +881,11 @@
         </div>
       </article>
 
-      <article class="panel span-5">
+      <article class="panel span-12">
         <div class="panel-head">
           <div>
             <h2>Booking Settings</h2>
-            <p>Turn tiers on or off, rename ticket levels, and control the payment information shown on the live booking form.</p>
+            <p>Turn tiers on or off, rename ticket levels, and control the payment information shown to signed-in visitors on the live booking form.</p>
           </div>
         </div>
 
@@ -804,9 +983,10 @@
     </div>
   </div>
 
+  <script src="config.js"></script>
   <script>
     const API_BASE = window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
-    const ADMIN_EMAIL = "FractalAdmin@123";
+    const ADMIN_EMAIL = window.FRAC_ADMIN_EMAIL || "FractalAdmin@123";
     const DEFAULT_POSTER = "poster-placeholder.svg";
     const DEFAULT_TIERS = [
       { id: "wave1", label: "Wave I", price: "120 GEL", description: "early access" },
@@ -886,11 +1066,11 @@
         featured_event: {
           poster_url: "1.png",
           tag_en: "17 April / opening",
-          tag_ka: "17 აპრილი / opening",
+          tag_ka: "17 აპრილი / გახსნა",
           title_ka: "Love In Georgia | Garden Opening",
           date_ka: "17 აპრილი, 22:00",
           location_ka: "Garden, თბილისი",
-          summary_ka: "Garden Opening აერთიანებს დიჯეებს, სტუმარ არტისტებს, განრიგს და თბილ ღამის ენერგიას ერთ Love In Georgia გამოცემაში.",
+          summary_ka: "Garden Opening აერთიანებს დიჯეებს, სტუმარ არტისტებს, დახვეწილ crowd-ს და თბილ ღამის ენერგიას ერთ Love In Georgia გამოცემაში.",
           booking_copy_ka: "დაჯავშნე ადრე, მიუთითე გადარიცხვის კოდი და შეინარჩუნე ადგილი შენს ანგარიშზე."
         },
         poster_items: [
@@ -1156,11 +1336,15 @@
         brand_content: collectBrandContent()
       };
 
+      elements.saveSettingsBtn.disabled = true;
+      showStatus("Publishing website changes...");
       try {
         await api("/api/admin/event-settings", { method: "PUT", body: payload });
-        showStatus("Event control saved.");
+        showStatus("Website changes published. Refresh the public page if it is already open.");
       } catch (error) {
         showStatus(error.message || "Failed to save event control.", true);
+      } finally {
+        elements.saveSettingsBtn.disabled = false;
       }
     }
 
@@ -1171,7 +1355,7 @@
       const target = document.getElementById(targetId);
       if (target) target.value = result.path || "";
       updatePreview(previewId, result.path || "");
-      showStatus("Poster uploaded.");
+      showStatus("Poster uploaded. Press Publish Website Changes to make it live.");
     }
 
     function bindUploadControls() {

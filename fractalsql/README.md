@@ -27,6 +27,15 @@ $env:FLASK_APP="app.py"
 flask run
 ```
 
+## Render Deployment
+Use `fractalsql` as the Render root directory.
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `FLASK_APP=app.py flask db upgrade && gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`
+- Set `DATABASE_URL` to the Render Postgres internal connection string if you want admin/content changes to persist.
+- If the frontend is served from GitHub Pages, set `SESSION_COOKIE_SAMESITE=None`, `SESSION_COOKIE_SECURE=true`, and include `https://vornato.github.io` in `EXTRA_CORS_ORIGINS`.
+- Uploaded posters need persistent storage. Add a Render disk mounted at `/var/data` and set `UPLOAD_FOLDER=/var/data/uploads`; otherwise uploads can disappear after redeploys or service restarts.
+
 ## API (JSON)
 - `POST /api/auth/register` — fields: name, email, password, phone, id_number, gender, dob (YYYY-MM-DD), social_link, city. Logs user in. Writes Excel snapshot.
 - `POST /api/auth/login` — fields: email, password. Session cookie auth.

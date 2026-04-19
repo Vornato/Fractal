@@ -742,6 +742,7 @@
     </section>
   </main>
 
+  <script src="config.js"></script>
   <script>
     const API_BASE = window.FRAC_API_BASE || "https://fractal-ns5x.onrender.com";
     const AUTH_MODE = document.body.dataset.authMode || "register";
@@ -770,7 +771,7 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const profileEvents = document.getElementById('profileEvents');
     const userTickets = document.getElementById('userTickets');
-    const ADMIN_EMAIL = 'FractalAdmin@123';
+    const ADMIN_EMAIL = window.FRAC_ADMIN_EMAIL || 'FractalAdmin@123';
 
     let upcomingEvents = [
       {
